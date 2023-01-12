@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     if ($is_jwt_valid) {
         $user = $_GET['user'];
-        $stmt = $pdo->prepare('SELECT id, knev, email, admine FROM labor WHERE id = ? ');
+        $stmt = $pdo->prepare('SELECT id, knev, email, admine FROM labor_users WHERE id = ? ');
         $stmt->execute([$user]);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return;
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     $is_jwt_valid = is_jwt_valid($bearer_token);
 
     if ($is_jwt_valid) {
-        $stmt = $pdo->prepare('DELETE FROM labor WHERE id = ?');
+        $stmt = $pdo->prepare('DELETE FROM labor_users WHERE id = ?');
         $stmt->execute([$data->id]);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if (!$data) {
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'PATCH') {
 
     if ($is_jwt_valid) {
         // check id
-        $idCheck = $pdo->prepare('SELECT id FROM labor WHERE id = ?');
+        $idCheck = $pdo->prepare('SELECT id FROM labor_users WHERE id = ?');
         $idCheck->execute([$data->id]);
         $idCheck = $idCheck->fetch(PDO::FETCH_ASSOC);
 
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'PATCH') {
 
 
         // check if the requested changes dont change anything
-        $changeCheck = $pdo->prepare('SELECT * FROM labor WHERE id = ? AND knev = ? ANd email = ? AND admine = ?');
+        $changeCheck = $pdo->prepare('SELECT * FROM labor_users WHERE id = ? AND knev = ? ANd email = ? AND admine = ?');
         $changeCheck->execute([$data->id, $data->knev, $data->email, $data->admin]);
         $changeCheck = $changeCheck->fetch((PDO::FETCH_ASSOC));
 
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'PATCH') {
             return;
         }
 
-        $stmt = $pdo->prepare('UPDATE labor SET knev = ?, email = ?, admine = ? WHERE id = ?');
+        $stmt = $pdo->prepare('UPDATE labor_users SET knev = ?, email = ?, admine = ? WHERE id = ?');
         $stmt->execute([$data->knev, $data->email, $data->admin, $data->id]);
         
         $data = array(

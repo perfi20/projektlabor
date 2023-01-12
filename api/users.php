@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     // query
     if ($is_jwt_valid) {
-        $stmt = $pdo->prepare('SELECT id, knev, email, admine FROM labor');
+        $stmt = $pdo->prepare('SELECT id, knev, email, admine FROM labor_users');
         $stmt->execute();
 
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -27,12 +27,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $data = json_decode(file_get_contents('php://input', true));
 
     // check if unique email exists
-    $checkEmail = $pdo->prepare('SELECT id FROM labor WHERE email = ?');
+    $checkEmail = $pdo->prepare('SELECT id FROM labor_users WHERE email = ?');
     $checkEmail->execute([$data->email]);
     $checkEmail = $checkEmail->fetch(PDO::FETCH_ASSOC);
 
     // check if password is wrong
-    $checkPw = $pdo->prepare('SELECT id FROM labor WHERE jszo = ? ');
+    $checkPw = $pdo->prepare('SELECT id FROM labor_users WHERE jszo = ? ');
     $checkPw->execute([$data->jelszo]);
     $checkPw = $checkPw->fetch(PDO::FETCH_ASSOC);
 
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // all check passed
-    $stmt = $pdo->prepare('SELECT knev, email, admine FROM labor WHERE email = ? AND jszo = ?');
+    $stmt = $pdo->prepare('SELECT knev, email, admine FROM labor_users WHERE email = ? AND jszo = ?');
     $stmt->execute([$data->email, $data->jelszo]);
     $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -74,12 +74,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     $data = json_decode(file_get_contents('php://input', true));
 
     // check if unique username exists
-    $checkUsername = $pdo->prepare('SELECT id FROM labor WHERE knev = ? ');
+    $checkUsername = $pdo->prepare('SELECT id FROM labor_users WHERE knev = ? ');
     $checkUsername->execute([$data->knev]);
     $checkUsername = $checkUsername->fetch(PDO::FETCH_ASSOC);
 
     // check if unique email exists
-    $checkEmail = $pdo->prepare('SELECT id FROM labor WHERE email = ?');
+    $checkEmail = $pdo->prepare('SELECT id FROM labor_users WHERE email = ?');
     $checkEmail->execute([$data->email]);
     $checkEmail = $checkEmail->fetch(PDO::FETCH_ASSOC);
 
@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     }
 
     // all check passed
-    $stmt = $pdo->prepare('INSERT IGNORE INTO labor (knev, email, jszo) VALUES (?, ?, ?)');
+    $stmt = $pdo->prepare('INSERT IGNORE INTO labor_users (knev, email, jszo) VALUES (?, ?, ?)');
     $stmt->execute([$data->knev, $data->email, $data->jelszo]);
     $data = $stmt->fetch(PDO::FETCH_ASSOC);
     $data = array('status' => 1);

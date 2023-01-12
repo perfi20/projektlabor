@@ -11,22 +11,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if ($is_jwt_valid) {
         
         // user count
-        $userCount = $pdo->prepare("SELECT COUNT(id) AS 'users' FROM labor");
+        $userCount = $pdo->prepare("SELECT COUNT(id) AS 'users' FROM labor_users");
         $userCount->execute();
         $userCount = $userCount->fetch(PDO::FETCH_ASSOC);
 
         // event count
-        $eventCount = $pdo->prepare("SELECT COUNT(id) AS 'events' FROM forum WHERE event = 1");
+        $eventCount = $pdo->prepare("SELECT COUNT(id) AS 'events' FROM labor_forum WHERE event = 1");
         $eventCount->execute();
         $eventCount = $eventCount->fetch(PDO::FETCH_ASSOC);
 
         // post count
-        $postCount = $pdo->prepare("SELECT COUNT(id) AS 'posts' FROM forum");
+        $postCount = $pdo->prepare("SELECT COUNT(id) AS 'posts' FROM labor_forum");
         $postCount->execute();
         $postCount = $postCount->fetch(PDO::FETCH_ASSOC);
 
         // msg count
-        $msgCount = $pdo->prepare("SELECT COUNT(id) AS 'msgs' FROM chat");
+        $msgCount = $pdo->prepare("SELECT COUNT(id) AS 'msgs' FROM labor_chat");
         $msgCount->execute();
         $msgCount = $msgCount->fetch(PDO::FETCH_ASSOC);
 
