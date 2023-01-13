@@ -19,7 +19,7 @@ if (in_array($_SERVER['QUERY_STRING'], $noAuthResources[$_SERVER['REQUEST_METHOD
 
 // check the token
 $token = isset(apache_request_headers()['Token']) ? apache_request_headers()['Token'] : null;
-$stmt = $pdo->prepare('SELECT id FROM users WHERE token = ?');
+$stmt = $pdo->prepare('SELECT id FROM labor_users WHERE token = ?');
 $stmt->execute([$token]);
 if ($stmt->fetch(PDO::FETCH_ASSOC)) {
     return true;

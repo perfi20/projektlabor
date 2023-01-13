@@ -1,6 +1,6 @@
 <?php
 $myname = $_SESSION['knev'];
-$query = "SELECT knev FROM labor where knev!='$myname' order by knev";
+$query = "SELECT knev FROM labor_users where knev!='$myname' order by knev";
 $result = mysqli_query($db, $query);
 $knev = mysqli_fetch_all($result, MYSQLI_ASSOC);
 mysqli_free_result($result);
@@ -8,7 +8,7 @@ $searchname = mysqli_real_escape_string($db, $_POST['knev']);
 $ok = true;
 if (isset($_POST["search"])) {
   if (isset($_POST['knev'])) {
-    $sql = "SELECT knev FROM labor WHERE knev='$searchname'";
+    $sql = "SELECT knev FROM labor_users WHERE knev='$searchname'";
     $res = mysqli_query($db, $sql);
     if ((mysqli_num_rows($res) < 1)) {
       $jelszo_error = "Nem regisztrált Felhasználó!";
