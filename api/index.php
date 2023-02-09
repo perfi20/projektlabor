@@ -10,7 +10,7 @@ require('./jwt_utils.php');
 require('./cors.php');
 require('./config.php');
 
-$pdo = new PDO('mysql:host=mysql.rackhost.hu;dbname='.$db['mysqlDb'], $db['mysqlUser'], $db['mysqlPass'], array(PDO::MYSQL_ATTR_FOUND_ROWS => true));
+$pdo = new PDO('mysql:host=localhost;dbname='.$db['mysqlDb'], $db['mysqlUser'], $db['mysqlPass'], array(PDO::MYSQL_ATTR_FOUND_ROWS => true)); // host=mysql.rackhost.hu
 
 if ($development) {
     ini_set('display_errors', 1);

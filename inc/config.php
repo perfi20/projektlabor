@@ -1,8 +1,13 @@
 <?php
-define('DB_HOST', 'mysql.rackhost.hu');
-define('DB_USER', 'c22654perfi');
-define('DB_PASS', 'projektlabor');
-define('DB_NAME', 'c22654drupal');
+// define('DB_HOST', 'mysql.rackhost.hu');
+// define('DB_USER', 'c22654perfi');
+// define('DB_PASS', 'projektlabor');
+// define('DB_NAME', 'c22654drupal');
+
+define('DB_HOST', 'localhost');
+define('DB_USER', 'root');
+define('DB_PASS', 'wegojim');
+define('DB_NAME', 'labor');
 
 error_reporting(0);
 mysqli_report(MYSQLI_REPORT_OFF);

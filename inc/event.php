@@ -1,4 +1,5 @@
 <?php
+require('components/curl.php');
 
   $data = curl('posts', 'GET', NULL, true);
 
@@ -12,7 +13,7 @@
             <h6 class="card-subtitle mb-2 text-muted"><small>Létrehozva <?php echo $post['published']; ?></small></h6>
             <p class="card-text mx-auto col-8 text-truncate text-light"><?php echo $post['body']; ?></p>
             <br>
-            <a class="card-link btn btn-secondary rounded-pill mb-2" href="/post.php?id=<?php echo $post['id']; ?>">Olvasd tovább</a>
+            <a class="card-link btn btn-secondary rounded-pill mb-2" href="./post.php?id=<?php echo $post['id']; ?>">Olvasd tovább</a>
             <div class="card-footer text-muted"><?php echo round((time() - strtotime($post['published'])) / (60 * 60 * 24)); ?> napja</div>
           </div>
         </div>
