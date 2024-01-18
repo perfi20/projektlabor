@@ -1,16 +1,21 @@
 <?php
 
-if (isset($POST['submit'])) {
+// $username = null;
+// $email = null;
+// $access_level = null;
+// $id = null;
 
-	$knev = $_POST['knev'];
+if (isset($_POST['submit'])){
+
+	$username = $_POST['username'];
 	$email = $_POST['email'];
-	$admin = $_POST['admin'];
+	$access_level = $_POST['access_level'];
 	$id = $_POST['id'];
 
 	$postfields = json_encode([
-		'knev' => $knev,
+		'username' => $username,
 		'email' => $email,
-		'admin' => $admin,
+		'access_level' => $access_level,
 		'id' => $id
 	]);
 
@@ -21,13 +26,15 @@ if (isset($POST['submit'])) {
 ?>
 
 <div class="table-responsive">
-    <table class="table align-middle table-hover">
+    <table class="table align-middle text-light">
         <thead>
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Felhasználónév</th>
                 <th scope="col">Email</th>
                 <th scope="col">Típus</th>
+                <th scope="col">Létrehozva</th>
+                <th scope="col">Szerkesztve</th>
                 <th scope="col">Műveletek</th>
             </tr>
         </thead>
@@ -36,27 +43,39 @@ if (isset($POST['submit'])) {
 
                 // api request for users
                 $users = curl('users', 'GET', NULL, true);
+
                 foreach($users as $user) :
             ?>
         <tbody class="table-group-divider">
             <tr>
                 <th><?php echo $user['id']; ?></th>
-                <td><?php echo $user['knev']; ?></td>
+
+                <td><?php echo $user['username']; ?></td>
+
                 <td><?php echo $user['email']; ?></td>
-                <td><?php if($user['admine'] == 1){
-                    echo 'admin';
-                    } else echo 'felhasználó'
-                    ?>
+
+                <td>
+                    <?php if($user['access_level'] >= 1) {
+                                echo 'admin';
+                         } else echo 'felhasználó' ?>
                 </td>
+
+                <td><?php echo $user['created_at'] ?></td>
+
+                <td>
+                    <?php if(isset($user['updated_at'])) echo $user['updated_at'];
+                        else echo '-'; ?>
+                </td>
+
                 <td>
                     <!-- edit modal button -->
-                    <button type="button" class="btn btn-outline-dark"
+                    <button type="button" class="btn btn-outline-primary"
                         data-bs-toggle="modal" data-bs-target="#editModal<?php echo $user['id']; ?>">
                             Szerkesztés
                     </button>
 
                     <!-- delete modal button-->
-                    <button type="button" class="btn btn-outline-dark"
+                    <button type="button" class="btn btn-outline-danger"
                         data-bs-toggle="modal" data-bs-target="#deleteModal<?php echo $user['id']; ?>">
                             Törlés
                     </button>
@@ -78,24 +97,24 @@ if (isset($POST['submit'])) {
                                     </div>
                                     <div class="mb-3">
                                         <label for="username" class="col-form-label">Név:</label>
-                                        <input type="text" class="form-control" name="knev" value="<?php echo $user['knev']; ?>">
+                                        <input type="text" class="form-control" name="username" value="<?php echo $user['username']; ?>">
                                     </div>
                                     <div class="mb-3">
                                         <label for="email" class="col-form-label">Email:</label>
                                         <input type="email" class="form-control" name="email"  value="<?php echo $user['email']; ?>"></input>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="access" class="col-form-label">Jogosultság:</label>
-                                        <select class="form-control" name="admin">
-                                            <option value="0" <?php if($user['admine'] == 0) echo "selected"; ?>>Felhasználó</option>
-                                            <option value="1" <?php if($user['admine'] == 1) echo "selected"; ?>>Admin</option>
+                                        <label for="access_level" class="col-form-label">Jogosultság:</label>
+                                        <select class="form-control" name="access_level">
+                                            <option value="0" <?php if($user['access_level'] == 0) echo "selected"; ?>>Felhasználó</option>
+                                            <option value="1" <?php if($user['access_level'] >= 1) echo "selected"; ?>>Admin</option>
                                         </select>
                                     </div>
                                 
                             </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégsem</button>
-                                        <button type="submit" name="submit" class="btn btn-primary" >Mentés</button>
+                                        <button type="submit" name="submit" class="btn btn-primary">Mentés</button>
                                     </div>
 
                                 </form>

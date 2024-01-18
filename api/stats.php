@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if ($is_jwt_valid) {
         
         // user count
-        $userCount = $pdo->prepare("SELECT COUNT(id) AS 'users' FROM labor_users");
+        $userCount = $pdo->prepare("SELECT COUNT(id) AS 'users' FROM user");
         $userCount->execute();
         $userCount = $userCount->fetch(PDO::FETCH_ASSOC);
 

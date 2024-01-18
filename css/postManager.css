@@ -1,0 +1,7 @@
+.close {
+    cursor: pointer;
+}
+
+.close:hover {
+    background: white;
+}

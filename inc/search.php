@@ -1,4 +1,5 @@
 <?php
+
 $myname = $_SESSION['knev'];
 $query = "SELECT knev FROM labor_users where knev!='$myname' order by knev";
 $result = mysqli_query($db, $query);

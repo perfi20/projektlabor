@@ -1,0 +1,19 @@
+chat websocket
+forum kezdooldal topic cardokkal
+
+post manager: 
+    logged in user can upload, edit, delete posts to forum
+
+forum: 
+    show posts
+        by user
+        by category - create category!
+
+user:
+    settings
+        change email, name?, password
+        upload profile pic
+
+
+api:
+    pagination with 10 
