@@ -83,8 +83,8 @@ include_once('./components/curl.php');
         <strong><?php echo $_SESSION['username']; ?></strong>
       </a>
       <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-        <li><a class="dropdown-item" href="./post_manager.php">New post</a></li>
-        <li><a class="dropdown-item" href="#">Settings</a></li>
+        <li><a class="dropdown-item" href="./post_manager.php?new">New post</a></li>
+        <li><a class="dropdown-item" href="./post_manager.php">My posts</a></li>
         <li><a class="dropdown-item" href="#">Profile</a></li>
         <li><hr class="dropdown-divider"></li>
         <li><a class="dropdown-item" href="./inc/logout.php">Sign out</a></li>

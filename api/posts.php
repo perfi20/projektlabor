@@ -1,7 +1,6 @@
 <?php
 // get all posts
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $data = json_decode(file_get_contents('php://input', true));
 
     $stmt = $pdo->prepare('SELECT * FROM post');
     $stmt->execute();
@@ -221,25 +220,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
 
 // edit post by id
 if ($_SERVER['REQUEST_METHOD'] == 'PATCH') {
-    $data = json_decode(file_get_contents('php://input', true));
+    $input = json_decode(file_get_contents('php://input', true));
 
     $bearer_token = get_bearer_token();
     $is_jwt_valid = is_jwt_valid($bearer_token);
 
     if (!$is_jwt_valid) {
-        $data = array('error' => 'Access denied!');
+        $data = array('success' => false, 'error' => 'Access denied!');
         return;
     }
 
-    $stmt = $pdo->prepare("UPDATE post SET title = ?, summary = ?, publisher = ?, content = ?");
-    $stmt->execute([$data->title, $data->summary, $data->publisher, $data->content]);
-    $data = $stmt->fetch(PDO::FETCH_ASSOC);
+    try {
+        $stmt = $pdo->prepare("UPDATE post
+            SET title = ?, category = ?, summary = ?, updated_at = NOW(), featured = ?
+            WHERE id = ?"
+        );
+        $stmt->execute([$input->title, $input->category, $input->summary, $input->featured, $input->id]);
+        $data = array('success' => true);
+    } catch (PDOException $e) {
+        $data = array('success' => false, 'error' => $e->getMessage());
+    }
+
     return;
 }
 
 // delete post by id
 if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
-    $data = json_decode(file_get_contents('php://input', true));
+    $input = json_decode(file_get_contents('php://input', true));
 
     $bearer_token = get_bearer_token();
     $is_jwt_valid = is_jwt_valid($bearer_token);
@@ -250,7 +257,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     }
 
     $stmt = $pdo->prepare("DELETE FROM post WHERE id = ?");
-    $stmt->execute([$data->id]);
+    $stmt->execute([$input->id]);
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if ($data) {
