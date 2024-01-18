@@ -83,39 +83,40 @@ if (isset($_POST['submit'])){
                     <div class="modal fade" id="editModal<?php echo $user['id']; ?>" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
-                                                        <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="editModalLabel">Szerkesztés </h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="editModalLabel">Szerkesztés </h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
 
-                            <div class="modal-body">
-                                <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                                <div class="modal-body">
+                                    <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                                    
+                                        <div class="mb-3">
+                                            <label for="id" class="col-form-label">ID:</label>
+                                            <input type="text" class="form-control" name="id" value="<?php echo $user['id']; ?>" readonly>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="username" class="col-form-label">Név:</label>
+                                            <input type="text" class="form-control" name="username" value="<?php echo $user['username']; ?>">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="email" class="col-form-label">Email:</label>
+                                            <input type="email" class="form-control" name="email"  value="<?php echo $user['email']; ?>"></input>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="access_level" class="col-form-label">Jogosultság:</label>
+                                            <select class="form-control" name="access_level">
+                                                <option value="0" <?php if($user['access_level'] == 0) echo "selected"; ?>>Felhasználó</option>
+                                                <option value="1" <?php if($user['access_level'] >= 1) echo "selected"; ?>>Admin</option>
+                                            </select>
+                                        </div>
+                                    
+                                </div>
                                 
-                                    <div class="mb-3">
-                                        <label for="id" class="col-form-label">ID:</label>
-                                        <input type="text" class="form-control" name="id" value="<?php echo $user['id']; ?>" readonly>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="username" class="col-form-label">Név:</label>
-                                        <input type="text" class="form-control" name="username" value="<?php echo $user['username']; ?>">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="email" class="col-form-label">Email:</label>
-                                        <input type="email" class="form-control" name="email"  value="<?php echo $user['email']; ?>"></input>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="access_level" class="col-form-label">Jogosultság:</label>
-                                        <select class="form-control" name="access_level">
-                                            <option value="0" <?php if($user['access_level'] == 0) echo "selected"; ?>>Felhasználó</option>
-                                            <option value="1" <?php if($user['access_level'] >= 1) echo "selected"; ?>>Admin</option>
-                                        </select>
-                                    </div>
-                                
-                            </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégsem</button>
-                                        <button type="submit" name="submit" class="btn btn-primary">Mentés</button>
-                                    </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégsem</button>
+                                    <button type="submit" name="submit" class="btn btn-primary">Mentés</button>
+                                </div>
 
                                 </form>
                             </div>
