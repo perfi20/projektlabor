@@ -7,8 +7,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 // list resources what need no authentication
 $noAuthResources = [
-    'GET' => ['messages'],
-    'POST' => ['users=login'],
+    'GET' => ['messages', 'posts'],
+    'POST' => ['users=login', 'posts'],
     'PATCH' => [],
     'DELETE' => []
 ];

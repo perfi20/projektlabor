@@ -4,21 +4,21 @@
 if ($_SERVER['REQUEST_METHOD'] == 'GET') { 
     
     // jwt validation
-    $bearer_token = get_bearer_token();
-    $is_jwt_valid = is_jwt_valid($bearer_token);
+    // $bearer_token = get_bearer_token();
+    // $is_jwt_valid = is_jwt_valid($bearer_token);
 
     // query
-    if ($is_jwt_valid) {
-        $stmt = $pdo->prepare('SELECT id, knev, email, admine FROM labor_users');
+    // if ($is_jwt_valid) {
+        $stmt = $pdo->prepare('SELECT id, username, email, access_level, created_at, updated_at FROM user');
         $stmt->execute();
 
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return;
-    } else {
-        $data = array('error' => 'Access denied');
-        return;
-    }
-    return;
+//    } else {
+//         $data = array('error' => 'Access denied');
+//         return;
+//     }
+//     return;
 }
 
 // LOGIN USER
@@ -26,45 +26,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     $data = json_decode(file_get_contents('php://input', true));
 
-    // check if unique email exists
-    $checkEmail = $pdo->prepare('SELECT id FROM labor_users WHERE email = ?');
-    $checkEmail->execute([$data->email]);
-    $checkEmail = $checkEmail->fetch(PDO::FETCH_ASSOC);
-
-    // check if password is wrong
-    $checkPw = $pdo->prepare('SELECT id FROM labor_users WHERE jszo = ? ');
-    $checkPw->execute([$data->jelszo]);
-    $checkPw = $checkPw->fetch(PDO::FETCH_ASSOC);
-
-    // check if email is wrong
-    if (!$checkEmail) {
-        $data = array('status' => 'email_wrong', 'err_code' => 2);
-        return;
-    }
-    
-    // check if pw is wrong
-    if (!$checkPw) {
-        $data = array('status' => 'pw_wrong', 'err_code' => 3);
-        return;
-    }
-
     // all check passed
-    $stmt = $pdo->prepare('SELECT knev, email, admine FROM labor_users WHERE email = ? AND jszo = ?');
-    $stmt->execute([$data->email, $data->jelszo]);
+    $stmt = $pdo->prepare('SELECT id, username, email, access_level FROM user WHERE username = ? AND pw = ?');
+    $stmt->execute([$data->username, $data->pw]);
     $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    // login failed
+    if (!$data) {
+        $data = array('success' => false);
+        return;
+    }
+
     // 
-    $admin = $data['admine'];
+    $access_level = $data['access_level'];
     $email = $data['email'];
-    $username = $data['knev'];
+    $username = $data['username'];
+    $id = $data["id"];
 
     // jwt
     $headers = array('alg' => 'HS256', 'typ' => 'JWT');
     $payload = array('username' => $username, 'exp' => (time() + 36000)); // token valid for 1 hours
     $jwt = generate_jwt($headers, $payload);
 
-    // response
-    $data = array('status' => 1, 'err_code' => 1, 'token' => $jwt, 'knev' => $username, 'email' => $email, 'admin' => $admin);
+    // response - send back the email for the client to use
+    $data = array(
+        'success' => true,
+        'token' => $jwt,
+        'username' => $username,
+        'id' => $id,
+        'email' => $email,
+        'access_level' => $access_level
+    );
     return;
  }
 
@@ -74,12 +66,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     $data = json_decode(file_get_contents('php://input', true));
 
     // check if unique username exists
-    $checkUsername = $pdo->prepare('SELECT id FROM labor_users WHERE knev = ? ');
-    $checkUsername->execute([$data->knev]);
+    $checkUsername = $pdo->prepare('SELECT id FROM user WHERE username = ? ');
+    $checkUsername->execute([$data->username]);
     $checkUsername = $checkUsername->fetch(PDO::FETCH_ASSOC);
 
     // check if unique email exists
-    $checkEmail = $pdo->prepare('SELECT id FROM labor_users WHERE email = ?');
+    $checkEmail = $pdo->prepare('SELECT id FROM user WHERE email = ?');
     $checkEmail->execute([$data->email]);
     $checkEmail = $checkEmail->fetch(PDO::FETCH_ASSOC);
 
@@ -101,8 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     }
 
     // all check passed
-    $stmt = $pdo->prepare('INSERT IGNORE INTO labor_users (knev, email, jszo) VALUES (?, ?, ?)');
-    $stmt->execute([$data->knev, $data->email, $data->jelszo]);
+    $stmt = $pdo->prepare('INSERT IGNORE INTO user (username, email, pw) VALUES (?, ?, ?)');
+    $stmt->execute([$data->username, $data->email, $data->pw]);
     $data = $stmt->fetch(PDO::FETCH_ASSOC);
     $data = array('status' => 1);
     return;

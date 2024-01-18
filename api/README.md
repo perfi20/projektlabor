@@ -16,3 +16,8 @@
 | ?chat           |    GET      |  Y   |    list messages from a chat |
 | ?chat           |    POST     |  Y   |    list user's chat partners |
 | ?chat           |    PUT      |  Y   |    add new chat message      |
+
+## Access levels:
+    0 - user without acccount
+    1 - logged in user
+    2 - admin

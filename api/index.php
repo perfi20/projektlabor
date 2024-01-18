@@ -4,11 +4,12 @@
 // RewriteCond %{HTTP:Authorization} ^(.*)
 // RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
 
-use PDO;
-
 require('./jwt_utils.php');
 require('./cors.php');
 require('./config.php');
+
+$data = null;
+$development = true;
 
 $pdo = new PDO('mysql:host=mysql.rackhost.hu;dbname='.$db['mysqlDb'], $db['mysqlUser'], $db['mysqlPass'], array(PDO::MYSQL_ATTR_FOUND_ROWS => true));
 

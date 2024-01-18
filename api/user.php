@@ -3,56 +3,68 @@
 // LIST USER BY ID
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
-    // jwt validation
+    // auth
     $bearer_token = get_bearer_token();
     $is_jwt_valid = is_jwt_valid($bearer_token);
 
-    if ($is_jwt_valid) {
-        $user = $_GET['user'];
-        $stmt = $pdo->prepare('SELECT id, knev, email, admine FROM labor_users WHERE id = ? ');
-        $stmt->execute([$user]);
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return;
-    } else {
+    if (!$is_jwt_valid) {
         $data = array('error' => 'Access denied');
         return;
     }
+
+    // query
+    $user = $_GET['user'];
+    $stmt = $pdo->prepare('SELECT id, knev, email, admine FROM user WHERE id = ? ');
+    $stmt->execute([$user]);
+    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return;
+
 }
 
+// delete user by id
 if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     $data = json_decode(file_get_contents('php://input'));
 
+    // auth
     $bearer_token = get_bearer_token();
     $is_jwt_valid = is_jwt_valid($bearer_token);
 
-    if ($is_jwt_valid) {
-        $stmt = $pdo->prepare('DELETE FROM labor_users WHERE id = ?');
-        $stmt->execute([$data->id]);
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        if (!$data) {
-            http_response_code(401);
-            $data = array('status' => '0');
-        }
-        else $data = array('status' => '1');
-        return;
-    } else {
+    if (!$is_jwt_valid) {
         $data = array('error' => 'Access denied');
-        return; 
+        return;
     }
+
+    // query
+    $stmt = $pdo->prepare('DELETE FROM user WHERE id = ?');
+    $stmt->execute([$data->id]);
+    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // query failed
+    if (!$data) {
+        http_response_code(401);
+        $data = array('success' => false);
+    }
+
+    $data = array('success' => true);
     return;
+
 }
 
 // EDIT USER BY ID
 if ($_SERVER['REQUEST_METHOD'] == 'PATCH') {
     $data = json_decode(file_get_contents('php://input'));
 
-    $bearer_token = get_bearer_token();
-    $is_jwt_valid = is_jwt_valid($bearer_token);
+    // auth
+    // $bearer_token = get_bearer_token();
+    // $is_jwt_valid = is_jwt_valid($bearer_token);
 
-    if ($is_jwt_valid) {
+    // if (!$is_jwt_valid) {
+    //     $data = array('error' => 'Access denied');
+    //     return;   
+    // }
+
         // check id
-        $idCheck = $pdo->prepare('SELECT id FROM labor_users WHERE id = ?');
+        $idCheck = $pdo->prepare('SELECT id FROM user WHERE id = ?');
         $idCheck->execute([$data->id]);
         $idCheck = $idCheck->fetch(PDO::FETCH_ASSOC);
 
@@ -66,29 +78,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'PATCH') {
 
 
         // check if the requested changes dont change anything
-        $changeCheck = $pdo->prepare('SELECT * FROM labor_users WHERE id = ? AND knev = ? ANd email = ? AND admine = ?');
-        $changeCheck->execute([$data->id, $data->knev, $data->email, $data->admin]);
+        $changeCheck = $pdo->prepare('SELECT * FROM user WHERE id = ? AND username = ? ANd email = ? AND access_level = ?');
+        $changeCheck->execute([$data->id, $data->username, $data->email, $data->access_level]);
         $changeCheck = $changeCheck->fetch((PDO::FETCH_ASSOC));
 
         if ($changeCheck) {
             $data = array(
-                'status' => 'no_changes',
-                'error' => 1
+                'success' => false,
+                'status' => 'no_changes'
             );
             return;
         }
 
-        $stmt = $pdo->prepare('UPDATE labor_users SET knev = ?, email = ?, admine = ? WHERE id = ?');
-        $stmt->execute([$data->knev, $data->email, $data->admin, $data->id]);
+        // query
+        $stmt = $pdo->prepare('UPDATE user SET username = ?, email = ?, access_level = ? WHERE id = ?');
+        $stmt->execute([$data->username, $data->email, $data->acccess_level, $data->id]);
         
         $data = array(
-            'status' => 'success',
-            'error' => 0
+            'success' => true
         );
         return;
-    } else {
-        $data = array('error' => 'Access denied');
-        return;   
-    }
-    return;
+
 }

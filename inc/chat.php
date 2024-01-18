@@ -1,4 +1,5 @@
 <?php
+
   // new message sent
   if (isset($_POST['submit'])) {
 
@@ -22,7 +23,6 @@
   }
 
 ?>
-
 
 <!-- chat -->
 <div class="container">
