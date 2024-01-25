@@ -30,9 +30,6 @@ include_once('./components/curl.php');
           <li class="nav-item">
             <a class="nav-link" href="./register.php">Register</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
-          </li>
         </ul>
          <?php // WEATHER
 

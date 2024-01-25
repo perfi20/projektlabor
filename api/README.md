@@ -18,6 +18,5 @@
 | ?chat           |    PUT      |  Y   |    add new chat message      |
 
 ## Access levels:
-    0 - user without acccount
-    1 - logged in user
-    2 - admin
+    0 - user
+    1 - admin

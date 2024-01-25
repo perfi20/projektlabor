@@ -15,7 +15,7 @@ $result = curl('posts', 'POST', $postfields, true);
 
     <?php foreach ($result as $archive) : ?>
 
-        <li><a href="forum.php?date=<?php echo $archive["month_year"]; ?>"><?php echo $archive["month_year"]; ?></a></li>
+        <li><a href="index.php?date=<?php echo $archive["month_year"]; ?>"><?php echo $archive["month_year"]; ?></a></li>
 
     <?php endforeach; ?>
     </ol>

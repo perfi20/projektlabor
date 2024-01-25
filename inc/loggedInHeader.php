@@ -14,7 +14,7 @@ include_once('./components/curl.php');
 </head>
 
 <body class="bg-dark text-light">
-
+ 
 <nav class="navbar bg-body-tertiary navbar-expand-sm sticky-top" data-bs-theme="dark">
 	<div class="container">
 		<a class="navbar-brand" href="./index.php"><i class="bi bi-circle"></i> Circle</a>
@@ -23,12 +23,7 @@ include_once('./components/curl.php');
 		</button>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-				<li class="nav-item w-100">
-					<a class="nav-link" href="./chat.php">Chat</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">About</a>
-				</li>
+
 				<li class="nav-item w-100">
 					<?php if (isset($_SESSION['access_level']) && $_SESSION['access_level'] >= 1) {
 						echo '<a class="nav-link" href="admin.php">Admin</a>';
@@ -79,13 +74,13 @@ include_once('./components/curl.php');
 
 		<div class="dropdown">
       <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+        <img src="../src/profile_pic.jpg" alt="" width="32" height="32" class="rounded-circle me-2">
         <strong><?php echo $_SESSION['username']; ?></strong>
       </a>
       <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-        <li><a class="dropdown-item" href="./post_manager.php?new">New post</a></li>
+        <li><a class="dropdown-item" href="./post_manager.php?action=new">New post</a></li>
         <li><a class="dropdown-item" href="./post_manager.php">My posts</a></li>
-        <li><a class="dropdown-item" href="#">Profile</a></li>
+        <li><a class="dropdown-item" href="./user_manager.php">Profile</a></li>
         <li><hr class="dropdown-divider"></li>
         <li><a class="dropdown-item" href="./inc/logout.php">Sign out</a></li>
       </ul>
