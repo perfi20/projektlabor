@@ -1,82 +1,122 @@
 <?php
 
+session_start();
+
 include_once('components/curl.php');
-include('inc/notLoggedInHeader.php');
+include_once('inc/notLoggedInHeader.php');
 include_once('components/validateInput.php');
 
-if (!empty($_COOKIE['email'])) {
+if (isset($_SESSION['username']) && $_SESSION['username'] !== "") {
   header('location: index.php');
 }
 
-// initializing variables
-$username = null;
-$email = null;
-$pw = null;
-
-if (isset($_POST['submit'])){
+if (isset($_POST['submit'])) {
 
   $username = validateInput($_POST['username']);
   $email = validateInput($_POST['email']);
-  $pw = validateInput($_POST['pw']);
-  $pwSecured = hash('sha256', $pw);
+  $password = validateInput($_POST['password']);
+  $passwordConfirm = validateInput($_POST["passwordConfirm"]);
+  $pwSecured = hash('sha256', $passwordConfirm);
 
-  $postfields = json_encode(['username' => $username, 'email' => $email, 'pw' => $pwSecured]);
+  // only submit if passwords are the same
+  if ($password === $passwordConfirm) {
 
-  $data = curl('users', 'PUT', $postfields);
+    $postfields = json_encode(['username' => $username, 'email' => $email, 'password' => $pwSecured]);
+    $result = curl('users', 'PUT', $postfields);
 
-  // TODO: API ADJA VISSZA AZ ERRORT, CSAK SIMÁN ÍRJA KI GECI
-  if($data->status == 'username_and_email_exists'){
-    $knev_error = "Foglalt felhasználónév!";
-    $email_error = "Regisztrált E-mail cím!";
-  } else if ($data->status == 'username_exists') {
-    $knev_error = "Foglalt felhasználónév!";
-  } else if ($data->status == 'email_exists') {
-    $email_error = "Regisztrált E-mail cím!";
-  } else {
-    session_start();
-      $_SESSION['email'] = $email;
+    $GLOBALS["toastFunction"] = "showToast('$result->success', '$result->message');";
+
+    if($result->success == true) {
+
       $_SESSION['username'] = $username;
+      $_SESSION['userID'] = $result->id;
+      $_SESSION['email'] = $email;
+      $_SESSION['access_level'] = $result->access_level;
+      $_SESSION['token'] = $result->token;
+
       header('location: index.php');
+
+    }
+
+  } else {
+    $GLOBALS["toastFunction"] = "showToast('false', 'Passwords are not matching!');";
   }
+
 }
 
 ?>
 
   <div class="container position-absolute top-50 start-50 translate-middle">
     <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" class="was-validated border border-secondary p-5 rounded" style="--bs-border-opacity: .5;" method="POST">
-        <h1>Regisztráció</h1>
+
+        <h1>Register</h1>
+
       <div class="form-floating my-5">
-        <input type="text" class="form-control bg-dark text-light" pattern="{0,25}" title="Kérem adja meg a Felhasználónevét, maximum 25 karakter!" id="floatingUsername" name="username" placeholder="Keresztnev" value="<?php echo $username; ?>" required>
-        <label for="floatingUsername">Felhasználónév</label>
-        <?php if (isset($knev_error)) : ?>
-          <span class="text-light bg-danger"><?php echo $knev_error; ?></span>
-        <?php endif ?>
+        <input type="text" class="form-control bg-dark text-light" pattern="{3,50}"
+          title="Username must be between 3 and 50 characters!!" id="floatingUsername" name="username"
+          placeholder="Username" value="<?php echo $username; ?>" required autofocus
+        >
+        <label for="floatingUsername">Username</label>
       </div>
+
       <div class="form-floating mb-5">
-        <input type="email" class="form-control bg-dark text-light" pattern="{0,25}" title="Kérem adja meg a E-mail címét, maximum 25 karakter!" id="floatingEmail" name="email" placeholder="name@example.com" value="<?php echo $email; ?>" required>
-        <label for="floatingEmail">Email cím</label>
-        <?php if (isset($email_error)) : ?>
-          <span class="text-light bg-danger"><?php echo $email_error; ?></span>
-        <?php endif ?>
+        <input type="email" class="form-control bg-dark text-light" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" title="Wrong email format!" id="floatingEmail" name="email" placeholder="Email" value="<?php echo $email; ?>" required>
+        <label for="floatingEmail">Email</label>
       </div>
+
       <div class="form-floating mb-5">
-        <input type="password" class="form-control bg-dark text-light" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,25}" title="Tartalmaznia kell: 1 kis és nagybetüt és 1 számot illetve minimum 6 maximum 25 karakternek kell lennie!" id="floatingPassword" name="pw" placeholder="Jelszó" value="<?php echo $pw; ?>" required>
-        <label for="floatingPassword">Jelszó</label>
+        <input type="password" class="form-control bg-dark text-light"
+          pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,50}"
+          title="Must contain at least one number and one uppercase adn lowercase letter, and between 8 and 50 characters"
+          id="floatingPassword" name="password" placeholder="Password" value="<?php echo $pw; ?>" required
+        >
+        <label for="floatingPassword">Password</label>
       </div>
+
       <div class="form-floating mb-5">
-        <input type="password" class="form-control bg-dark text-light" pattern="{6,25}" id="floatingPassword" name="pwAgain" placeholder="Password" required>
-        <label for="floatingPassword">Jelszó megerősítése</label>
-        <?php if (isset($jelszo2_error)) : ?>
-          <span class="text-light bg-danger"><?php echo $jelszo2_error; ?></span>
-        <?php endif ?>
+        <input type="password" class="form-control bg-dark text-light" pattern="{6,25}" id="floatingPasswordConfirm" name="passwordConfirm" placeholder="Password" required>
+        <label for="floatingPasswordConfirm">Password confirmation</label>
       </div>
-      <button type="submit" name="submit" class="btn btn-outline-success">Regisztráció</button>
+
+      <button type="submit" name="submit" class="btn btn-outline-success">Register</button>
+
     </form>
   </div>
 
   <?php
   include('inc/footer.php');
   ?>
-</body>
 
-</html>
+<!-- toast -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="liveToast" class="toast text-dark" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header" id="toastHeader">
+
+      <strong class="me-auto" id="toastTitle"></strong>
+      <small>11 mins ago</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body" id="toastMessage">
+    
+    </div>
+  </div>
+</div>
+
+<script src="./js/eventHandler.js"></script>
+
+<script>
+
+<?php
+    if ($GLOBALS["toastFunction"] !== "") {
+        echo $GLOBALS["toastFunction"];
+    } else {
+        $GLOBALS["toastFunction"] = "";
+    } 
+?>
+
+// prevent form resubmission when page is refreshed
+if ( window.history.replaceState ) {
+  window.history.replaceState( null, null, window.location.href );
+}
+
+</script>

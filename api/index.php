@@ -21,7 +21,6 @@ if ($development) {
 $resource = strtok($_SERVER['QUERY_STRING'], '='); // lecsapja a query = előtti részét
 //require('auth.php');
 
-// TODO: egyszerúbb resource kezelés
 if ($resource == 'users') {
     require('users.php');
 }
