@@ -1,4 +1,4 @@
-# projektlabor hhtps:https://perfi.hu/
+# projektlabor https://perfi.hu/
 PHP alapú blog alkalmazás Projekt labor és tervezés egyetemi tárgy keretében.
 
 Az alkalmazás megjelenítése Bootstrap 5 alapon történik, számos beépített funkcióját kihasználva.
