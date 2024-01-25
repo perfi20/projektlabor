@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-error_reporting(0);
+//error_reporting(0);
 
 include_once('components/curl.php');
 
@@ -20,18 +20,18 @@ if (isset($_SESSION['username']) && !empty($_SESSION['username'])) {
 
 <div class="nav-scroller py-1 mb-3 border-bottom">
     <nav class="nav nav-underline justify-content-between">
-      <a class="nav-item nav-link link-body-emphasis active" href="index.php?category=world">World</a>
-      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=u.S">U.S.</a>
-      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=technology">Technology</a>
-      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=design">Design</a>
-      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=culture">Culture</a>
-      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=business">Business</a>
-      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=politics">Politics</a>
-      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=opinion">Opinion</a>
-      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=science">Science</a>
-      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=health">Health</a>
-      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=style">Style</a>
-      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=travel">Travel</a>
+      <a class="nav-item nav-link link-body-emphasis active" href="index.php?category=World">World</a>
+      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=U.S">U.S.</a>
+      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=Technology">Technology</a>
+      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=Design">Design</a>
+      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=Culture">Culture</a>
+      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=Business">Business</a>
+      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=Politics">Politics</a>
+      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=Opinion">Opinion</a>
+      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=Science">Science</a>
+      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=Health">Health</a>
+      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=Style">Style</a>
+      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=Travel">Travel</a>
     </nav>
   </div>
 
@@ -242,7 +242,10 @@ endif;
       <div class="position-sticky" style="top: 2rem;">
         <div class="p-4 mb-3 rounded">
           <h4 class="fst-italic">About</h4>
-          <p class="mb-0">Customize this section to tell your visitors a little bit about your publication, writers, content, or something else entirely. Totally up to you.</p>
+          <p class="mb-0">
+            Circle is a university project where users can view and create blog posts in various themes.
+            Feel free to explore and try out anything. The Archives is under construction.
+          </p>
         </div>
 
         <?php
