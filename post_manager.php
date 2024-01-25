@@ -28,8 +28,12 @@ if (isset($_POST['postSubmit'])) {
 
     $postCoverImage = filter_var($_POST['coverImage'], FILTER_SANITIZE_URL);
 
-    $postInputs = $_POST['form'];
-
+    if (!empty($_POST['form'])) {
+        $postInputs = $_POST['form'];
+    } else {
+        $GLOBALS["toastFunction"] = "showToast('false', 'Post content cannot be empty!');";
+    }
+    
     // 2d array
     foreach ($postInputs as $p) {
 
@@ -113,7 +117,7 @@ if (isset($_POST['postSubmit'])) {
         header('location: ../index.php?post='.$data->id);
     }
 
-    $error = $data->error;
+    $GLOBALS["toastFunction"] = "showToast('$data->success', '$data->message');";
     
 }
 

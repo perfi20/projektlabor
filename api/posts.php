@@ -237,7 +237,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     $is_jwt_valid = is_jwt_valid($bearer_token);
 
     if (!$is_jwt_valid) {
-         $data = array('success' => false, 'error' => 'Access denied!');
+         $data = array('success' => false, 'message' => 'Access Denied!', 'error' => 'Access dDnied!');
         return;
     }
 
@@ -258,9 +258,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
     $lastId = $pdo->lastInsertId();
-    $data = array('success' => true, 'id' => $lastId);
+    $data = array('success' => true,'message' => 'Post created successfully!', 'id' => $lastId);
     } catch (PDOException $e) {
-        $data = array('success' => false, 'error' => $e->getMessage());
+        $data = array('success' => false, 'message' => 'Failed to create Post!', 'error' => $e->getMessage());
     }
     return;
 
