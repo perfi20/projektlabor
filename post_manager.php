@@ -41,7 +41,7 @@ if (isset($_POST['postSubmit'])) {
         {
             switch ($key) {
 
-                case "pTitle": 
+                case "header": 
                     $postContent .= '<h3>'.$value.'</h3>';
                     break;
 
