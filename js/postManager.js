@@ -1,27 +1,53 @@
 let i = 0;
 
-function addNewContent() {
+function addNewContent(type) {
 
     let formContent = document.getElementById("form_content");
 
-    let br = document.createElement("br");
     //let form = document.forms['create_post'];
-
-    let type = document.getElementById("newContentType").value;
     
     // delete button doesnt work :( it adds a whitespace in the parameter
     // <button type="button" onclick="close("p1")" class="btn btn-danger">Delete</button>
 
+    // new header
+    if (type == "h") {
+
+        let br = document.createElement("br");
+
+        let headerLabel = document.createElement("label");
+        headerLabel.innerHTML = "Header Content"
+        let header = document.createElement("input");
+        header.appendChild(headerLabel);
+        header.setAttribute("name", `form[${i}][header]`);
+        header.setAttribute("type", "text");
+        header.setAttribute("class", "form-control bg-dark text-light");
+        header.setAttribute("required", "");
+
+        let headerDelete = document.createElement("button");
+        headerDelete.innerHTML = "";
+        headerDelete.setAttribute("aria-label", "Close");
+        headerDelete.setAttribute("type", "button");
+        headerDelete.setAttribute("class", "btn-close");
+        headerDelete.addEventListener("click", () => {
+
+            formContent.removeChild(headerLabel);
+            formContent.removeChild(header);
+            formContent.removeChild(br);
+            formContent.removeChild(headerDelete);
+
+        });
+
+        formContent.appendChild(headerLabel);
+        formContent.appendChild(headerDelete);
+        formContent.appendChild(header);
+        formContent.appendChild(br);
+
+    }
+
     // new paragraph
     if (type == 'p') {
 
-        let pTitleLabel = document.createElement("label");
-        pTitleLabel.innerHTML = "Paragraph Header (optional)";
-        let pTitle = document.createElement("input");
-        pTitle.appendChild(pTitleLabel);
-        pTitle.setAttribute("name", `form[${i}][pTitle]`)
-        pTitle.setAttribute("type", "text");
-        pTitle.setAttribute("class", "form-control bg-dark text-light");
+        let br = document.createElement("br");
 
         let pContentLabel = document.createElement("label");
         pContentLabel.innerHTML = "Paragraph Content";
@@ -31,54 +57,78 @@ function addNewContent() {
         pContent.setAttribute("class", "form-control bg-dark text-light")
         pContent.appendChild(pContentLabel);
 
-        
-        formContent.appendChild(br.cloneNode());
-        formContent.appendChild(pTitleLabel);
-        formContent.appendChild(br.cloneNode());
-        formContent.appendChild(pTitle);
-        formContent.appendChild(br.cloneNode());
+        let paragraphDelete = document.createElement("button");
+        paragraphDelete.innerHTML = "";
+        paragraphDelete.setAttribute("aria-label", "Close");
+        paragraphDelete.setAttribute("type", "button");
+        paragraphDelete.setAttribute("class", "btn-close");
+        paragraphDelete.addEventListener("click", () => {
+
+            formContent.removeChild(pContentLabel);
+            formContent.removeChild(pContent);
+            formContent.removeChild(br);
+            formContent.removeChild(paragraphDelete);
+
+        });
+
         formContent.appendChild(pContentLabel);
-        formContent.appendChild(br.cloneNode());
+        formContent.appendChild(paragraphDelete);
         formContent.appendChild(pContent);
-        formContent.appendChild(br.cloneNode());
+        formContent.appendChild(br);
 
     }
 
     // new unordered list
     if (type == 'ul' || type == "ol") {
 
-        let ulLabel = document.createElement("label");
+        let br = document.createElement("br");
+
+        let listLabel = document.createElement("label");
         if (type == "ul") {
-            ulLabel.innerHTML = "Unordered List Content (separated by ,)";
-            ulLabel.setAttribute("for", "ulContent");
+            listLabel.innerHTML = "Unordered List Content (separated by ,)";
+            listLabel.setAttribute("for", "ulContent");
         } else {
-            ulLabel.innerHTML = "Ordered List Content (separated by ,)";
-            ulLabel.setAttribute("for", "olContent");
+            listLabel.innerHTML = "Ordered List Content (separated by ,)";
+            listLabel.setAttribute("for", "olContent");
         }
 
-        let ulContent = document.createElement("textarea");
-        ulContent.appendChild(ulLabel);
+        let listContent = document.createElement("textarea");
+        listContent.appendChild(listLabel);
         if (type == "ul") {
-            ulContent.setAttribute("name", `form[${i}][ulContent]`);
+            listContent.setAttribute("name", `form[${i}][ulContent]`);
         } else {
-            ulContent.setAttribute("name", `form[${i}][olContent]`);
+            listContent.setAttribute("name", `form[${i}][olContent]`);
         }
         
-        ulContent.setAttribute("type", "text");
-        ulContent.setAttribute("required", "");
-        ulContent.setAttribute("class", "form-control bg-dark text-light");
+        listContent.setAttribute("type", "text");
+        listContent.setAttribute("required", "");
+        listContent.setAttribute("class", "form-control bg-dark text-light");
 
-        formContent.appendChild(br.cloneNode());
-        formContent.appendChild(ulLabel);
-        formContent.appendChild(br.cloneNode());
-        formContent.appendChild(ulContent);
-        formContent.appendChild(br.cloneNode());
+        let listDelete = document.createElement("button");
+        listDelete.innerHTML = "";
+        listDelete.setAttribute("aria-label", "Close");
+        listDelete.setAttribute("type", "button");
+        listDelete.setAttribute("class", "btn-close");
+        listDelete.addEventListener("click", () => {
+
+            formContent.removeChild(listLabel);
+            formContent.removeChild(listContent);
+            formContent.removeChild(br);
+            formContent.removeChild(listDelete);
+
+        });
+
+        formContent.appendChild(listLabel);
+        formContent.appendChild(listDelete);
+        formContent.appendChild(listContent);
+        formContent.appendChild(br);
         
-
     }
 
     
     if (type == 't') {
+
+        let br = document.createElement("br");
 
         //let j=1;
 
@@ -99,6 +149,22 @@ function addNewContent() {
         tableRow.setAttribute("name", `form[${i}][tableRows]`);
         tableRow.setAttribute("required", "");
         tableRow.setAttribute("class", "form-control bg-dark text-light");
+
+        let tableDelete = document.createElement("button");
+        tableDelete.innerHTML = "";
+        tableDelete.setAttribute("aria-label", "Close");
+        tableDelete.setAttribute("type", "button");
+        tableDelete.setAttribute("class", "btn-close");
+        tableDelete.addEventListener("click", () => {
+
+            formContent.removeChild(tableHeadsLabel);
+            formContent.removeChild(tableHeadNames);
+            formContent.removeChild(tableRowLabel);
+            formContent.removeChild(tableRow);
+            formContent.removeChild(br);
+            formContent.removeChild(tableDelete);
+
+        });
 
         // let generateRowBtn = document.createElement("button");
         // generateRowBtn.innerHTML = "Generate table";
@@ -124,16 +190,13 @@ function addNewContent() {
         // });
 
 
-        formContent.appendChild(br.cloneNode());
         formContent.appendChild(tableHeadsLabel);
-        formContent.appendChild(br.cloneNode());
+        formContent.appendChild(tableDelete);
         formContent.appendChild(tableHeadNames);
-        formContent.appendChild(br.cloneNode());
 
         formContent.appendChild(tableRowLabel);
-        formContent.appendChild(br.cloneNode());
         formContent.appendChild(tableRow);
-        formContent.appendChild(br.cloneNode());
+        formContent.appendChild(br);
         
         // formContent.appendChild(generateRowBtn);
         // formContent.appendChild(br.cloneNode());
@@ -141,6 +204,8 @@ function addNewContent() {
     }
 
     if (type == 'pic') {
+
+        let br = document.createElement("br");
 
         let picLabel = document.createElement("label");
         picLabel.innerHTML = "Enter Picture URL";
@@ -151,11 +216,24 @@ function addNewContent() {
         picture.setAttribute("required", "");
         picture.setAttribute("class", "form-control bg-dark text-light");
 
-        formContent.appendChild(br.cloneNode());
+        let pictureDelete = document.createElement("button");
+        pictureDelete.innerHTML = "";
+        pictureDelete.setAttribute("aria-label", "Close");
+        pictureDelete.setAttribute("type", "button");
+        pictureDelete.setAttribute("class", "btn-close");
+        pictureDelete.addEventListener("click", () => {
+
+            formContent.removeChild(picLabel);
+            formContent.removeChild(picture);
+            formContent.removeChild(br);
+            formContent.removeChild(pictureDelete);
+
+        });
+
         formContent.appendChild(picLabel);
-        formContent.appendChild(br.cloneNode());
+        formContent.appendChild(pictureDelete);
         formContent.appendChild(picture);
-        formContent.appendChild(br.cloneNode());
+        formContent.appendChild(br);
 
     }
 

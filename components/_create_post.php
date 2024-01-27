@@ -46,12 +46,13 @@ $error = "";
             <input type="url" name="coverImage" id="coverImage" class="form-control bg-dark text-light" required>
         </div>
 
-        <div id="form_content"></div>
+        <div id="form_content" data-bs-theme="dark"></div>
 
         <div class="mb-5">
             <label for="newContent">New...</label>
-            <select class="form-control bg-dark text-light" oninput="addNewContent()" name="newContent" id="newContentType">
+            <select class="form-control bg-dark text-light" oninput="addNewContent(this.value)" name="newContent" id="newContentType">
                 <option value="">Select an element</option>
+                <option value="h">New Header</option>
                 <option value="p">New Paragraph</option>
                 <option value="q" disabled>New Quote</option>
                 <option value="t">New Table</option>
