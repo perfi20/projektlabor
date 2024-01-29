@@ -158,7 +158,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // select distinct month and year post creation dates for displaying archives
     if (isset($input->archive) && $input->archive!== "") {
 
-        $stmt = $pdo->prepare("SELECT DISTINCT (DATE_FORMAT(created_at, '%M %Y')) AS month_year
+        $stmt = $pdo->prepare(
+            "SELECT DISTINCT (DATE_FORMAT(created_at, '%M %Y')) AS month_year,
+            DATE_FORMAT(created_at, '%Y') AS y, DATE_FORMAT(created_at, '%m') AS m
             FROM post ORDER BY DATE_FORMAT(created_at, '%Y') ASC, DATE_FORMAT(created_at, '%m') ASC;
         ");
         $stmt->execute();
@@ -167,10 +169,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$data) {
             $data = array(
                 'success' => false,
-                'error' => 'failed to get archives'
+                'message' => 'failed to get archives!',
+                'error' => 'failed to get archives!'
             );
             return;
         }
+
+    }
+
+    // select posts by date - archive
+    if (isset($input->year) || isset($input->month)) {
+
+
+        $firstDate = date("Y-m-d H:i:s", strtotime("$input->year-$input->month-1"));
+        $lastDate = date("Y-m-d H:i:s", strtotime("$input->year-$input->month-31"));
+
+        // pagination
+        $limit = $input->limit;
+
+        try {
+            $pagination = $pdo->prepare("SELECT COUNT(id) AS posts FROM post WHERE created_at BETWEEN ? AND ?");
+            $pagination->execute([$firstDate, $lastDate]);
+            $pages = $pagination->fetch(PDO::FETCH_ASSOC);
+            $totalPages = ceil($pages["posts"] / $limit);
+            $starting_limit = ($input->page - 1) * $limit;
+        } catch (PDOException $e) {
+            $data = array('success' => false);
+            return;
+        }
+
+        $stmt = $pdo->prepare(
+            "SELECT p.id, p.title, p.category, p.cover, p.created_at, p.content, u.username FROM post p
+            INNER JOIN user u ON p.publisher = u.id WHERE p.created_at BETWEEN ? AND ?
+            ORDER BY created_at ASC LIMIT $starting_limit, $limit
+        ");
+        $stmt->execute([$firstDate, $lastDate]);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!$data) {
+            $data = array(
+                'success' => false,
+                'message' => 'failed to get posts!',
+                'error' => 'failed to get posts!',
+            );
+            return;
+        }
+
+        $content = array(
+            'success' => true,
+            'page' => $input->page,
+            'total_pages' => $totalPages,
+            'posts' => $data
+        );
+        $data = $content;
         return;
     }
 
