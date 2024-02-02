@@ -10,12 +10,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         try {
             $stmt = $pdo->prepare(
-                "SELECT p.title, p.category, p.cover, p.created_at, p.content, u.username FROM post p
+                "SELECT p.title, p.category, p.cover, p.created_at, p.content, u.username, u.id FROM post p
                 INNER JOIN user u ON p.publisher = u.id WHERE p.id = ?
             ");
             $stmt->execute([$input->id]);
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
+            $publisher = $data["id"];
             $content = array(
                 'success' => true,
                 'title' => $data["title"],
@@ -35,8 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // view counter
         if (isset($input->ip) && $input->ip !== "") {
 
-            $stmt = $pdo->prepare("INSERT INTO views (ip, postID, userID) VALUES (?, ?, ?)");
-            $stmt->execute([$input->ip, $input->id, $input->userID]);
+            $stmt = $pdo->prepare("INSERT INTO views (ip, postID, authorID, userID) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$input->ip, $input->id, $publisher, $input->userID]);
         }
 
         return;
@@ -64,7 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         try {
             $stmt = $pdo->prepare(
-            "SELECT p.id, p.title, p.category, p.cover, p.summary, p.created_at, p.updated_at, p.content, p.featured, u.username
+            "SELECT p.id, p.title, p.category, p.cover, p.summary, DATE_FORMAT(p.created_at, '%Y-%m-%d') AS created_at,
+            DATE_FORMAT(p.updated_at, '%Y-%m-%d') AS updated_at, p.content, p.featured, u.username
             FROM post p INNER JOIN user u ON p.publisher = u.id WHERE u.username = ?
             ORDER BY created_at DESC LIMIT $starting_limit, $limit"
             );

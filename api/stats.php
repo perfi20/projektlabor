@@ -19,22 +19,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         try {
             // user count
-        $userCount = $pdo->prepare("SELECT COUNT(id) AS 'users' FROM user");
+        $userCount = $pdo->prepare("SELECT COUNT(id) AS users FROM user");
         $userCount->execute();
         $userCount = $userCount->fetch(PDO::FETCH_ASSOC);
 
         // post count
-        $postCount = $pdo->prepare("SELECT COUNT(id) AS 'posts' FROM post");
+        $postCount = $pdo->prepare("SELECT COUNT(id) AS posts FROM post");
         $postCount->execute();
         $postCount = $postCount->fetch(PDO::FETCH_ASSOC);
 
+        // view count
+        $viewCount = $pdo->prepare("SELECT COUNT(id) AS views FROM views");
+        $viewCount->execute();
+        $viewCount = $viewCount->fetch(PDO::FETCH_ASSOC);
+
         $users = $userCount['users'];
         $posts = $postCount['posts'];
+        $views = $viewCount['views'];
 
         $data = array(
             'success' => true,
             'users' => $users,
-            'posts' => $posts
+            'posts' => $posts,
+            'views' => $views,
         );
 
         } catch (PDOException $e) {
@@ -68,7 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         try {
             $stmt = $pdo->prepare(
-            "SELECT p.id, p.title, p.category, p.cover, p.summary, p.created_at, p.updated_at,p.content, p.featured,
+            "SELECT p.id, p.title, p.category, p.cover, p.summary, DATE_FORMAT(p.created_at, '%Y-%m-%d') AS created_at,
+            DATE_FORMAT(p.updated_at, '%Y %m %d') AS updated_at , p.content, p.featured,
             u.username, COUNT(v.id) AS views
             FROM post p JOIN user u ON p.publisher = u.id LEFT JOIN views v ON p.id = v.postID
             GROUP BY p.id ORDER BY created_at DESC LIMIT $starting_limit, $limit"
@@ -112,9 +120,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         try {
             $stmt = $pdo->prepare(
-            "SELECT u.id, u.username, u.email, u.created_at, u.updated_at, u.access_level, COUNT(p.id) AS postNumber
-            FROM user u LEFT JOIN post p ON u.id = p.publisher GROUP BY u.id
-            ORDER BY u.created_at DESC LIMIT $starting_limit, $limit"
+                "SELECT u.id, u.username, u.email, DATE_FORMAT(u.created_at, '%Y-%m-%d') AS created_at,
+                DATE_FORMAT(u.updated_at, '%Y-%m-%d') AS updated_at, u.access_level, COUNT(p.id) AS postNumber,
+                (SELECT COUNT(id) FROM views WHERE authorID = u.id) AS totalViews
+                FROM user u LEFT JOIN post p ON u.id = p.publisher
+                GROUP BY u.id ORDER BY created_at DESC LIMIT $starting_limit, $limit"
             );
             $stmt->execute();
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -40,12 +40,14 @@ if (!isset($_GET["view"])) {
 		<thead>
 			<th scope="col">Users</th>
 			<th scope="col">Posts</th>
+            <th scope="col">Views</th>
 		</thead>
 
 		<tbody class="table-group-divider">
 			<tr>
 				<th><?php echo $result["users"]; ?></th>
 				<th><?php echo $result["posts"]; ?></th>
+                <th><?php echo $result["views"]; ?></th>
 			</tr>
 		</tbody>
 
@@ -122,7 +124,7 @@ if (isset($_GET["view"]) && $_GET["view"] === "posts") {
     <tbody class="table-group-divider">
         <tr>
             <th><?php echo $page == 1 ? $i : ($i + ($page * 25)); ?></th>
-            <td><?php echo $post["title"] ?></td>
+            <td><?php echo strlen($post["title"]) > 60 ? substr($post['title'], 0, 60).'...' : $post["title"] ?></td>
             <td><?php echo $post["category"] ?></td>
             <td><?php echo $post["username"] ?></td>
             <td><?php echo $post["created_at"] ?></td>
@@ -146,7 +148,6 @@ if (isset($_GET["view"]) && $_GET["view"] === "posts") {
                 </button>
 
                 <!-- edit modal -->
-
                 <div class="modal fade" id="editModal<?php echo $post["id"]; ?>" tabindex="-1"
                     aria-labelledby="editModalLabel" aria-hidden="true" data-bs-theme="dark">
                     <div class="modal-dialog">
@@ -167,7 +168,7 @@ if (isset($_GET["view"]) && $_GET["view"] === "posts") {
 
                                     <div class="mb-3">
                                         <label for="title" class="col-form-label">Title:</label>
-                                        <input type="text" name="title" id="title" class="form-control bg-dark text-light" value="<?php echo $post["title"]; ?>">
+                                        <textarea name="title" id="title" rows="2" class="form-control bg-dark text-light"><?php echo $post["title"]; ?></textarea>
                                     </div>
 
                                     <div class="mb-3">
@@ -328,6 +329,7 @@ if (isset($_GET["view"]) && $_GET["view"] === "users") {
             <th scope="col">Updated at</th>
             <th scope="col">Role</th>
             <th scope="col">Posts</th>
+            <th scope="col">Total Views</th>
             <th scope="col">Actions</th>
         </tr>
     </thead>
@@ -345,7 +347,8 @@ if (isset($_GET["view"]) && $_GET["view"] === "users") {
             <td><?php echo $user["created_at"] ?></td>
             <td><?php if (isset($user["updated_at"])) echo $user["updated_at"] ?></td>
             <td><?php echo ($user["access_level"] === 1) ? "Admin" : "User"; ?></td>
-            <td><?php echo $user["postNumber"] ?></td>
+            <td><?php echo $user["postNumber"]; ?></td>
+            <td><?php echo $user["totalViews"]; ?></td>
 
             <td>
                 <!-- view posts button -->
