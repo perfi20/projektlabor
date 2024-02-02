@@ -205,7 +205,7 @@ if (!isset($_GET["action"])) {
     <tbody class="table-group-divider">
         <tr>
             <th><?php echo $page == 1 ? $i : ($i + ($page * 25)); ?></th>
-            <td><?php echo $post["title"] ?></td>
+            <td><?php echo strlen($post["title"]) > 60 ? substr($post['title'], 0, 60).'...' : $post["title"] ?></td>
             <td><?php echo $post["category"] ?></td>
             <td><?php echo $post["created_at"] ?></td>
             <td><?php if (isset($post["updated_at"])) echo $post["updated_at"] ?></td>

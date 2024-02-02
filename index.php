@@ -295,7 +295,7 @@ endif;
           <h4 class="fst-italic">About</h4>
           <p class="mb-0">
             Circle is a university project where users can view and create blog posts in various themes.
-            Feel free to explore and try out anything. The Archives is under construction.
+            Feel free to explore and try out anything.
           </p>
         </div>
 
