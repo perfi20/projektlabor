@@ -93,25 +93,97 @@ if (isset($_GET["view"]) && $_GET["view"] === "posts") {
 	// pagination
     $page = isset($_GET["page"]) ? $_GET["page"] : 1;
 
-	$postfields = json_encode(['user' => $_SESSION["username"], 'view' => 'posts', 'page' => $page, 'limit' => 50]);
+    // filtering
+    $sort = $_GET['sort'] ? $_GET['sort'] : 'created_at';
+
+    $order = ($_GET['order'] == 'desc') ? 'asc' : 'desc';
+    if (!isset($_GET['order'])) {
+        $order = 'desc';
+    }
+    
+    if ($order == 'asc') {
+        $arrow = '<img src="./src/icons8-chevron-up-64.png" width="20" height="20"/>';
+    } else $arrow = '<img src="./src/icons8-chevron-down-64.png" width="20" height="20"/>';
+
+    // request
+	$postfields = json_encode([
+        'user' => $_SESSION["username"],
+        'view' => 'posts',
+        'page' => $page,
+        'limit' => 50,
+        'sort' => $sort,
+        'order' => $order
+    ]);
 	$result = curl('stats', 'POST', $postfields, true);
     $content = $result["posts"];
 
 	?>
 
+<!-- collapsable admin search form -->
+<button type="button" class="btn btn-outline-success" data-bs-toggle="collapse"
+    data-bs-target="#searchFormCollapse" aria-expanded="false">
+    Filters
+</button>
+
+<div class="collapse" id="searchFormCollapse">
+<div class="card card-body bg-dark">
+    <form method="GET" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
+
+        <label for="filterTitle" class="col-form-label">Title</label>
+        <input type="text" name="filterTitle" id="filterTitle" class="form-control bg-dark text-light">
+
+        <label for="filterCategory" class="col-form-label">Category</label>
+        <select name="filterCategory" id="filterCategory" class="form-control bg-dark text-light">
+            <option value="world">World</option>
+            <option value="us">U.S</option>
+            <option value="technology">Technology</option>
+            <option value="design">Design</option>
+            <option value="culture">Culture</option>
+            <option value="business">Business</option>
+            <option value="politics">Politics</option>
+            <option value="opinion">Opinion</option>
+            <option value="science">Science</option>
+            <option value="health">Health</option>
+            <option value="style">Style</option>
+            <option value="travel">Travel</option>
+            <option value="other">Other</option>
+        </select>
+
+        <label for="filterPublisher" class="col-form-label">Publisher</label>
+        <input type="text" name="filterPublisher" id="filterPublisher" class="form-control bg-dark text-light">
+
+        <label for="filterFeatured" class="col-form-label">Featured</label>
+        <input type="radio" name="filterFeatured" id="filterFeatured" class="form-control bg-dark text-light">
+
+        <input type="submit" value="Search" name="filterSubmit" id="filterSubmit" class="btn btn-outline-success">
+
+    </form>
+</div>
+</div>
+
+
+
 <div class="table-responsive">
     <table class="table align-middle text-light">
+
+    <!-- filtering links styling -->
+    <style>
+        .filter-link {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
 
     <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Title</th>
-            <th scope="col">Category</th>
-            <th scope="col">Publisher</th>
-            <th scope="col">Created at</th>
-            <th scope="col">Updated at</th>
-            <th scope="col">Featured</th>
-            <th scope="col">Views</th>
+            <th scope="col"><a class="filter-link" href="?view=posts&sort=title&order=<?php echo $order; ?>">Title<?php if ($sort == 'title') echo $arrow; ?></a></th>
+            <th scope="col"><a class="filter-link" href="?view=posts&sort=category&order=<?php echo $order; ?>">Category<?php if ($sort == 'category') echo $arrow; ?></a></th>
+            <th scope="col"><a class="filter-link" href="?view=posts&sort=publisher&order=<?php echo $order; ?>">Publisher<?php if ($sort == 'publisher') echo $arrow; ?></a></th>
+            <th scope="col"><a class="filter-link" href="?view=posts&sort=created_at&order=<?php echo $order; ?>">Created at<?php if ($sort == 'created_at') echo $arrow; ?></a></th>
+            <th scope="col"><a class="filter-link" href="?view=posts&sort=updated_at&order=<?php echo $order; ?>">Updated at<?php if ($sort == 'updated_at') echo $arrow; ?></a></th>
+            <th scope="col"><a class="filter-link" href="?view=posts&sort=featured&order=<?php echo $order; ?>">Featured<?php if ($sort == 'featured') echo $arrow; ?></a></th>
+            <th scope="col"><a class="filter-link" href="?view=posts&sort=views&order=<?php echo $order; ?>">Views<?php if ($sort == 'views') echo $arrow; ?></a></th>
             <th scope="col">Actions</th>
         </tr>
     </thead>
@@ -309,8 +381,28 @@ if (isset($_GET["view"]) && $_GET["view"] === "users") {
 
     // pagination
     $page = isset($_GET["page"]) ? $_GET["page"] : 1;
-	
-	$postfields = json_encode(['user' => $_SESSION['username'], 'view' => 'users', 'page' => $page, 'limit' => 50]);
+
+    // filtering
+    $sort = $_GET['sort'] ? $_GET['sort'] : 'created_at';
+    
+    $order = ($_GET['order'] == 'desc') ? 'asc' : 'desc';
+    if (!isset($_GET['order'])) {
+        $order = 'desc';
+    }
+    
+    if ($order == 'asc') {
+        $arrow = '<img src="./src/icons8-chevron-up-64.png" width="20" height="20"/>';
+    } else $arrow = '<img src="./src/icons8-chevron-down-64.png" width="20" height="20"/>';
+
+    // request
+	$postfields = json_encode([
+        'user' => $_SESSION['username'],
+        'view' => 'users',
+        'page' => $page,
+        'limit' => 50,
+        'sort' => $sort,
+        'order' => $order
+    ]);
 	$result = curl('stats', 'POST', $postfields, true);
 
     $content = $result["users"];
@@ -320,16 +412,24 @@ if (isset($_GET["view"]) && $_GET["view"] === "users") {
     <div class="table-responsive">
     <table class="table align-middle text-light">
 
+    <!-- filtering links styling -->
+    <style>
+        .filter-link {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+
     <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Username</th>
-            <th scope="col">Email</th>
-            <th scope="col">Created at</th>
-            <th scope="col">Updated at</th>
-            <th scope="col">Role</th>
-            <th scope="col">Posts</th>
-            <th scope="col">Total Views</th>
+            <th scope="col"><a class="filter-link" href="?view=users&sort=username&order=<?php echo $order; ?>">Username<?php if ($sort == 'username') echo $arrow; ?></a></th>
+            <th scope="col"><a class="filter-link" href="?view=users&sort=email&order=<?php echo $order; ?>">Email<?php if ($sort == 'email') echo $arrow; ?></a></th>
+            <th scope="col"><a class="filter-link" href="?view=users&sort=created_at&order=<?php echo $order; ?>">Created at<?php if ($sort == 'created_at') echo $arrow; ?></a></th>
+            <th scope="col"><a class="filter-link" href="?view=users&sort=updated_at&order=<?php echo $order; ?>">Updated at<?php if ($sort == 'updated_at') echo $arrow; ?></a></th>
+            <th scope="col"><a class="filter-link" href="?view=users&sort=access_level&order=<?php echo $order; ?>">Role<?php if ($sort == 'access_level') echo $arrow; ?></a></th>
+            <th scope="col"><a class="filter-link" href="?view=users&sort=postNumber&order=<?php echo $order; ?>">Posts<?php if ($sort == 'postNumber') echo $arrow; ?></a></th>
+            <th scope="col"><a class="filter-link" href="?view=users&sort=totalViews&order=<?php echo $order; ?>">Views<?php if ($sort == 'totalViews') echo $arrow; ?></a></th>
             <th scope="col">Actions</th>
         </tr>
     </thead>
