@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         return;
     }
 
-    // get all posts
+    // posts view
     if (isset($input->view) && $input->view === 'posts') {
 
         // pagination
@@ -73,13 +73,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             return;
         }
 
+        // filtering
+        if (isset($input->sort) && isset($input->order)) {
+            $sort = $input->sort;
+            $order = $input->order;
+        } else {
+            $sort = 'created_at';
+            $order = 'asc';
+        }
+
         try {
             $stmt = $pdo->prepare(
             "SELECT p.id, p.title, p.category, p.cover, p.summary, DATE_FORMAT(p.created_at, '%Y-%m-%d') AS created_at,
             DATE_FORMAT(p.updated_at, '%Y %m %d') AS updated_at , p.content, p.featured,
             u.username, COUNT(v.id) AS views
             FROM post p JOIN user u ON p.publisher = u.id LEFT JOIN views v ON p.id = v.postID
-            GROUP BY p.id ORDER BY created_at DESC LIMIT $starting_limit, $limit"
+            GROUP BY p.id ORDER BY $sort $order LIMIT $starting_limit, $limit"
             );
             $stmt->execute();
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -99,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         return;
     }
 
-    // get all users
+    // users view
     if (isset($input->view) && $input->view === "users") {
 
         // pagination
@@ -118,13 +127,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             return;
         }
 
+        // filtering
+        if (isset($input->sort) && isset($input->order)) {
+            $sort = $input->sort;
+            $order = $input->order;
+        } else {
+            $sort = 'created_at';
+            $order = 'asc';
+        }
+
         try {
             $stmt = $pdo->prepare(
                 "SELECT u.id, u.username, u.email, DATE_FORMAT(u.created_at, '%Y-%m-%d') AS created_at,
                 DATE_FORMAT(u.updated_at, '%Y-%m-%d') AS updated_at, u.access_level, COUNT(p.id) AS postNumber,
                 (SELECT COUNT(id) FROM views WHERE authorID = u.id) AS totalViews
                 FROM user u LEFT JOIN post p ON u.id = p.publisher
-                GROUP BY u.id ORDER BY created_at DESC LIMIT $starting_limit, $limit"
+                GROUP BY u.id ORDER BY $sort $order LIMIT $starting_limit, $limit"
             );
             $stmt->execute();
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);

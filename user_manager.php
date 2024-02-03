@@ -127,9 +127,7 @@ if (!isset($_GET["magic"])) {
         <tbody>
             <!-- username -->
             <tr>
-                <td>
-                    Username
-                </td>
+                <td>Username</td>
                 <td>
                     <h3 id="username"><?php echo $user["username"]; ?></h3>
                 </td>
@@ -143,9 +141,7 @@ if (!isset($_GET["magic"])) {
 
             <!-- email -->
             <tr>
-                <td>
-                    Email
-                </td>
+                <td>Email</td>
                 <td>
                     <h3><?php echo $user["email"]; ?></h3>
                 </td>
@@ -159,9 +155,7 @@ if (!isset($_GET["magic"])) {
 
             <!-- password -->
             <tr>
-                <td>
-                    Password
-                </td>
+                <td>Password</td>
                 <td></td>
                 <td>
                     <button type="button" class="btn btn-outline-warning"
@@ -171,11 +165,21 @@ if (!isset($_GET["magic"])) {
                 </td>
             </tr>
 
+            <!-- Profile picture -->
+            <tr>
+                <td>Profile Picture</td>
+                <td></td>
+                <td>
+                    <button type="button" class="btn btn-outline-warning"
+                        data-bs-toggle="modal" data-bs-target="#editPictureModal">
+                        Change
+                    </button>
+                </td>
+            </tr>
+
             <!-- role -->
             <tr>
-                <td>
-                    Role
-                </td>
+                <td>Role</td>
                 <td>
                     <h3><?php echo $user["access_level"] === 0 ? "user" : "admin"; ?></h3>
                 </td>
@@ -184,9 +188,7 @@ if (!isset($_GET["magic"])) {
 
             <!-- created_at -->
             <tr>
-                <td>
-                    Account created
-                </td>
+                <td>Account created</td>
                 <td>
                     <h3><?php echo $user["created_at"]; ?></h3>
                 </td>
@@ -195,9 +197,7 @@ if (!isset($_GET["magic"])) {
 
             <!-- created_at -->
             <tr>
-                <td>
-                    Account updated
-                </td>
+                <td>Account updated</td>
                 <td>
                     <h3><?php echo $user["updated_at"]; ?></h3>
                 </td>
@@ -314,6 +314,38 @@ if (!isset($_GET["magic"])) {
                         <div class="modal-footer">
                             <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
                             <button type="submit" class="btn btn-outline-warning" name="editPassword" id="editPassword">Change</button>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- edit profile picture modal -->
+
+    <div class="modal fade" id="editPictureModal" tabindex="-1"
+        aria-labelledby="editPictureModalLabel" aria-hidden="true" data-bs-theme="dark">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark">
+
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="editPictureModalLabel">Change Profile Picture</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="nodal-body">
+                    <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+
+                        <div class="mb-3">
+                            <label for="pw">Picture:</label>
+                            <input type="file" accept="image/*" name="picture" id="picture">
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-outline-warning" name="editPicture" id="editPicture">Change</button>
                         </div>
 
                     </form>

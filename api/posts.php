@@ -62,12 +62,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             return;
         }
 
+        // filtering
+        if (isset($input->sort) && isset($input->order)) {
+            $sort = $input->sort;
+            $order = $input->order;
+        } else {
+            $sort = 'created_at';
+            $order = 'asc';
+        }
+
         try {
             $stmt = $pdo->prepare(
             "SELECT p.id, p.title, p.category, p.cover, p.summary, DATE_FORMAT(p.created_at, '%Y-%m-%d') AS created_at,
             DATE_FORMAT(p.updated_at, '%Y-%m-%d') AS updated_at, p.content, p.featured, u.username
             FROM post p INNER JOIN user u ON p.publisher = u.id WHERE u.username = ?
-            ORDER BY created_at DESC LIMIT $starting_limit, $limit"
+            ORDER BY $sort $order LIMIT $starting_limit, $limit"
             );
             $stmt->execute([$input->user]);
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);

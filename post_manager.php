@@ -176,7 +176,26 @@ if (!isset($_GET["action"])) {
     $page = isset($_GET["page"]) ? $_GET["page"] : 1;
     $category = $_GET["user"];
 
-    $postfields = json_encode(['user' => $_SESSION["username"], 'page' => $page, 'limit' => 50]);
+    // filtering
+    $sort = $_GET['sort'] ? $_GET['sort'] : 'created_at';
+    
+    $order = ($_GET['order'] == 'desc') ? 'asc' : 'desc';
+    if (!isset($_GET['order'])) {
+        $order = 'desc';
+    }
+    
+    if ($order == 'asc') {
+        $arrow = '<img src="./src/icons8-chevron-up-64.png" width="20" height="20"/>';
+    } else $arrow = '<img src="./src/icons8-chevron-down-64.png" width="20" height="20"/>';
+    
+    // request
+    $postfields = json_encode([
+        'user' => $_SESSION["username"],
+        'page' => $page,
+        'limit' => 50,
+        'sort' => $sort,
+        'order' => $order
+    ]);
     $result = curl('posts', 'POST', $postfields, true);
 
     $content = $result["posts"];
@@ -185,14 +204,22 @@ if (!isset($_GET["action"])) {
 <div class="table-responsive">
     <table class="table align-middle text-light">
 
+    <!-- filtering links styling -->
+    <style>
+        .filter-link {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+
     <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Title</th>
-            <th scope="col">Category</th>
-            <th scope="col">Created at</th>
-            <th scope="col">Updated at</th>
-            <th scope="col">Featured</th>
+            <th scope="col"><a class="filter-link" href="?sort=title&order=<?php echo $order; ?>">Title<?php if ($sort == 'title') echo $arrow; ?></a></th>
+            <th scope="col"><a class="filter-link" href="?sort=category&order=<?php echo $order; ?>">Category<?php if ($sort == 'category') echo $arrow; ?></a></th>
+            <th scope="col"><a class="filter-link" href="?sort=created_at&order=<?php echo $order; ?>">Created at<?php if ($sort == 'created_at') echo $arrow; ?></a></th>
+            <th scope="col"><a class="filter-link" href="?sort=updated_at&order=<?php echo $order; ?>">Updated at<?php if ($sort == 'updated_at') echo $arrow; ?></a></th>
+            <th scope="col"><a class="filter-link" href="?sort=featured&order=<?php echo $order; ?>">Featured<?php if ($sort == 'featured') echo $arrow; ?></a></th>
             <th scope="col">Actions</th>
         </tr>
     </thead>
