@@ -74,7 +74,25 @@ include_once('./components/curl.php');
 
 		<div class="dropdown">
       <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-        <img src="../src/profile_pic.jpg" alt="" width="32" height="32" class="rounded-circle me-2">
+        <?php // show profile picture
+
+          $id = $_SESSION["userID"];
+          $path = 'src/'.$id.'/';
+          $files = scandir($path);
+
+          if (!empty($files)) {
+            foreach ($files as $file) {
+              $filePath = $path . '/' . $file;
+            }
+            
+          } else {
+            // default profile picture
+            $filePath = 'src/profile_pic.jpg';
+          }
+          
+        ?>
+        <img src="<?php echo $filePath; ?>" alt="" width="32" height="32" class="rounded-circle me-2">
+        
         <strong><?php echo $_SESSION['username']; ?></strong>
       </a>
       <ul class="dropdown-menu dropdown-menu-dark text-small shadow">

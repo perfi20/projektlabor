@@ -105,6 +105,49 @@ if (isset($_POST['editPassword'])) {
     }
     
 }
+
+// profile picture upload
+if (isset($_POST['editPicture'])) {
+
+    $id = $_SESSION["userID"];
+    $path = 'src/'.$id.'/';
+    mkdir($path);
+
+// delete previous image
+    $files = scandir($path);
+    foreach ($files as $file) {
+        $filePath = $path . '/' . $file;
+        unlink($filePath);
+    }
+
+    $target_dir = $path;
+    $target_file = $target_dir . basename($_FILES['picture']['name']);
+    $uploadOk = 1;
+    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+    // check if image file is an actual image or fake image
+    $check = getimagesize($_FILES['picture']['tmp_name']);
+    if ($check !== false) {
+        $uploadOk = 1;
+    } else $uploadOk = 0;
+
+    // check file size
+    if ($_FILES['picture']['size'] > 500000) {
+        $uploadOk = 0;
+    }
+
+    // check file format
+    if ($imageFileType != 'jpg' && $imageFileType !== 'png' && $imageFileType != 'jpeg') {
+        $uploadOk = 0;
+    }
+
+    // rename to profile-pic
+    rename($target_file . $imageFileType, $target_file . 'profile-pic' . $imageFileType);
+
+    // upload
+    move_uploaded_file($_FILES['picture']['tmp_name'], $target_file);
+
+}
     
 // MAIN CONTENT
 // i dont know why, but this way data get refreshed insantly without page reload
@@ -336,16 +379,30 @@ if (!isset($_GET["magic"])) {
                 </div>
 
                 <div class="nodal-body">
-                    <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                    <form method="POST" enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
 
+                    <div class="mb3">
+                        <?php // show profile picture
+
+                        $id = $_SESSION["userID"];
+                        $path = 'src/'.$id.'/';
+                        $files = scandir($path);
+                        foreach ($files as $file) {
+                        $filePath = $path . '/' . $file;
+
+                        }
+                    ?>
+                    <img src="<?php echo $filePath; ?>" alt="" class="form-control bg-dark text-light">
+                    </div>
+                    
                         <div class="mb-3">
-                            <label for="pw">Picture:</label>
-                            <input type="file" accept="image/*" name="picture" id="picture">
+                            <label for="pw">New Picture:</label>
+                            <input type="file" accept="image/*" name="picture" id="picture" class="form-control bg-dark text-light">
                         </div>
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-outline-warning" name="editPicture" id="editPicture">Change</button>
+                            <button type="submit" class="btn btn-outline-warning" name="editPicture" id="editPicture">Upload</button>
                         </div>
 
                     </form>
