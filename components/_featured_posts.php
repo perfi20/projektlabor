@@ -17,7 +17,7 @@ for ($i=0; $i<3; $i++) {
     <div class="col-lg-6 px-0">
       <h1 class="display-4 fst-italic"><?php echo $first["title"]; ?></h1>
       <p class="lead my-3"><?php echo $first["summary"]; ?></p>
-      <p class="lead mb-0"><a href="index.php?post=<?php echo $first["id"]; ?>" class="fw-bold">Continue reading...</a></p>
+      <p class="lead mb-0"><a href="/post/<?php echo $first["id"]; ?>" class="fw-bold">Continue reading...</a></p>
     </div>
   </div>
 
@@ -29,7 +29,7 @@ for ($i=0; $i<3; $i++) {
           <h3 class="mb-0"><?php echo $second["title"]; ?></h3>
           <div class="mb-1 text-body-secondary">Nov 12</div>
           <p class="card-text mb-auto"><?php echo $second["summary"]; ?></p>
-          <a href="index.php?post=<?php echo $second["id"]; ?>" class="icon-link gap-1 icon-link-hover stretched-link">
+          <a href="/post/<?php echo $second["id"]; ?>" class="icon-link gap-1 icon-link-hover stretched-link">
             Continue reading
             <svg class="bi"><use xlink:href="#chevron-right"/></svg>
           </a>
@@ -43,7 +43,7 @@ for ($i=0; $i<3; $i++) {
           <h3 class="mb-0"><?php echo $third["title"]; ?></h3>
           <div class="mb-1 text-body-secondary">Nov 11</div>
           <p class="mb-auto"><?php echo $third["summary"]; ?></p>
-          <a href="index.php?post=<?php echo $third["id"]; ?>" class="icon-link gap-1 icon-link-hover stretched-link">
+          <a href="/post/<?php echo $third["id"]; ?>" class="icon-link gap-1 icon-link-hover stretched-link">
             Continue reading
             <svg class="bi"><use xlink:href="#chevron-right"/></svg>
           </a>

@@ -9,12 +9,12 @@ require_once('inc/loggedInHeader.php');
 require_once('components/validateInput.php');
 
 if (empty($_SESSION['username'])) {
-    header('location: index.php');
+    header('location: /');
 
 }
 ?>
 
-<script src="./js/postManager.js"></script>
+<script src="/js/postManager.js"></script>
 
 <?php
 // create post from submit
@@ -114,7 +114,7 @@ if (isset($_POST['postSubmit'])) {
 
     // redirect user to the new post
     if ($data->success == true) {
-        header('location: ../index.php?post='.$data->id);
+        header('location: /post/'.$data->id);
     }
 
     $GLOBALS["toastFunction"] = "showToast('$data->success', '$data->message');";
@@ -127,10 +127,10 @@ if (isset($_POST['postSubmit'])) {
 
 <!-- page navigation -->
 <nav class="nav nav-pills nav-justified">
-  <a class="nav-link <?php echo !isset($_GET["action"]) ? "active" : ""; ?>"
-    href="post_manager.php">My Posts</a>
-  <a class="nav-link <?php echo isset($_GET["action"]) && $_GET["action"] == "new" ? "active" : ""; ?>"
-    href="post_manager.php?action=new">New Post</a>
+  <a class="nav-link <?php echo !isset($view) ? "active" : ""; ?>"
+    href="/user/posts">My Posts</a>
+  <a class="nav-link <?php echo isset($view) && $view == "create" ? "active" : ""; ?>"
+    href="/user/posts/create">New Post</a>
 </nav>
 
 
@@ -165,12 +165,12 @@ if (isset($_POST["edit"])) {
 }
 
 // new post form
-if (isset($_GET["action"]) && $_GET["action"] == "new") {
+if (isset($view) && $view == "create") {
     include_once('./components/_create_post.php');
 }
 
 // main content - show user's posts with edit/delete options
-if (!isset($_GET["action"])) {
+if (!isset($view)) {
 
     // pagination
     $page = isset($_GET["page"]) ? $_GET["page"] : 1;
@@ -185,8 +185,8 @@ if (!isset($_GET["action"])) {
     }
     
     if ($order == 'asc') {
-        $arrow = '<img src="./src/icons8-chevron-up-64.png" width="20" height="20"/>';
-    } else $arrow = '<img src="./src/icons8-chevron-down-64.png" width="20" height="20"/>';
+        $arrow = '<img src="/src/icons8-chevron-up-64.png" width="20" height="20"/>';
+    } else $arrow = '<img src="/src/icons8-chevron-down-64.png" width="20" height="20"/>';
     
     // request
     $postfields = json_encode([
@@ -236,10 +236,10 @@ if (!isset($_GET["action"])) {
             <td><?php echo $post["category"] ?></td>
             <td><?php echo $post["created_at"] ?></td>
             <td><?php if (isset($post["updated_at"])) echo $post["updated_at"] ?></td>
-            <td><?php echo $post["featured"] ? "yes" : "no"; ?></td>
+            <td <?php echo $post['featured'] ? 'class="text-success"' : 'class="text-secondary"'; ?>><?php echo $post["featured"] ? 'Yes' : 'No'; ?></td>
             <td>
                 <!-- view post button -->
-                <a class="btn btn-outline-light" href="index.php?post=<?php echo $post["id"]; ?>">View</a>
+                <a class="btn btn-outline-light" href="/post/=<?php echo $post["id"]; ?>">View</a>
 
                 <!-- edit modal button -->
                 <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
@@ -266,7 +266,7 @@ if (!isset($_GET["action"])) {
                             </div>
 
                             <div class="modal-body">
-                                <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                <form method="POST" action="/user/posts">
                                     
                                     <div class="mb-3">
                                         <label for="id" class="col-form-label">ID:</label>
@@ -335,7 +335,7 @@ if (!isset($_GET["action"])) {
                             </div>
 
                             <div class="modal-body">
-                                <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                <form method="POST" action="/user/posts">
 
                                     <div class="mb-3">
                                         <p>Are you sure you want to delete post?</p>
@@ -402,7 +402,7 @@ require_once('inc/footer.php');
   </div>
 </div>
 
-<script src="./js/eventHandler.js"></script>
+<script src="/js/eventHandler.js"></script>
 
 <script>
 

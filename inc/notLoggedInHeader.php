@@ -11,6 +11,7 @@ include_once('./components/curl.php');
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
   <title>Circle</title>
+  <base href="https://perfi.hu/">
 </head>
 
 <body class="bg-dark text-light">
@@ -18,17 +19,17 @@ include_once('./components/curl.php');
   <nav class="navbar bg-body-tertiary navbar-expand-sm sticky-top" data-bs-theme="dark">
     <div class="container">
 
-      <a class="navbar-brand" href="./index.php"><i class="bi bi-circle"></i> Circle</a>
+      <a class="navbar-brand" href="/"><i class="bi bi-circle"></i> Circle</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-sm-0">
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="./login.php">Login</a>
+            <a class="nav-link" aria-current="page" href="/login">Login</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="./register.php">Register</a>
+            <a class="nav-link" href="/register">Register</a>
           </li>
         </ul>
          <?php // WEATHER

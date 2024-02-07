@@ -7,7 +7,7 @@ include_once('inc/notLoggedInHeader.php');
 include_once('components/validateInput.php');
 
 if (isset($_SESSION['username']) && $_SESSION['username'] !== "") {
-  header('location: index.php');
+  header('location: /');
 }
 
 if (isset($_POST['submit'])) {
@@ -34,7 +34,7 @@ if (isset($_POST['submit'])) {
       $_SESSION['access_level'] = $result->access_level;
       $_SESSION['token'] = $result->token;
 
-      header('location: index.php');
+      header('location: /');
 
     }
 
@@ -47,7 +47,7 @@ if (isset($_POST['submit'])) {
 ?>
 
   <div class="container position-absolute top-50 start-50 translate-middle">
-    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" class="was-validated border border-secondary p-5 rounded" style="--bs-border-opacity: .5;" method="POST">
+    <form action="/register" class="was-validated border border-secondary p-5 rounded" style="--bs-border-opacity: .5;" method="POST">
 
         <h1>Register</h1>
 

@@ -191,15 +191,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($input->year) || isset($input->month)) {
 
 
-        $firstDate = date("Y-m-d H:i:s", strtotime("$input->year-$input->month-1"));
-        $lastDate = date("Y-m-d H:i:s", strtotime("$input->year-$input->month-31"));
+        //$firstDate = date("Y-m-d H:i:s", strtotime("$input->year-$input->month-1"));
+        //$lastDate = date("Y-m-d H:i:s", strtotime("$input->year-$input->month-31"));
+        //$date = "$input->year-$input->month";
 
         // pagination
         $limit = $input->limit;
 
         try {
-            $pagination = $pdo->prepare("SELECT COUNT(id) AS posts FROM post WHERE created_at BETWEEN ? AND ?");
-            $pagination->execute([$firstDate, $lastDate]);
+            $pagination = $pdo->prepare("SELECT COUNT(id) AS posts FROM post
+            WHERE YEAR(created_at) = ? AND MONTH(created_at) = ?");
+            $pagination->execute([$input->year, $input->month]);
             $pages = $pagination->fetch(PDO::FETCH_ASSOC);
             $totalPages = ceil($pages["posts"] / $limit);
             $starting_limit = ($input->page - 1) * $limit;
@@ -210,10 +212,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmt = $pdo->prepare(
             "SELECT p.id, p.title, p.category, p.cover, p.created_at, p.content, u.username FROM post p
-            INNER JOIN user u ON p.publisher = u.id WHERE p.created_at BETWEEN ? AND ?
+            INNER JOIN user u ON p.publisher = u.id WHERE YEAR(created_at) = ?
+            AND MONTH(created_at) = ?
             ORDER BY created_at ASC LIMIT $starting_limit, $limit
         ");
-        $stmt->execute([$firstDate, $lastDate]);
+        $stmt->execute([$input->year, $input->month]);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if (!$data) {
