@@ -20,18 +20,18 @@ if (isset($_SESSION['username']) && !empty($_SESSION['username'])) {
 
 <div class="nav-scroller py-1 mb-3 border-bottom">
     <nav class="nav nav-underline justify-content-between">
-      <a class="nav-item nav-link link-body-emphasis active" href="index.php?category=World">World</a>
-      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=U.S">U.S.</a>
-      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=Technology">Technology</a>
-      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=Design">Design</a>
-      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=Culture">Culture</a>
-      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=Business">Business</a>
-      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=Politics">Politics</a>
-      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=Opinion">Opinion</a>
-      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=Science">Science</a>
-      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=Health">Health</a>
-      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=Style">Style</a>
-      <a class="nav-item nav-link link-body-emphasis" href="index.php?category=Travel">Travel</a>
+      <a class="nav-item nav-link link-body-emphasis active" href="/posts/category/world">World</a>
+      <a class="nav-item nav-link link-body-emphasis" href="/posts/category/u.s">U.S.</a>
+      <a class="nav-item nav-link link-body-emphasis" href="/posts/category/technology">Technology</a>
+      <a class="nav-item nav-link link-body-emphasis" href="/posts/category/design">Design</a>
+      <a class="nav-item nav-link link-body-emphasis" href="/posts/category/culture">Culture</a>
+      <a class="nav-item nav-link link-body-emphasis" href="/posts/category/business">Business</a>
+      <a class="nav-item nav-link link-body-emphasis" href="/posts/category/politics">Politics</a>
+      <a class="nav-item nav-link link-body-emphasis" href="/posts/category/opinion">Opinion</a>
+      <a class="nav-item nav-link link-body-emphasis" href="/posts/category/science">Science</a>
+      <a class="nav-item nav-link link-body-emphasis" href="/posts/category/health">Health</a>
+      <a class="nav-item nav-link link-body-emphasis" href="/posts/category/style">Style</a>
+      <a class="nav-item nav-link link-body-emphasis" href="/posts/category/travel">Travel</a>
     </nav>
   </div>
 
@@ -48,16 +48,15 @@ if (isset($_SESSION['username']) && !empty($_SESSION['username'])) {
 <?php
 
 // show specific post by id
-if (isset($_GET["post"]) && $_GET["post"] !== "") : 
+if (isset($postByID) && $postID !== "") : 
 
-  $id = $_GET["post"];
   $ip = $_SERVER["REMOTE_ADDR"];
 
-  $postfields = json_encode(['id' => $id, 'ip' => $ip, 'userID' => $_SESSION["userID"]]);
+  $postfields = json_encode(['id' => $postByID, 'ip' => $ip, 'userID' => $_SESSION["userID"]]);
   $result = curl('posts', 'POST', $postfields, true);
 
   if ($result["success"] != true) {
-    header('location: index.php');
+    header('location: /');
   }
 
   $title = $result["title"];
@@ -74,31 +73,30 @@ if (isset($_GET["post"]) && $_GET["post"] !== "") :
       <article class="blog-post">
       <h2 class="display-5 link-body-emphasis mb-1">'.$title.'</h2>
       <img class="rounded img-fluid" src="'.$cover.'">
-      <p class="blog-post-meta">'.$date.' by <a href="../index.php?user='.$publisher.'">'.$publisher.'</a>
+      <p class="blog-post-meta">'.$date.' by <a href="/posts/from/'.$publisher.'">'.$publisher.'</a>
       </p>
-      <a href="index.php?category='.$category.'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$category.'</strong></a>
+      <a href="/posts/category/'.$category.'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$category.'</strong></a>
       '.$content.'
       </article>
     '; 
   ?>
 
-    <a class="btn btn-outline-light mb-4" href="index.php">Back</a>
+    <a class="btn btn-outline-light mb-4" href="/">Back</a>
     </div>
 
 <?php endif;
 
 // show posts from a sepcific user
-if (isset($_GET["user"]) && $_GET["user"] !== "") :
+if (isset($postsByUser) && $postsByUser !== "") :
 
   // pagination
-  $page = isset($_GET["page"]) ? $_GET["page"] : 1;
-  $user = $_GET["user"];
+  $page = isset($page) ? $page : 1;
 
-  $postfields = json_encode(['user' => $user, 'page' => $page, 'limit' => 5]);
+  $postfields = json_encode(['user' => $postsByUser, 'page' => $page, 'limit' => 5]);
   $result = curl('posts', 'POST', $postfields, true);
 
   if (!$result["success"]) {
-    header('location: index.php');
+    header('location: /');
   }
 
   $content = $result["posts"];
@@ -113,9 +111,9 @@ if (isset($_GET["user"]) && $_GET["user"] !== "") :
   <article class="blog-post">
   <h2 class="display-5 link-body-emphasis mb-1">'.$post["title"].'</h2>
   <img class="rounded img-fluid" src="'.$post["cover"].'">
-  <p class="blog-post-meta">'.$date.' by <a href="../index.php?user='.$post["username"].'">'.$post["username"].'</a>
+  <p class="blog-post-meta">'.$date.' by <a href="/posts/from/'.$post["username"].'">'.$post["username"].'</a>
   </p>
-  <a href="index.php?category='.$post["category"].'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$post["category"].'</strong></a>
+  <a href="/posts/category/'.$post["category"].'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$post["category"].'</strong></a>
   '.$post["content"].'
   </article>
   ';
@@ -126,15 +124,15 @@ if (isset($_GET["user"]) && $_GET["user"] !== "") :
   <nav aria-label="pagination">
       <ul class="pagination justify-content-center">
         <li class="page-item  <?php echo (($page - 1) <= 0 ) ? "disabled" : ""; ?>">
-          <a class="page-link bg-dark text-light" href="index.php?user=<?php echo $user; ?>&page=<?php echo $page - 1 ; ?>">Previous</a>
+          <a class="page-link bg-dark text-light" href="/posts/from/<?php echo $postsByUser; ?>/page/<?php echo $page - 1 ; ?>">Previous</a>
         </li>
         <?php for ($pages=1;$pages<=$result["total_pages"];$pages++) : ?>
           <li class="page-item <?php echo ($pages == $page) ? "active" : ""; ?>"><a class="page-link bg-dark text-light"
-            href="index.php?user=<?php echo $user; ?>&page=<?php echo $pages; ?>"><?php echo $pages; ?></a>
+            href="/posts/from/<?php echo $postsByUser; ?>/page/<?php echo $pages; ?>"><?php echo $pages; ?></a>
           </li>
         <?php endfor; ?>
         <li class="page-item <?php echo (($page + 1) > $result["total_pages"] ) ? "disabled" : ""; ?>">
-          <a class="page-link bg-dark text-light" href="index.php?user=<?php echo $user; ?>&page=<?php echo $page + 1 ; ?>">Next</a>
+          <a class="page-link bg-dark text-light" href="/posts/from/<?php echo $postsByUser; ?>/page/<?php echo $page + 1 ; ?>">Next</a>
         </li>
       </ul>
     </nav>
@@ -144,17 +142,16 @@ if (isset($_GET["user"]) && $_GET["user"] !== "") :
 <?php endif;
 
 // show posts by category
-if (isset($_GET["category"]) && $_GET["category"] !== "") :
+if (isset($postsByCategory) && $postsByCategory !== "") :
 
   // pagination
-  $page = isset($_GET["page"]) ? $_GET["page"] : 1;
-  $category = $_GET["category"];
+  $page = isset($page) ? $page : 1;
 
-  $postfields = json_encode(['category' => $category, 'page' => $page, 'limit' => 3]);
+  $postfields = json_encode(['category' => $postsByCategory, 'page' => $page, 'limit' => 3]);
   $result = curl('posts', 'POST', $postfields, true);
 
   if (!$result["success"]) {
-    header('location: index.php');
+    header('location: /');
   }
 
   $content = $result["posts"];
@@ -167,9 +164,9 @@ if (isset($_GET["category"]) && $_GET["category"] !== "") :
       <article class="blog-post">
       <h2 class="display-5 link-body-emphasis mb-1">'.$post["title"].'</h2>
       <img class="rounded img-fluid" src="'.$post["cover"].'">
-      <p class="blog-post-meta">'.$date.' by <a href="../index.php?user='.$post["username"].'">'.$post["username"].'</a>
+      <p class="blog-post-meta">'.$date.' by <a href="/posts/from/'.$post["username"].'">'.$post["username"].'</a>
       </p>
-      <a href="index.php?category='.$post["category"].'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$post["category"].'</strong></a>
+      <a href="/posts/category/'.$post["category"].'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$post["category"].'</strong></a>
       '.$post["content"].'
       </article>
       ';
@@ -180,15 +177,15 @@ if (isset($_GET["category"]) && $_GET["category"] !== "") :
     <nav aria-label="pagination">
       <ul class="pagination justify-content-center">
         <li class="page-item  <?php echo (($page - 1) <= 0 ) ? "disabled" : ""; ?>">
-          <a class="page-link bg-dark text-light" href="index.php?category=<?php echo $category; ?>&page=<?php echo $page - 1 ; ?>">Previous</a>
+          <a class="page-link bg-dark text-light" href="/posts/category/<?php echo $postsByCategory; ?>/page/<?php echo $page - 1 ; ?>">Previous</a>
         </li>
         <?php for ($pages=1;$pages<=$result["total_pages"];$pages++) : ?>
           <li class="page-item <?php echo ($pages == $page) ? "active" : ""; ?>"><a class="page-link bg-dark text-light"
-            href="index.php?category=<?php echo $category; ?>&page=<?php echo $pages; ?>"><?php echo $pages; ?></a>
+            href="/posts/category/<?php echo $postsByCategory; ?>/page/<?php echo $pages; ?>"><?php echo $pages; ?></a>
           </li>
         <?php endfor; ?>
         <li class="page-item <?php echo (($page + 1) > $result["total_pages"] ) ? "disabled" : ""; ?>">
-          <a class="page-link bg-dark text-light" href="index.php?category=<?php echo $category; ?>&page=<?php echo $page + 1 ; ?>">Next</a>
+          <a class="page-link bg-dark text-light" href="/posts/category/<?php echo $postsByCategory; ?>/page/<?php echo $page + 1 ; ?>">Next</a>
         </li>
       </ul>
     </nav>
@@ -198,16 +195,14 @@ if (isset($_GET["category"]) && $_GET["category"] !== "") :
 <?php endif;
 
 // show posts by date - archive
-if (isset($_GET['year']) || isset($_GET['month'])) {
+if (isset($postsByYear) || isset($postsByMonth)) {
 
-  $page = isset($_GET["page"]) ? $_GET["page"] : 1;
-  $year = $_GET['year'];
-  $month = $_GET['month'];
+  $page = isset($page) ? $page : 1;
 
-  $postfields = json_encode(['year' => $year, 'month' => $month, 'page' => $page, 'limit' => 3]);
+  $postfields = json_encode(['year' => $postsByYear, 'month' => $postsByMonth, 'page' => $page, 'limit' => 3]);
   $result = curl('posts', 'POST', $postfields, true);
   if (!$result["success"]) {
-    header('location: index.php');
+    header('location: /');
   }
 
   $content = $result["posts"];
@@ -220,9 +215,9 @@ if (isset($_GET['year']) || isset($_GET['month'])) {
     <article class="blog-post">
     <h2 class="display-5 link-body-emphasis mb-1">'.$post["title"].'</h2>
     <img class="rounded img-fluid" src="'.$post["cover"].'">
-    <p class="blog-post-meta">'.$date.' by <a href="../index.php?user='.$post["username"].'">'.$post["username"].'</a>
+    <p class="blog-post-meta">'.$date.' by <a href="/posts/from/'.$post["username"].'">'.$post["username"].'</a>
     </p>
-    <a href="index.php?category='.$post["category"].'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$post["category"].'</strong></a>
+    <a href="/posts/category/'.$post["category"].'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$post["category"].'</strong></a>
     '.$post["content"].'
     </article>
     ';
@@ -233,15 +228,15 @@ if (isset($_GET['year']) || isset($_GET['month'])) {
     <nav aria-label="pagination">
       <ul class="pagination justify-content-center">
         <li class="page-item  <?php echo (($page - 1) <= 0 ) ? "disabled" : ""; ?>">
-          <a class="page-link bg-dark text-light" href="index.php?year=<?php echo $year; ?>&month=<?php echo $month; ?>&page=<?php echo $page - 1 ; ?>">Previous</a>
+          <a class="page-link bg-dark text-light" href="/posts/date/<?php echo $postsByYear; ?>/<?php echo $postsByMonth; ?>/page/<?php echo $page - 1 ; ?>">Previous</a>
         </li>
         <?php for ($pages=1;$pages<=$result["total_pages"];$pages++) : ?>
           <li class="page-item <?php echo ($pages == $page) ? "active" : ""; ?>"><a class="page-link bg-dark text-light"
-            href="index.php?year=<?php echo $year; ?>&month=<?php echo $month; ?>&page=<?php echo $pages; ?>"><?php echo $pages; ?></a>
+            href="/posts/date/<?php echo $postsByYear; ?>/<?php echo $postsByMonth; ?>/page/<?php echo $pages; ?>"><?php echo $pages; ?></a>
           </li>
         <?php endfor; ?>
         <li class="page-item <?php echo (($page + 1) > $result["total_pages"] ) ? "disabled" : ""; ?>">
-          <a class="page-link bg-dark text-light" href="index.php?year=<?php echo $year; ?>&month=<?php echo $month; ?>&page=<?php echo $page + 1 ; ?>">Next</a>
+          <a class="page-link bg-dark text-light" href="/posts/date/<?php echo $postsByYear; ?>/<?php echo $postsByMonth; ?>/page/<?php echo $page + 1 ; ?>">Next</a>
         </li>
       </ul>
     </nav>
@@ -252,7 +247,7 @@ if (isset($_GET['year']) || isset($_GET['month'])) {
 }
 
 // main page content - 3 random post
-if (!isset($_GET['post']) && !isset($_GET['user']) && !isset($_GET['category']) && !isset($_GET['year']) && !isset($_GET['month'])) : 
+if (!isset($postByID) && !isset($postsByUser) && !isset($postsByCategory) && !isset($postsByYear) && !isset($postsByMonth)) : 
 ?>
     
   <h3 class="pb-4 mb-4 fst-italic border-bottom">
@@ -274,9 +269,9 @@ if (!isset($_GET['post']) && !isset($_GET['user']) && !isset($_GET['category']) 
       <article class="blog-post">
       <h2 class="display-5 link-body-emphasis mb-1">'.$post["title"].'</h2>
       <img class="rounded img-fluid" src="'.$post["cover"].'">
-      <p class="blog-post-meta">'.$date.' by <a href="../index.php?user='.$post["username"].'">'.$post["username"].'</a>
+      <p class="blog-post-meta">'.$date.' by <a href="/posts/from/'.$post["username"].'">'.$post["username"].'</a>
       </p>
-      <a href="index.php?category='.$post["category"].'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$post["category"].'</strong></a>
+      <a href="/posts/category/'.$post["category"].'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$post["category"].'</strong></a>
       '.$post["content"].'
       </article>
       ';

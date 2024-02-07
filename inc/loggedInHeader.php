@@ -11,13 +11,14 @@ include_once('./components/curl.php');
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
   	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 	<title>Circle</title>
+  <base href="https://perfi.hu/">
 </head>
 
 <body class="bg-dark text-light">
  
 <nav class="navbar bg-body-tertiary navbar-expand-sm sticky-top" data-bs-theme="dark">
 	<div class="container">
-		<a class="navbar-brand" href="./index.php"><i class="bi bi-circle"></i> Circle</a>
+		<a class="navbar-brand" href="/"><i class="bi bi-circle"></i> Circle</a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
@@ -26,7 +27,7 @@ include_once('./components/curl.php');
 
 				<li class="nav-item w-100">
 					<?php if (isset($_SESSION['access_level']) && $_SESSION['access_level'] >= 1) {
-						echo '<a class="nav-link" href="admin.php">Admin</a>';
+						echo '<a class="nav-link" href="/admin/statistics">Admin</a>';
 					} ?>
 					
 				</li>
@@ -69,7 +70,7 @@ include_once('./components/curl.php');
             $file = $weatherCode . $night;
 
           ?>
-          <span class="navbar-text" href="#"><?php echo $data->current_weather->temperature; ?> °C <img width="30" height="24" class="d-inline-block align-text-top" alt="Felhős" src="./src/<?php echo $file ?>.svg"> </span>
+          <span class="navbar-text" href="#"><?php echo $data->current_weather->temperature; ?> °C <img width="30" height="24" class="d-inline-block align-text-top" alt="Weather" src="/src/<?php echo $file ?>.svg"> </span>
 		</div>
 
 		<div class="dropdown">
@@ -77,12 +78,12 @@ include_once('./components/curl.php');
         <?php // show profile picture
 
           $id = $_SESSION["userID"];
-          $path = 'src/'.$id.'/';
+          $path = 'src/'.$id;
           $files = scandir($path);
 
           if (!empty($files)) {
             foreach ($files as $file) {
-              $filePath = $path . '/' . $file;
+              $filePath = $path .'/'. $file;
             }
             
           } else {
@@ -93,16 +94,17 @@ include_once('./components/curl.php');
         ?>
         <img src="<?php echo $filePath; ?>" alt="" width="32" height="32" class="rounded-circle me-2">
         
+        
         <strong><?php echo $_SESSION['username']; ?></strong>
       </a>
       <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-        <li><a class="dropdown-item" href="./post_manager.php?action=new">New post</a></li>
-        <li><a class="dropdown-item" href="./post_manager.php">My posts</a></li>
-        <li><a class="dropdown-item" href="./user_manager.php">Profile</a></li>
+        <li><a class="dropdown-item" href="/user/posts/create">New post</a></li>
+        <li><a class="dropdown-item" href="/user/posts">My posts</a></li>
+        <li><a class="dropdown-item" href="/user/profile">Profile</a></li>
         <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="./inc/logout.php">Sign out</a></li>
+        <li><a class="dropdown-item" href="/logout">Sign out</a></li>
       </ul>
-	  
+      
     </div>
 
   </div>

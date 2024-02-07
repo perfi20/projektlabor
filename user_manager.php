@@ -10,7 +10,7 @@ require_once('inc/loggedInHeader.php');
 
 // check login state
 if (empty($_SESSION['username'])) {
-    header('location: index.php');
+    header('location: /');
 }
 
 // change username
@@ -34,7 +34,7 @@ if (isset($_POST["editUsername"])) {
 
 
             $_SESSION["username"] = "";
-            header('Location: login.php');
+            header('Location: /login');
         }
     } else {
         // username is empty
@@ -262,8 +262,8 @@ if (!isset($_GET["magic"])) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <div class="nodal-body">
-                    <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                <div class="modal-body">
+                    <form method="POST" action="/user/profile">
 
                         <div class="mb-3">
                             <label for="prevUsername">Previous Username:</label>
@@ -299,8 +299,8 @@ if (!isset($_GET["magic"])) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <div class="nodal-body">
-                    <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                <div class="modal-body">
+                    <form method="POST" action="/user/profile">
 
                         <div class="mb-3">
                             <label for="prevEmail">Previous Email:</label>
@@ -336,8 +336,8 @@ if (!isset($_GET["magic"])) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <div class="nodal-body">
-                    <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                <div class="modal-body">
+                    <form method="POST" action="/user/profile">
 
                         <div class="mb-3">
                             <label for="pw">Password:</label>
@@ -378,8 +378,8 @@ if (!isset($_GET["magic"])) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <div class="nodal-body">
-                    <form method="POST" enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                <div class="modal-body">
+                    <form method="POST" enctype="multipart/form-data" action="/user/profile">
 
                     <div class="mb3">
                         <?php // show profile picture
@@ -435,7 +435,7 @@ require_once('inc/footer.php');
   </div>
 </div>
 
-<script src="./js/eventHandler.js"></script>
+<script src="../js/eventHandler.js"></script>
 
 <script>
 

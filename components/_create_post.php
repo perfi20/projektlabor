@@ -6,7 +6,7 @@ $error = "";
 ?>
 
 <div class="container">
-    <form id="create_post" class="was-validated border border-secondary p-5 rounded" style="--bs-border-opacity: .5;" method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
+    <form id="create_post" class="was-validated border border-secondary p-5 rounded" style="--bs-border-opacity: .5;" method="POST" action="/user/posts">
     
 
         <h1>Create a new post</h1>

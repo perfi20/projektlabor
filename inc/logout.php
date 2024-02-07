@@ -8,4 +8,4 @@ $_SESSION['access_level'] = "";
 $_SESSION['token'] = "";
 session_destroy();
 
-header('location: ../index.php');
+header('location: ../');

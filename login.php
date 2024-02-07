@@ -7,9 +7,8 @@ include_once('inc/notLoggedInHeader.php');
 include_once('components/validateInput.php');
 
 if (isset($_SESSION['username']) && $_SESSION['username'] !== "") {
-  header('location: index.php');
+  header('location: /');
 }
-
 
 if (isset($_POST['submit'])) {
 
@@ -27,10 +26,13 @@ if (isset($_POST['submit'])) {
     $_SESSION['username'] = $result->username;
     $_SESSION['userID'] = $result->id;
     $_SESSION['email'] = $result->email;
-    $_SESSION['access_level'] = $result->access_level;
+    //$_SESSION['access_level'] = $result->access_level;
+    // set admin access for demo purposes
+    $_SESSION['access_level'] = 1;
+
     $_SESSION['token'] = $result->token;
     
-    header('location: index.php');
+    header('location: /');
   }
 
   // login toast
@@ -41,7 +43,7 @@ if (isset($_POST['submit'])) {
 ?>
 
 <div class="container position-absolute top-50 start-50 translate-middle">
-<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);  ?>" class="was-validated border border-secondary p-5 rounded" style="--bs-border-opacity: .5;" method="POST">
+<form action="/login" class="was-validated border border-secondary p-5 rounded" style="--bs-border-opacity: .5;" method="POST">
 <h1>Login</h1>
   <div class="form-floating my-5">
     <input type="text" class="form-control bg-dark text-light"

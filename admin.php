@@ -5,11 +5,11 @@ session_start();
 $GLOBALS["toastFunction"] = "";
 
 require_once('components/curl.php');
-require_once('inc/loggedInHeader.php');
+include('inc/loggedInHeader.php');
 
 // check for authorization
 if (!empty($_SESSION["username"]) && !empty($_SESSION["userID"]) && $_SESSION["access_level"] !== 1) {
-	header('location: index.php');
+	header('location: /');
 }
 ?>
 
@@ -17,17 +17,17 @@ if (!empty($_SESSION["username"]) && !empty($_SESSION["userID"]) && $_SESSION["a
 
 <!-- page navigation -->
 <nav class="nav nav-pills nav-justified">
-	<a class="nav-link <?php echo !isset($_GET["view"]) ? "active" : ""; ?>"
-    	href="admin.php">Statistics</a>
-	<a class="nav-link <?php echo isset($_GET["view"]) && $_GET["view"] == "posts" ? "active" : ""; ?>"
-    	href="admin.php?view=posts">Posts</a>
-	<a class="nav-link <?php echo isset($_GET["view"]) && $_GET["view"] == "users" ? "active" : ""; ?>"
-    	href="admin.php?view=users">Users</a>
+	<a class="nav-link <?php echo $view === 'statistics' ? 'active' : ''; ?>"
+    	href="/admin/statistics">Statistics</a>
+	<a class="nav-link <?php echo $view === 'posts' ? 'active' : ''; ?>"
+    	href="/admin/posts">Posts</a>
+	<a class="nav-link <?php echo $view === 'users' ? 'active' : ''; ?>"
+    	href="/admin/users">Users</a>
 </nav>
 
 <?php 
 // MAIN CONTENT - website statistics
-if (!isset($_GET["view"])) {
+if (isset($view) && $view == 'statistics') {
 	
 	$postfields = json_encode(['user' => $_SESSION["username"], 'view' => 'stats']);
 	$result = curl('stats', 'POST', $postfields, true);
@@ -61,7 +61,7 @@ if (!isset($_GET["view"])) {
 // POSTS VIEW
 
 // delete post
-    if (isset($_POST["delete"])) {
+    if (isset($_POST['deletePost'])) {
 
         $postfield = json_encode(['delete' => 'true', 'id' => $_POST["id"]]);
         $result = curl('posts', 'DELETE', $postfield);
@@ -71,24 +71,24 @@ if (!isset($_GET["view"])) {
     }
 
     // edit post
-    if (isset($_POST["edit"])) {
+    if (isset($_POST['editPost'])) {
     
-    $postfield = json_encode([
-        'id' => $_POST["id"],
-        'title' => $_POST["title"],
-        'category' => $_POST["category"],
-        'cover' => $_POST["cover"],
-        'summary' => $_POST["summary"],
-        'featured' => $_POST["featured"] ? true : false
-    ]);
-    $result = curl('posts', 'PATCH', $postfield);
+        $postfield = json_encode([
+            'id' => $_POST["id"],
+            'title' => $_POST["title"],
+            'category' => $_POST["category"],
+            'cover' => $_POST["cover"],
+            'summary' => $_POST["summary"],
+            'featured' => $_POST["featured"] ? true : false
+        ]);
+        $result = curl('posts', 'PATCH', $postfield);
 
-    $GLOBALS["toastFunction"] = "showToast('$result->success', '$result->message');";
+        $GLOBALS["toastFunction"] = "showToast('$result->success', '$result->message');";
 
     }
 
 // POSTS MAIN CONTENT
-if (isset($_GET["view"]) && $_GET["view"] === "posts") {
+if (isset($view) && $view == "posts") {
 
 	// pagination
     $page = isset($_GET["page"]) ? $_GET["page"] : 1;
@@ -102,8 +102,8 @@ if (isset($_GET["view"]) && $_GET["view"] === "posts") {
     }
     
     if ($order == 'asc') {
-        $arrow = '<img src="./src/icons8-chevron-up-64.png" width="20" height="20"/>';
-    } else $arrow = '<img src="./src/icons8-chevron-down-64.png" width="20" height="20"/>';
+        $arrow = '<img src="/src/icons8-chevron-up-64.png" width="20" height="20"/>';
+    } else $arrow = '<img src="/src/icons8-chevron-down-64.png" width="20" height="20"/>';
 
     // request
 	$postfields = json_encode([
@@ -201,11 +201,11 @@ if (isset($_GET["view"]) && $_GET["view"] === "posts") {
             <td><?php echo $post["username"] ?></td>
             <td><?php echo $post["created_at"] ?></td>
             <td><?php if (isset($post["updated_at"])) echo $post["updated_at"] ?></td>
-            <td><?php echo $post["featured"] ? "yes" : "no"; ?></td>
+            <td <?php echo $post['featured'] ? 'class="text-success"' : 'class="text-secondary"'; ?>><?php echo $post["featured"] ? 'Yes' : 'No'; ?></td>
             <td><?php echo $post["views"]; ?></td>
             <td>
                 <!-- view post button -->
-                <a class="btn btn-outline-light" href="index.php?post=<?php echo $post["id"]; ?>">View</a>
+                <a class="btn btn-outline-light" href="/post/<?php echo $post["id"]; ?>">View</a>
 
                 <!-- edit modal button -->
                 <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
@@ -231,7 +231,7 @@ if (isset($_GET["view"]) && $_GET["view"] === "posts") {
                             </div>
 
                             <div class="modal-body">
-                                <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                <form method="POST" action="/admin/posts">
                                     
                                     <div class="mb-3">
                                         <label for="id" class="col-form-label">ID:</label>
@@ -281,7 +281,7 @@ if (isset($_GET["view"]) && $_GET["view"] === "posts") {
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" name="edit" id="edit" class="btn btn-outline-warning">Edit</button>
+                                <button type="submit" name="editPost" class="btn btn-outline-warning">Edit</button>
                             </div>
                                 </form>
                         </div>
@@ -300,7 +300,7 @@ if (isset($_GET["view"]) && $_GET["view"] === "posts") {
                             </div>
 
                             <div class="modal-body">
-                                <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>?view=users">
+                                <form method="POST" action="/admin/posts">
 
                                     <div class="mb-3">
                                         <p>Are you sure you want to delete post?</p>
@@ -308,7 +308,7 @@ if (isset($_GET["view"]) && $_GET["view"] === "posts") {
                                     <input type="hidden" name="id" value="<?php echo $post["id"]; ?>">
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
-                                        <button type="submit" name="delete" class="btn btn-outline-danger">Delete</button>
+                                        <button type="submit" name="deletePost" class="btn btn-outline-danger">Delete</button>
                                     </div>
 
                                 </form>
@@ -332,15 +332,15 @@ if (isset($_GET["view"]) && $_GET["view"] === "posts") {
 <nav aria-label="pagination">
       <ul class="pagination justify-content-center">
         <li class="page-item  <?php echo (($page - 1) <= 0 ) ? "disabled" : ""; ?>">
-          <a class="page-link bg-dark text-light" href="admin.php?view=posts&page=<?php echo $page - 1 ; ?>">Previous</a>
+          <a class="page-link bg-dark text-light" href="/admin/view/posts/page/<?php echo $page - 1 ; ?>">Previous</a>
         </li>
         <?php for ($pages=1;$pages<=$result["total_pages"];$pages++) : ?>
           <li class="page-item <?php echo ($pages == $page) ? "active" : ""; ?>"><a class="page-link bg-dark text-light"
-            href="admin.php?view=posts&page=<?php echo $pages; ?>"><?php echo $pages; ?></a>
+            href="/admin/view/posts/page/<?php echo $pages; ?>"><?php echo $pages; ?></a>
           </li>
         <?php endfor; ?>
         <li class="page-item <?php echo (($page + 1) > $result["total_pages"] ) ? "disabled" : ""; ?>">
-          <a class="page-link bg-dark text-light" href="admin.php?view=posts&page=<?php echo $page + 1 ; ?>">Next</a>
+          <a class="page-link bg-dark text-light" href="/admin/view/posts/page/<?php echo $page + 1 ; ?>">Next</a>
         </li>
       </ul>
     </nav>
@@ -352,7 +352,7 @@ if (isset($_GET["view"]) && $_GET["view"] === "posts") {
 // USERS VIEW
 
 // delete user
-if (isset($_POST["delete"])) {
+if (isset($_POST["deleteUser"])) {
 
     $postfield = json_encode(['delete' => 'true', 'id' => $_POST["id"]]);
     $result = curl('user', 'DELETE', $postfield);
@@ -362,7 +362,7 @@ if (isset($_POST["delete"])) {
 }
 
 // admin edit user
-if (isset($_POST["edit"])) {
+if (isset($_POST["editUser"])) {
     
     $postfield = json_encode([
         'id' => $_POST["id"],
@@ -377,7 +377,7 @@ if (isset($_POST["edit"])) {
 }
 
 // USERS MAIN CONTENT
-if (isset($_GET["view"]) && $_GET["view"] === "users") {
+if (isset($view) && $view == "users") {
 
     // pagination
     $page = isset($_GET["page"]) ? $_GET["page"] : 1;
@@ -391,8 +391,8 @@ if (isset($_GET["view"]) && $_GET["view"] === "users") {
     }
     
     if ($order == 'asc') {
-        $arrow = '<img src="./src/icons8-chevron-up-64.png" width="20" height="20"/>';
-    } else $arrow = '<img src="./src/icons8-chevron-down-64.png" width="20" height="20"/>';
+        $arrow = '<img src="/src/icons8-chevron-up-64.png" width="20" height="20"/>';
+    } else $arrow = '<img src="/src/icons8-chevron-down-64.png" width="20" height="20"/>';
 
     // request
 	$postfields = json_encode([
@@ -452,7 +452,7 @@ if (isset($_GET["view"]) && $_GET["view"] === "users") {
 
             <td>
                 <!-- view posts button -->
-                <a class="btn btn-outline-light" href="index.php?user=<?php echo $user["username"]; ?>">View Posts</a>
+                <a class="btn btn-outline-light" href="/posts/from/<?php echo $user["username"]; ?>">View Posts</a>
 
                 <!-- edit modal button -->
                 <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
@@ -479,7 +479,7 @@ if (isset($_GET["view"]) && $_GET["view"] === "users") {
                             </div>
 
                             <div class="modal-body">
-                                <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                <form method="POST" action="/admin/users">
                                     
                                     <div class="mb-3">
                                         <label for="id" class="col-form-label">ID:</label>
@@ -506,7 +506,7 @@ if (isset($_GET["view"]) && $_GET["view"] === "users") {
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" name="edit" id="edit" class="btn btn-outline-warning">Edit</button>
+                                <button type="submit" name="editUser" class="btn btn-outline-warning">Edit</button>
                             </div>
                                 </form>
                         </div>
@@ -525,15 +525,15 @@ if (isset($_GET["view"]) && $_GET["view"] === "users") {
                             </div>
 
                             <div class="modal-body">
-                                <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                <form method="POST" action="/admin/users">
 
                                     <div class="mb-3">
-                                        <p>Are you sure you want to delete user?</p>
+                                        <p>Are you sure you want to delete User?</p>
                                     </div>
                                     <input type="hidden" name="id" value="<?php echo $user["id"]; ?>">
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
-                                        <button type="submit" name="delete" class="btn btn-outline-danger">Delete</button>
+                                        <button type="submit" name="deleteUser" class="btn btn-outline-danger">Delete</button>
                                     </div>
 
                                 </form>
@@ -594,7 +594,7 @@ if (isset($_GET["view"]) && $_GET["view"] === "users") {
   </div>
 </div>
 
-<script src="./js/eventHandler.js"></script>
+<script src="/js/eventHandler.js"></script>
 
 <script>
 
