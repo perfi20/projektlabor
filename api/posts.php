@@ -270,7 +270,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($input->featured) && $input->featured !== "") {
 
         try {
-            $stmt = $pdo->prepare("SELECT * FROM post WHERE featured = true ORDER BY RAND() LIMIT 3");
+            $stmt = $pdo->prepare(
+                "SELECT p.id, p.title, p.category, p.cover, p.summary, DATE_FORMAT(p.created_at, '%M %d') AS created_at, u.username
+                FROM post p JOIN user u ON p.publisher = u.id WHERE featured = true ORDER BY RAND() LIMIT 3
+                ");
             $stmt->execute();
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

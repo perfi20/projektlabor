@@ -10,13 +10,14 @@ include_once('./components/curl.php');
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
   	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/darkmode-toggle.css">
 	<title>Circle</title>
   <base href="https://perfi.hu/">
 </head>
 
-<body class="bg-dark text-light">
+<body>
  
-<nav class="navbar bg-body-tertiary navbar-expand-sm sticky-top" data-bs-theme="dark">
+<nav class="navbar bg-body-tertiary navbar-expand-sm sticky-top">
 	<div class="container">
 		<a class="navbar-brand" href="/"><i class="bi bi-circle"></i> Circle</a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,10 +72,14 @@ include_once('./components/curl.php');
 
           ?>
           <span class="navbar-text" href="#"><?php echo $data->current_weather->temperature; ?> °C <img width="30" height="24" class="d-inline-block align-text-top" alt="Weather" src="/src/<?php echo $file ?>.svg"> </span>
+
+          <!-- theme -->
+          <?php include_once('components/theme.php'); ?>
+
 		</div>
 
 		<div class="dropdown">
-      <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+      <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
         <?php // show profile picture
 
           $id = $_SESSION["userID"];
@@ -97,7 +102,7 @@ include_once('./components/curl.php');
         
         <strong><?php echo $_SESSION['username']; ?></strong>
       </a>
-      <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+      <ul class="dropdown-menu dropdown-menu text-small shadow">
         <li><a class="dropdown-item" href="/user/posts/create">New post</a></li>
         <li><a class="dropdown-item" href="/user/posts">My posts</a></li>
         <li><a class="dropdown-item" href="/user/profile">Profile</a></li>

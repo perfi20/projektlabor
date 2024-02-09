@@ -10,13 +10,14 @@ include_once('./components/curl.php');
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="/darkmode-toggle.css">
   <title>Circle</title>
   <base href="https://perfi.hu/">
 </head>
 
-<body class="bg-dark text-light">
+<body>
 
-  <nav class="navbar bg-body-tertiary navbar-expand-sm sticky-top" data-bs-theme="dark">
+  <nav class="navbar bg-body-tertiary navbar-expand-sm sticky-top">
     <div class="container">
 
       <a class="navbar-brand" href="/"><i class="bi bi-circle"></i> Circle</a>
@@ -71,6 +72,9 @@ include_once('./components/curl.php');
 
           ?>
           <span class="navbar-text" href="#"><?php echo $data->current_weather->temperature; ?> °C <img width="30" height="24" class="d-inline-block align-text-top" alt="Felhős" src="./src/<?php echo $file ?>.svg"> </span>
+
+             <!-- theme -->
+             <?php include_once('components/theme.php'); ?>           
       </div>
     </div>
   </nav>

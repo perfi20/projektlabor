@@ -10,16 +10,16 @@ $error = "";
     
 
         <h1>Create a new post</h1>
-        <p class="text-light text-center bg-danger mt-5"><?php echo $error; ?></p>
+        <p class=" text-center bg-danger mt-5"><?php echo $error; ?></p>
         
         <div class="mb-5">
             <label for="postTitle">Title</label>
-            <input type="text" name="postTitle" id="postTitle" class="form-control bg-dark text-light" required>
+            <input type="text" name="postTitle" id="postTitle" class="form-control" required>
         </div>
 
         <div class="mb-5">
             <label for="postCategory">Category</label>
-            <select class="form-control bg-dark text-light" name="postCategory" id="postCategory">
+            <select class="form-control" name="postCategory" id="postCategory">
                 <option default value="Other">Other</option>
                 <option value="World">World</option>
                 <option value="U.S">U.S</option>
@@ -38,19 +38,19 @@ $error = "";
 
         <div class="mb-5">
             <label for="postSum">Summary</label>
-            <textarea type="text" name="postSum" id="postSum" class="form-control bg-dark text-light" rows="3" required></textarea>
+            <textarea type="text" name="postSum" id="postSum" class="form-control" rows="3" required></textarea>
         </div>
 
         <div class="mb-5">
             <label for="coverImage">Cover Image URL</label>
-            <input type="url" name="coverImage" id="coverImage" class="form-control bg-dark text-light" required>
+            <input type="url" name="coverImage" id="coverImage" class="form-control" required>
         </div>
 
-        <div id="form_content" data-bs-theme="dark"></div>
+        <div id="form_content"></div>
 
         <div class="mb-5">
             <label for="newContent">New...</label>
-            <select class="form-control bg-dark text-light" oninput="addNewContent(this.value)" name="newContent" id="newContentType">
+            <select class="form-control" oninput="addNewContent(this.value)" name="newContent" id="newContentType">
                 <option value="">Select an element</option>
                 <option value="h">New Header</option>
                 <option value="p">New Paragraph</option>
@@ -65,7 +65,8 @@ $error = "";
         <button type="submit" name="postSubmit" class="btn btn-outline-success align-middle">Submit</button>
         <button
             type="button" id="deleteContent" name="deleteContent" class="btn btn-outline-danger" 
-            onclick="removeFormContent()">Clear
+            onclick="removeFormContent()">
+            Clear
         </button>
 
     </form>

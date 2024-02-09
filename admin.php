@@ -35,7 +35,7 @@ if (isset($view) && $view == 'statistics') {
 	?>
 
 	<div class="table-responsive">
-		<table class="table align-middle text-light">
+		<table class="table align-middle">
 
 		<thead>
 			<th scope="col">Users</th>
@@ -126,14 +126,14 @@ if (isset($view) && $view == "posts") {
 </button>
 
 <div class="collapse" id="searchFormCollapse">
-<div class="card card-body bg-dark">
+<div class="card card-body">
     <form method="GET" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
 
         <label for="filterTitle" class="col-form-label">Title</label>
-        <input type="text" name="filterTitle" id="filterTitle" class="form-control bg-dark text-light">
+        <input type="text" name="filterTitle" id="filterTitle" class="form-control">
 
         <label for="filterCategory" class="col-form-label">Category</label>
-        <select name="filterCategory" id="filterCategory" class="form-control bg-dark text-light">
+        <select name="filterCategory" id="filterCategory" class="form-control">
             <option value="world">World</option>
             <option value="us">U.S</option>
             <option value="technology">Technology</option>
@@ -150,10 +150,10 @@ if (isset($view) && $view == "posts") {
         </select>
 
         <label for="filterPublisher" class="col-form-label">Publisher</label>
-        <input type="text" name="filterPublisher" id="filterPublisher" class="form-control bg-dark text-light">
+        <input type="text" name="filterPublisher" id="filterPublisher" class="form-control">
 
         <label for="filterFeatured" class="col-form-label">Featured</label>
-        <input type="radio" name="filterFeatured" id="filterFeatured" class="form-control bg-dark text-light">
+        <input type="radio" name="filterFeatured" id="filterFeatured" class="form-control">
 
         <input type="submit" value="Search" name="filterSubmit" id="filterSubmit" class="btn btn-outline-success">
 
@@ -164,12 +164,11 @@ if (isset($view) && $view == "posts") {
 
 
 <div class="table-responsive">
-    <table class="table align-middle text-light">
+    <table class="table align-middle">
 
     <!-- filtering links styling -->
     <style>
         .filter-link {
-            color: white;
             text-decoration: none;
         }
     </style>
@@ -205,7 +204,7 @@ if (isset($view) && $view == "posts") {
             <td><?php echo $post["views"]; ?></td>
             <td>
                 <!-- view post button -->
-                <a class="btn btn-outline-light" href="/post/<?php echo $post["id"]; ?>">View</a>
+                <a class="btn btn-outline-info" href="/post/<?php echo $post["id"]; ?>">View</a>
 
                 <!-- edit modal button -->
                 <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
@@ -221,9 +220,9 @@ if (isset($view) && $view == "posts") {
 
                 <!-- edit modal -->
                 <div class="modal fade" id="editModal<?php echo $post["id"]; ?>" tabindex="-1"
-                    aria-labelledby="editModalLabel" aria-hidden="true" data-bs-theme="dark">
+                    aria-labelledby="editModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
-                        <div class="modal-content bg-dark">
+                        <div class="modal-content">
 
                             <div class="modal-header">
                                 <h1 class="modal-title fs-5" id="editModalLabel">Edit</h1>
@@ -235,17 +234,17 @@ if (isset($view) && $view == "posts") {
                                     
                                     <div class="mb-3">
                                         <label for="id" class="col-form-label">ID:</label>
-                                        <input type="text" name="id" id="id" class="form-control bg-dark text-light" value="<?php echo $post["id"]; ?>" readonly>
+                                        <input type="text" name="id" id="id" class="form-control" value="<?php echo $post["id"]; ?>" readonly>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="title" class="col-form-label">Title:</label>
-                                        <textarea name="title" id="title" rows="2" class="form-control bg-dark text-light"><?php echo $post["title"]; ?></textarea>
+                                        <textarea name="title" id="title" rows="2" class="form-control"><?php echo $post["title"]; ?></textarea>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="category" class="col-form-label">Category:</label>
-                                        <select name="category" id="category" class="form-control bg-dark text-light">
+                                        <select name="category" id="category" class="form-control">
                                             <option value="Other" <?php if ($post["category"] == "Other") echo "selected"; ?>>Other</option>
                                             <option value="World" <?php if ($post["category"] == "World") echo "selected"; ?>>World</option>
                                             <option value="U.S" <?php if ($post["category"] == "U.S") echo "selected"; ?>>U.S</option>
@@ -264,23 +263,23 @@ if (isset($view) && $view == "posts") {
 
                                     <div class="mb-5">
                                         <label for="cover" class="col-form-label">Cover URL</label>
-                                        <textarea name="cover" id="cover" rows="3" class="form-control bg-dark text-light"><?php echo $post["cover"]; ?></textarea>
+                                        <textarea name="cover" id="cover" rows="3" class="form-control"><?php echo $post["cover"]; ?></textarea>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="summary" class="col-form-label">Summary:</label>
-                                        <textarea name="summary" id="summary" rows="3" class="form-control bg-dark text-light"><?php echo $post["summary"];?></textarea>
+                                        <textarea name="summary" id="summary" rows="3" class="form-control"><?php echo $post["summary"];?></textarea>
                                     </div>
 
                                     <div class="mb-3 form-check form-switch">
-                                    <input class="form-check-input bg-dark" type="checkbox" role="switch" id="featuredSwitch" name="featured" value="featured" <?php echo $post["featured"] ? "checked" : "" ?>>
+                                    <input class="form-check-input" type="checkbox" role="switch" id="featuredSwitch" name="featured" value="featured" <?php echo $post["featured"] ? "checked" : "" ?>>
                                     <label class="form-check-label" for="featuredSwitch">Featured</label>
                                     </div>    
 
                             </div>
 
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" name="editPost" class="btn btn-outline-warning">Edit</button>
                             </div>
                                 </form>
@@ -290,9 +289,9 @@ if (isset($view) && $view == "posts") {
 
                 <!-- delete modal -->
                 <div class="modal fade" id="deleteModal<?php echo $post["id"]; ?>" tabindex="-1"
-                    aria-labelledby="deleteModalLabel" aria-hidden="true" data-bs-theme="dark">
+                    aria-labelledby="deleteModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
-                        <div class="modal-content bg-dark">
+                        <div class="modal-content">
 
                             <div class="modal-header">
                                 <h1 class="modal-title fs-5" id="deleteModalLabel">Delete</h1>
@@ -307,7 +306,7 @@ if (isset($view) && $view == "posts") {
                                     </div>
                                     <input type="hidden" name="id" value="<?php echo $post["id"]; ?>">
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Cancel</button>
                                         <button type="submit" name="deletePost" class="btn btn-outline-danger">Delete</button>
                                     </div>
 
@@ -332,15 +331,15 @@ if (isset($view) && $view == "posts") {
 <nav aria-label="pagination">
       <ul class="pagination justify-content-center">
         <li class="page-item  <?php echo (($page - 1) <= 0 ) ? "disabled" : ""; ?>">
-          <a class="page-link bg-dark text-light" href="/admin/view/posts/page/<?php echo $page - 1 ; ?>">Previous</a>
+          <a class="page-link" href="/admin/view/posts/page/<?php echo $page - 1 ; ?>">Previous</a>
         </li>
         <?php for ($pages=1;$pages<=$result["total_pages"];$pages++) : ?>
-          <li class="page-item <?php echo ($pages == $page) ? "active" : ""; ?>"><a class="page-link bg-dark text-light"
+          <li class="page-item <?php echo ($pages == $page) ? "active" : ""; ?>"><a class="page-link"
             href="/admin/view/posts/page/<?php echo $pages; ?>"><?php echo $pages; ?></a>
           </li>
         <?php endfor; ?>
         <li class="page-item <?php echo (($page + 1) > $result["total_pages"] ) ? "disabled" : ""; ?>">
-          <a class="page-link bg-dark text-light" href="/admin/view/posts/page/<?php echo $page + 1 ; ?>">Next</a>
+          <a class="page-link" href="/admin/view/posts/page/<?php echo $page + 1 ; ?>">Next</a>
         </li>
       </ul>
     </nav>
@@ -410,7 +409,7 @@ if (isset($view) && $view == "users") {
 ?>
 
     <div class="table-responsive">
-    <table class="table align-middle text-light">
+    <table class="table align-middle">
 
     <!-- filtering links styling -->
     <style>
@@ -452,7 +451,7 @@ if (isset($view) && $view == "users") {
 
             <td>
                 <!-- view posts button -->
-                <a class="btn btn-outline-light" href="/posts/from/<?php echo $user["username"]; ?>">View Posts</a>
+                <a class="btn btn-outline-info" href="/posts/from/<?php echo $user["username"]; ?>">View Posts</a>
 
                 <!-- edit modal button -->
                 <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
@@ -469,9 +468,9 @@ if (isset($view) && $view == "users") {
                 <!-- edit modal -->
 
                 <div class="modal fade" id="editModal<?php echo $user["id"]; ?>" tabindex="-1"
-                    aria-labelledby="editModalLabel" aria-hidden="true" data-bs-theme="dark">
+                    aria-labelledby="editModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
-                        <div class="modal-content bg-dark">
+                        <div class="modal-content">
 
                             <div class="modal-header">
                                 <h1 class="modal-title fs-5" id="editModalLabel">Edit</h1>
@@ -483,29 +482,29 @@ if (isset($view) && $view == "users") {
                                     
                                     <div class="mb-3">
                                         <label for="id" class="col-form-label">ID:</label>
-                                        <input type="text" name="id" id="id" class="form-control bg-dark text-light" value="<?php echo $user["id"]; ?>" readonly>
+                                        <input type="text" name="id" id="id" class="form-control" value="<?php echo $user["id"]; ?>" readonly>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="username" class="col-form-label">Username:</label>
-                                        <input type="text" name="username" id="username" class="form-control bg-dark text-light" value="<?php echo $user["username"]; ?>">
+                                        <input type="text" name="username" id="username" class="form-control" value="<?php echo $user["username"]; ?>">
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="email" class="col-form-label">Email:</label>
-                                        <input type="text" name="email" id="email" class="form-control bg-dark text-light" value="<?php echo $user["email"]; ?>">
+                                        <input type="text" name="email" id="email" class="form-control" value="<?php echo $user["email"]; ?>">
                                     </div>
 
 
                                     <div class="mb-3 form-check form-switch">
-                                        <input class="form-check-input bg-dark" type="checkbox" role="switch" id="roleSwitch" name="role" value="role" <?php echo ($user["access_level"] === 1 ) ? "checked" : "" ?>>
+                                        <input class="form-check-input" type="checkbox" role="switch" id="roleSwitch" name="role" value="role" <?php echo ($user["access_level"] === 1 ) ? "checked" : "" ?>>
                                         <label class="form-check-label" for="roleSwitch">Admin</label>
                                     </div>    
 
                             </div>
 
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" name="editUser" class="btn btn-outline-warning">Edit</button>
                             </div>
                                 </form>
@@ -515,9 +514,9 @@ if (isset($view) && $view == "users") {
 
                 <!-- delete modal -->
                 <div class="modal fade" id="deleteModal<?php echo $user["id"]; ?>" tabindex="-1"
-                    aria-labelledby="deleteModalLabel" aria-hidden="true" data-bs-theme="dark">
+                    aria-labelledby="deleteModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
-                        <div class="modal-content bg-dark">
+                        <div class="modal-content">
 
                             <div class="modal-header">
                                 <h1 class="modal-title fs-5" id="deleteModalLabel">Delete</h1>
@@ -532,7 +531,7 @@ if (isset($view) && $view == "users") {
                                     </div>
                                     <input type="hidden" name="id" value="<?php echo $user["id"]; ?>">
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Cancel</button>
                                         <button type="submit" name="deleteUser" class="btn btn-outline-danger">Delete</button>
                                     </div>
 
@@ -557,15 +556,15 @@ if (isset($view) && $view == "users") {
 <nav aria-label="pagination">
     <ul class="pagination justify-content-center">
     <li class="page-item  <?php echo (($page - 1) <= 0 ) ? "disabled" : ""; ?>">
-        <a class="page-link bg-dark text-light" href="admin.php?view=users&page=<?php echo $page - 1 ; ?>">Previous</a>
+        <a class="page-link" href="admin.php?view=users&page=<?php echo $page - 1 ; ?>">Previous</a>
     </li>
     <?php for ($pages=1;$pages<=$result["total_pages"];$pages++) : ?>
-        <li class="page-item <?php echo ($pages == $page) ? "active" : ""; ?>"><a class="page-link bg-dark text-light"
+        <li class="page-item <?php echo ($pages == $page) ? "active" : ""; ?>"><a class="page-link"
         href="admin.php?view=users&page=<?php echo $pages; ?>"><?php echo $pages; ?></a>
         </li>
     <?php endfor; ?>
     <li class="page-item <?php echo (($page + 1) > $result["total_pages"] ) ? "disabled" : ""; ?>">
-        <a class="page-link bg-dark text-light" href="admin.php?view=users&page=<?php echo $page + 1 ; ?>">Next</a>
+        <a class="page-link" href="admin.php?view=users&page=<?php echo $page + 1 ; ?>">Next</a>
     </li>
     </ul>
 </nav>
@@ -577,11 +576,11 @@ if (isset($view) && $view == "users") {
 
 </main>
 
-<?php require_once('inc/footer.php'); ?>
+<?php include_once('inc/footer.php'); ?>
 
 <!-- toast -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
-  <div id="liveToast" class="toast text-dark" role="alert" aria-live="assertive" aria-atomic="true">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-header" id="toastHeader">
 
       <strong class="me-auto" id="toastTitle"></strong>

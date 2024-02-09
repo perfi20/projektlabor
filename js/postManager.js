@@ -20,7 +20,7 @@ function addNewContent(type) {
         header.appendChild(headerLabel);
         header.setAttribute("name", `form[${i}][header]`);
         header.setAttribute("type", "text");
-        header.setAttribute("class", "form-control bg-dark text-light");
+        header.setAttribute("class", "form-control");
         header.setAttribute("required", "");
 
         let headerDelete = document.createElement("button");
@@ -54,7 +54,7 @@ function addNewContent(type) {
         let pContent = document.createElement("textarea");
         pContent.setAttribute("name", `form[${i}][pContent]`)
         pContent.setAttribute("required", "");
-        pContent.setAttribute("class", "form-control bg-dark text-light")
+        pContent.setAttribute("class", "form-control")
         pContent.appendChild(pContentLabel);
 
         let paragraphDelete = document.createElement("button");
@@ -102,7 +102,7 @@ function addNewContent(type) {
         
         listContent.setAttribute("type", "text");
         listContent.setAttribute("required", "");
-        listContent.setAttribute("class", "form-control bg-dark text-light");
+        listContent.setAttribute("class", "form-control");
 
         let listDelete = document.createElement("button");
         listDelete.innerHTML = "";
@@ -139,7 +139,7 @@ function addNewContent(type) {
         tableHeadNames.setAttribute("type", "text");
         tableHeadNames.setAttribute("name", `form[${i}][tableHeads]`);
         tableHeadNames.setAttribute("required", "");
-        tableHeadNames.setAttribute("class", "form-control bg-dark text-light");
+        tableHeadNames.setAttribute("class", "form-control");
 
         let tableRowLabel = document.createElement("label");
         tableRowLabel.innerHTML = `Table row contents (rows separated by - , data separated by ,)`;
@@ -148,7 +148,7 @@ function addNewContent(type) {
         tableRow.setAttribute("type", "text");
         tableRow.setAttribute("name", `form[${i}][tableRows]`);
         tableRow.setAttribute("required", "");
-        tableRow.setAttribute("class", "form-control bg-dark text-light");
+        tableRow.setAttribute("class", "form-control");
 
         let tableDelete = document.createElement("button");
         tableDelete.innerHTML = "";
@@ -214,7 +214,7 @@ function addNewContent(type) {
         picture.setAttribute("type", "url");
         picture.setAttribute("name", `form[${i}][picture]`);
         picture.setAttribute("required", "");
-        picture.setAttribute("class", "form-control bg-dark text-light");
+        picture.setAttribute("class", "form-control");
 
         let pictureDelete = document.createElement("button");
         pictureDelete.innerHTML = "";

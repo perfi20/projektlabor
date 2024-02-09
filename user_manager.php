@@ -422,7 +422,7 @@ require_once('inc/footer.php');
 
 <!-- toast -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
-  <div id="liveToast" class="toast text-dark" role="alert" aria-live="assertive" aria-atomic="true">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-header" id="toastHeader">
 
       <strong class="me-auto" id="toastTitle"></strong>

@@ -46,13 +46,13 @@ if (isset($_POST['submit'])) {
 <form action="/login" class="was-validated border border-secondary p-5 rounded" style="--bs-border-opacity: .5;" method="POST">
 <h1>Login</h1>
   <div class="form-floating my-5">
-    <input type="text" class="form-control bg-dark text-light"
+    <input type="text" class="form-control"
       value="<?php echo isset($username) ? "$username" : ""; ?>" name="username"
       id="floatingUsername" placeholder="Username" required autofocus autocomplete="username">
     <label for="floatingUsername">Username</label>
   </div>
   <div class="form-floating mb-5">
-    <input type="password" class="form-control bg-dark text-light" value=""name="password"
+    <input type="password" class="form-control" value=""name="password"
       id="floatingPassword" placeholder="Password" required autocomplete="current-password"
     >
     <label for="floatingPassword">Password</label>
@@ -67,7 +67,7 @@ include_once('inc/footer.php');
 
 <!-- toast -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
-  <div id="liveToast" class="toast text-dark" role="alert" aria-live="assertive" aria-atomic="true">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-header" id="toastHeader">
 
       <strong class="me-auto" id="toastTitle"></strong>

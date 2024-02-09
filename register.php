@@ -52,7 +52,7 @@ if (isset($_POST['submit'])) {
         <h1>Register</h1>
 
       <div class="form-floating my-5">
-        <input type="text" class="form-control bg-dark text-light" pattern="{3,50}"
+        <input type="text" class="form-control" pattern="{3,50}"
           title="Username must be between 3 and 50 characters!!" id="floatingUsername" name="username"
           placeholder="Username" value="<?php echo $username; ?>" required autofocus
         >
@@ -60,12 +60,12 @@ if (isset($_POST['submit'])) {
       </div>
 
       <div class="form-floating mb-5">
-        <input type="email" class="form-control bg-dark text-light" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" title="Wrong email format!" id="floatingEmail" name="email" placeholder="Email" value="<?php echo $email; ?>" required>
+        <input type="email" class="form-control" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" title="Wrong email format!" id="floatingEmail" name="email" placeholder="Email" value="<?php echo $email; ?>" required>
         <label for="floatingEmail">Email</label>
       </div>
 
       <div class="form-floating mb-5">
-        <input type="password" class="form-control bg-dark text-light"
+        <input type="password" class="form-control"
           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,50}"
           title="Must contain at least one number and one uppercase adn lowercase letter, and between 8 and 50 characters"
           id="floatingPassword" name="password" placeholder="Password" value="<?php echo $pw; ?>" required
@@ -74,7 +74,7 @@ if (isset($_POST['submit'])) {
       </div>
 
       <div class="form-floating mb-5">
-        <input type="password" class="form-control bg-dark text-light" pattern="{6,25}" id="floatingPasswordConfirm" name="passwordConfirm" placeholder="Password" required>
+        <input type="password" class="form-control" pattern="{6,25}" id="floatingPasswordConfirm" name="passwordConfirm" placeholder="Password" required>
         <label for="floatingPasswordConfirm">Password confirmation</label>
       </div>
 
@@ -89,7 +89,7 @@ if (isset($_POST['submit'])) {
 
 <!-- toast -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
-  <div id="liveToast" class="toast text-dark" role="alert" aria-live="assertive" aria-atomic="true">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-header" id="toastHeader">
 
       <strong class="me-auto" id="toastTitle"></strong>
