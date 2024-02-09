@@ -13,12 +13,14 @@ for ($i=0; $i<3; $i++) {
 
 ?>
 
-<div class="p-4 p-md-5 mb-4 rounded">
+<div class="row p-4 p-md-5 mb-4 border rounded  align-items-center">
     <div class="col-lg-6 px-0">
-      <h1 class="display-4 fst-italic"><?php echo $first["title"]; ?></h1>
+      <h1 class="display-4 fst-italic"><?php echo $first['title']; ?></h1>
+      <div class="mb-1 blog-post-meta"><?php echo $first['created_at'] ?> by <?php echo $first['username']; ?></div>
       <p class="lead my-3"><?php echo $first["summary"]; ?></p>
       <p class="lead mb-0"><a href="/post/<?php echo $first["id"]; ?>" class="fw-bold">Continue reading...</a></p>
     </div>
+    <div class="col-lg-6 px-0"><img class="rounded img-fluid" src="<?php echo $first['cover']; ?>"></div>
   </div>
 
   <div class="row md-2">
@@ -27,7 +29,7 @@ for ($i=0; $i<3; $i++) {
         <div class="col p-4 d-flex flex-column position-static">
           <strong class="d-inline-block mb-2 text-primary-emphasis"><?php echo $second["category"]; ?></strong>
           <h3 class="mb-0"><?php echo $second["title"]; ?></h3>
-          <div class="mb-1 text-body-secondary">Nov 12</div>
+          <div class="mb-1 blog-post-meta"><?php echo $second['created_at'] ?> by <?php echo $second['username']; ?></div>
           <p class="card-text mb-auto"><?php echo $second["summary"]; ?></p>
           <a href="/post/<?php echo $second["id"]; ?>" class="icon-link gap-1 icon-link-hover stretched-link">
             Continue reading
@@ -41,7 +43,7 @@ for ($i=0; $i<3; $i++) {
         <div class="col p-4 d-flex flex-column position-static">
           <strong class="d-inline-block mb-2 text-success-emphasis"><?php echo $third["category"] ?></strong>
           <h3 class="mb-0"><?php echo $third["title"]; ?></h3>
-          <div class="mb-1 text-body-secondary">Nov 11</div>
+          <div class="mb-1 blog-post-meta"><?php echo $third['created_at'] ?> by <?php echo $third['username']; ?></div>
           <p class="mb-auto"><?php echo $third["summary"]; ?></p>
           <a href="/post/<?php echo $third["id"]; ?>" class="icon-link gap-1 icon-link-hover stretched-link">
             Continue reading

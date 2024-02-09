@@ -73,9 +73,10 @@ if (isset($postByID) && $postID !== "") :
       <article class="blog-post">
       <h2 class="display-5 link-body-emphasis mb-1">'.$title.'</h2>
       <img class="rounded img-fluid" src="'.$cover.'">
-      <p class="blog-post-meta">'.$date.' by <a href="/posts/from/'.$publisher.'">'.$publisher.'</a>
-      </p>
-      <a href="/posts/category/'.$category.'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$category.'</strong></a>
+      <div class="position-relative">
+        <p class="blog-post-meta postition-absolute top-0 start-0"><a href="/posts/category/'.$category.'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$category.'</strong></a></p>
+        <p class="position-absolute top-0 end-0">'.$date.' by <a href="/posts/from/'.$publisher.'">'.$publisher.'</a></p>
+      </div>
       '.$content.'
       </article>
     '; 
@@ -111,9 +112,10 @@ if (isset($postsByUser) && $postsByUser !== "") :
   <article class="blog-post">
   <h2 class="display-5 link-body-emphasis mb-1">'.$post["title"].'</h2>
   <img class="rounded img-fluid" src="'.$post["cover"].'">
-  <p class="blog-post-meta">'.$date.' by <a href="/posts/from/'.$post["username"].'">'.$post["username"].'</a>
-  </p>
-  <a href="/posts/category/'.$post["category"].'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$post["category"].'</strong></a>
+  <div class="position-relative">
+    <p class="blog-post-meta postition-absolute top-0 start-0"><a href="/posts/category/'.$post["category"].'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$post["category"].'</strong></a></p>
+    <p class="position-absolute top-0 end-0">'.$date.' by <a href="/posts/from/'.$post["username"].'">'.$post["username"].'</a></p>
+  </div>
   '.$post["content"].'
   </article>
   ';
@@ -124,15 +126,15 @@ if (isset($postsByUser) && $postsByUser !== "") :
   <nav aria-label="pagination">
       <ul class="pagination justify-content-center">
         <li class="page-item  <?php echo (($page - 1) <= 0 ) ? "disabled" : ""; ?>">
-          <a class="page-link bg-dark text-light" href="/posts/from/<?php echo $postsByUser; ?>/page/<?php echo $page - 1 ; ?>">Previous</a>
+          <a class="page-link" href="/posts/from/<?php echo $postsByUser; ?>/page/<?php echo $page - 1 ; ?>">Previous</a>
         </li>
         <?php for ($pages=1;$pages<=$result["total_pages"];$pages++) : ?>
-          <li class="page-item <?php echo ($pages == $page) ? "active" : ""; ?>"><a class="page-link bg-dark text-light"
+          <li class="page-item <?php echo ($pages == $page) ? "active" : ""; ?>"><a class="page-link"
             href="/posts/from/<?php echo $postsByUser; ?>/page/<?php echo $pages; ?>"><?php echo $pages; ?></a>
           </li>
         <?php endfor; ?>
         <li class="page-item <?php echo (($page + 1) > $result["total_pages"] ) ? "disabled" : ""; ?>">
-          <a class="page-link bg-dark text-light" href="/posts/from/<?php echo $postsByUser; ?>/page/<?php echo $page + 1 ; ?>">Next</a>
+          <a class="page-link" href="/posts/from/<?php echo $postsByUser; ?>/page/<?php echo $page + 1 ; ?>">Next</a>
         </li>
       </ul>
     </nav>
@@ -164,9 +166,10 @@ if (isset($postsByCategory) && $postsByCategory !== "") :
       <article class="blog-post">
       <h2 class="display-5 link-body-emphasis mb-1">'.$post["title"].'</h2>
       <img class="rounded img-fluid" src="'.$post["cover"].'">
-      <p class="blog-post-meta">'.$date.' by <a href="/posts/from/'.$post["username"].'">'.$post["username"].'</a>
-      </p>
-      <a href="/posts/category/'.$post["category"].'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$post["category"].'</strong></a>
+      <div class="position-relative">
+        <p class="blog-post-meta postition-absolute top-0 start-0"><a href="/posts/category/'.$post["category"].'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$post["category"].'</strong></a></p>
+        <p class="position-absolute top-0 end-0">'.$date.' by <a href="/posts/from/'.$post["username"].'">'.$post["username"].'</a></p>
+      </div>
       '.$post["content"].'
       </article>
       ';
@@ -177,15 +180,15 @@ if (isset($postsByCategory) && $postsByCategory !== "") :
     <nav aria-label="pagination">
       <ul class="pagination justify-content-center">
         <li class="page-item  <?php echo (($page - 1) <= 0 ) ? "disabled" : ""; ?>">
-          <a class="page-link bg-dark text-light" href="/posts/category/<?php echo $postsByCategory; ?>/page/<?php echo $page - 1 ; ?>">Previous</a>
+          <a class="page-link" href="/posts/category/<?php echo $postsByCategory; ?>/page/<?php echo $page - 1 ; ?>">Previous</a>
         </li>
         <?php for ($pages=1;$pages<=$result["total_pages"];$pages++) : ?>
-          <li class="page-item <?php echo ($pages == $page) ? "active" : ""; ?>"><a class="page-link bg-dark text-light"
+          <li class="page-item <?php echo ($pages == $page) ? "active" : ""; ?>"><a class="page-link"
             href="/posts/category/<?php echo $postsByCategory; ?>/page/<?php echo $pages; ?>"><?php echo $pages; ?></a>
           </li>
         <?php endfor; ?>
         <li class="page-item <?php echo (($page + 1) > $result["total_pages"] ) ? "disabled" : ""; ?>">
-          <a class="page-link bg-dark text-light" href="/posts/category/<?php echo $postsByCategory; ?>/page/<?php echo $page + 1 ; ?>">Next</a>
+          <a class="page-link" href="/posts/category/<?php echo $postsByCategory; ?>/page/<?php echo $page + 1 ; ?>">Next</a>
         </li>
       </ul>
     </nav>
@@ -215,9 +218,10 @@ if (isset($postsByYear) || isset($postsByMonth)) {
     <article class="blog-post">
     <h2 class="display-5 link-body-emphasis mb-1">'.$post["title"].'</h2>
     <img class="rounded img-fluid" src="'.$post["cover"].'">
-    <p class="blog-post-meta">'.$date.' by <a href="/posts/from/'.$post["username"].'">'.$post["username"].'</a>
-    </p>
-    <a href="/posts/category/'.$post["category"].'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$post["category"].'</strong></a>
+    <div class="position-relative">
+        <p class="blog-post-meta postition-absolute top-0 start-0"><a href="/posts/category/'.$post["category"].'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$post["category"].'</strong></a></p>
+        <p class="position-absolute top-0 end-0">'.$date.' by <a href="/posts/from/'.$post["username"].'">'.$post["username"].'</a></p>
+    </div>
     '.$post["content"].'
     </article>
     ';
@@ -228,15 +232,15 @@ if (isset($postsByYear) || isset($postsByMonth)) {
     <nav aria-label="pagination">
       <ul class="pagination justify-content-center">
         <li class="page-item  <?php echo (($page - 1) <= 0 ) ? "disabled" : ""; ?>">
-          <a class="page-link bg-dark text-light" href="/posts/date/<?php echo $postsByYear; ?>/<?php echo $postsByMonth; ?>/page/<?php echo $page - 1 ; ?>">Previous</a>
+          <a class="page-link" href="/posts/date/<?php echo $postsByYear; ?>/<?php echo $postsByMonth; ?>/page/<?php echo $page - 1 ; ?>">Previous</a>
         </li>
         <?php for ($pages=1;$pages<=$result["total_pages"];$pages++) : ?>
-          <li class="page-item <?php echo ($pages == $page) ? "active" : ""; ?>"><a class="page-link bg-dark text-light"
+          <li class="page-item <?php echo ($pages == $page) ? "active" : ""; ?>"><a class="page-link"
             href="/posts/date/<?php echo $postsByYear; ?>/<?php echo $postsByMonth; ?>/page/<?php echo $pages; ?>"><?php echo $pages; ?></a>
           </li>
         <?php endfor; ?>
         <li class="page-item <?php echo (($page + 1) > $result["total_pages"] ) ? "disabled" : ""; ?>">
-          <a class="page-link bg-dark text-light" href="/posts/date/<?php echo $postsByYear; ?>/<?php echo $postsByMonth; ?>/page/<?php echo $page + 1 ; ?>">Next</a>
+          <a class="page-link" href="/posts/date/<?php echo $postsByYear; ?>/<?php echo $postsByMonth; ?>/page/<?php echo $page + 1 ; ?>">Next</a>
         </li>
       </ul>
     </nav>
@@ -269,9 +273,11 @@ if (!isset($postByID) && !isset($postsByUser) && !isset($postsByCategory) && !is
       <article class="blog-post">
       <h2 class="display-5 link-body-emphasis mb-1">'.$post["title"].'</h2>
       <img class="rounded img-fluid" src="'.$post["cover"].'">
-      <p class="blog-post-meta">'.$date.' by <a href="/posts/from/'.$post["username"].'">'.$post["username"].'</a>
-      </p>
-      <a href="/posts/category/'.$post["category"].'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$post["category"].'</strong></a>
+      <div class="position-relative">
+        <p class="blog-post-meta postition-absolute top-0 start-0"><a href="/posts/category/'.$post["category"].'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$post["category"].'</strong></a></p>
+        <p class="position-absolute top-0 end-0">'.$date.' by <a href="/posts/from/'.$post["username"].'">'.$post["username"].'</a></p>
+      </div>
+      
       '.$post["content"].'
       </article>
       ';
@@ -317,6 +323,5 @@ endif;
 </main>
 
 <?php
-//include_once('inc/event.php');
 include_once('inc/footer.php');
 ?>

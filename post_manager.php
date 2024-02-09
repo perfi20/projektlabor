@@ -19,7 +19,7 @@ if (empty($_SESSION['username'])) {
 <?php
 // create post from submit
 if (isset($_POST['postSubmit'])) {
-
+    
     $postTitle = $_POST['postTitle'];
 
     $postCategory = $_POST['postCategory'];
@@ -71,7 +71,7 @@ if (isset($_POST['postSubmit'])) {
                     break;
 
                 case "tableHeads":
-                    $postContent .= '<table class="table text-white"><thead><tr>';
+                    $postContent .= '<table class="table"><thead><tr>';
                     $list = explode(",", $value);
                     foreach ($list as $heads) {
                         $postContent .= '<th>'.$heads.'</th>';
@@ -202,12 +202,11 @@ if (!isset($view)) {
 ?>
 
 <div class="table-responsive">
-    <table class="table align-middle text-light">
+    <table class="table align-middle">
 
     <!-- filtering links styling -->
     <style>
         .filter-link {
-            color: white;
             text-decoration: none;
         }
     </style>
@@ -239,7 +238,7 @@ if (!isset($view)) {
             <td <?php echo $post['featured'] ? 'class="text-success"' : 'class="text-secondary"'; ?>><?php echo $post["featured"] ? 'Yes' : 'No'; ?></td>
             <td>
                 <!-- view post button -->
-                <a class="btn btn-outline-light" href="/post/=<?php echo $post["id"]; ?>">View</a>
+                <a class="btn btn-outline-info" href="/post/=<?php echo $post["id"]; ?>">View</a>
 
                 <!-- edit modal button -->
                 <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
@@ -256,9 +255,9 @@ if (!isset($view)) {
                 <!-- edit modal -->
 
                 <div class="modal fade" id="editModal<?php echo $post["id"]; ?>" tabindex="-1"
-                    aria-labelledby="editModalLabel" aria-hidden="true" data-bs-theme="dark">
+                    aria-labelledby="editModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
-                        <div class="modal-content bg-dark">
+                        <div class="modal-content">
 
                             <div class="modal-header">
                                 <h1 class="modal-title fs-5" id="editModalLabel">Edit</h1>
@@ -270,17 +269,17 @@ if (!isset($view)) {
                                     
                                     <div class="mb-3">
                                         <label for="id" class="col-form-label">ID:</label>
-                                        <input type="text" name="id" id="id" class="form-control bg-dark text-light" value="<?php echo $post["id"]; ?>" readonly>
+                                        <input type="text" name="id" id="id" class="form-control" value="<?php echo $post["id"]; ?>" readonly>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="title" class="col-form-label">Title:</label>
-                                        <textarea type="text" name="title" id="title" rows="3" class="form-control bg-dark text-light"><?php echo $post["title"]; ?></textarea>
+                                        <textarea type="text" name="title" id="title" rows="3" class="form-control"><?php echo $post["title"]; ?></textarea>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="category" class="col-form-label">Category:</label>
-                                        <select name="category" id="category" class="form-control bg-dark text-light">
+                                        <select name="category" id="category" class="form-control">
                                             <option value="Other" <?php if ($post["category"] == "Other") echo "selected"; ?>>Other</option>
                                             <option value="World" <?php if ($post["category"] == "World") echo "selected"; ?>>World</option>
                                             <option value="U.S" <?php if ($post["category"] == "U.S") echo "selected"; ?>>U.S</option>
@@ -299,23 +298,23 @@ if (!isset($view)) {
 
                                     <div class="mb-5">
                                         <label for="cover" class="col-form-label">Cover URL</label>
-                                        <textarea name="cover" id="cover" rows="3" class="form-control bg-dark text-light"><?php echo $post["cover"]; ?></textarea>
+                                        <textarea name="cover" id="cover" rows="3" class="form-control"><?php echo $post["cover"]; ?></textarea>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="summary" class="col-form-label">Summary:</label>
-                                        <textarea name="summary" id="summary" rows="4" class="form-control bg-dark text-light"><?php echo $post["summary"]; ?></textarea>
+                                        <textarea name="summary" id="summary" rows="4" class="form-control"><?php echo $post["summary"]; ?></textarea>
                                     </div>
 
                                     <div class="mb-3 form-check form-switch">
-                                    <input class="form-check-input bg-dark" type="checkbox" role="switch" id="featuredSwitch" name="featured" value="featured" <?php echo $post["featured"] ? "checked" : "" ?> disabled="disabled">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="featuredSwitch" name="featured" value="featured" <?php echo $post["featured"] ? "checked" : "" ?> disabled="disabled">
                                     <label class="form-check-label" for="featuredSwitch">Featured</label>
                                     </div>    
 
                             </div>
 
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" name="edit" id="edit" class="btn btn-outline-warning">Edit</button>
                             </div>
                                 </form>
@@ -325,9 +324,9 @@ if (!isset($view)) {
 
                 <!-- delete modal -->
                 <div class="modal fade" id="deleteModal<?php echo $post["id"]; ?>" tabindex="-1"
-                    aria-labelledby="deleteModalLabel" aria-hidden="true" data-bs-theme="dark">
+                    aria-labelledby="deleteModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
-                        <div class="modal-content bg-dark">
+                        <div class="modal-content">
 
                             <div class="modal-header">
                                 <h1 class="modal-title fs-5" id="deleteModalLabel">Delete</h1>
@@ -342,7 +341,7 @@ if (!isset($view)) {
                                     </div>
                                     <input type="hidden" name="id" value="<?php echo $post["id"]; ?>">
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Cancel</button>
                                         <button type="submit" name="delete" class="btn btn-outline-danger">Delete</button>
                                     </div>
 
@@ -367,15 +366,15 @@ if (!isset($view)) {
 <nav aria-label="pagination">
     <ul class="pagination justify-content-center">
     <li class="page-item  <?php echo (($page - 1) <= 0 ) ? "disabled" : ""; ?>">
-        <a class="page-link bg-dark text-light" href="post_manager.php?page=<?php echo $page - 1 ; ?>">Previous</a>
+        <a class="page-link" href="post_manager.php?page=<?php echo $page - 1 ; ?>">Previous</a>
     </li>
     <?php for ($pages=1;$pages<=$result["total_pages"];$pages++) : ?>
-        <li class="page-item <?php echo ($pages == $page) ? "active" : ""; ?>"><a class="page-link bg-dark text-light"
+        <li class="page-item <?php echo ($pages == $page) ? "active" : ""; ?>"><a class="page-link"
         href="post_manager.php?page=<?php echo $pages; ?>"><?php echo $pages; ?></a>
         </li>
     <?php endfor; ?>
     <li class="page-item <?php echo (($page + 1) > $result["total_pages"] ) ? "disabled" : ""; ?>">
-        <a class="page-link bg-dark text-light" href="post_manager.php?page=<?php echo $page + 1 ; ?>">Next</a>
+        <a class="page-link" href="post_manager.php?page=<?php echo $page + 1 ; ?>">Next</a>
     </li>
     </ul>
 </nav>
@@ -389,7 +388,7 @@ require_once('inc/footer.php');
 
 <!-- toast -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
-  <div id="liveToast" class="toast text-dark" role="alert" aria-live="assertive" aria-atomic="true">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-header" id="toastHeader">
 
       <strong class="me-auto" id="toastTitle"></strong>
