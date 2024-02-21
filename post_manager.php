@@ -166,6 +166,7 @@ if (isset($_POST["edit"])) {
 
 // new post form
 if (isset($view) && $view == "create") {
+    include_once('./components/__createPost.php');
     include_once('./components/_create_post.php');
 }
 
@@ -173,20 +174,29 @@ if (isset($view) && $view == "create") {
 if (!isset($view)) {
 
     // pagination
-    $page = isset($_GET["page"]) ? $_GET["page"] : 1;
-    $category = $_GET["user"];
+    $page = isset($page) ? $page : 1;
 
-    // filtering
-    $sort = $_GET['sort'] ? $_GET['sort'] : 'created_at';
     
-    $order = ($_GET['order'] == 'desc') ? 'asc' : 'desc';
-    if (!isset($_GET['order'])) {
-        $order = 'desc';
+    $orderBy = ($order == 'desc') ? 'asc' : 'desc';
+
+    if (!isset($order)) {
+        $orderBy = 'desc';
     }
     
-    if ($order == 'asc') {
-        $arrow = '<img src="/src/icons8-chevron-up-64.png" width="20" height="20"/>';
-    } else $arrow = '<img src="/src/icons8-chevron-down-64.png" width="20" height="20"/>';
+    // order arrow
+    if ($orderBy == 'asc') {
+        if ($_COOKIE['darkmode'] === 'disabled') {
+            $arrow = '<img src="/src/icons8-chevron-up-64-black.png" width="20" height="20"/>';
+        } else {
+            $arrow = '<img src="/src/icons8-chevron-up-64.png" width="20" height="20"/>';
+        }   
+    } else if ($orderBy == 'desc') {
+        if ($_COOKIE['darkmode'] === 'disabled') {
+            $arrow = '<img src="/src/icons8-chevron-down-64-black.png" width="20" height="20"/>';
+        } else {
+            $arrow = '<img src="/src/icons8-chevron-up-64.png" width="20" height="20"/>';
+        }
+    } 
     
     // request
     $postfields = json_encode([
@@ -194,7 +204,7 @@ if (!isset($view)) {
         'page' => $page,
         'limit' => 50,
         'sort' => $sort,
-        'order' => $order
+        'order' => $orderBy
     ]);
     $result = curl('posts', 'POST', $postfields, true);
 
@@ -214,11 +224,11 @@ if (!isset($view)) {
     <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col"><a class="filter-link" href="?sort=title&order=<?php echo $order; ?>">Title<?php if ($sort == 'title') echo $arrow; ?></a></th>
-            <th scope="col"><a class="filter-link" href="?sort=category&order=<?php echo $order; ?>">Category<?php if ($sort == 'category') echo $arrow; ?></a></th>
-            <th scope="col"><a class="filter-link" href="?sort=created_at&order=<?php echo $order; ?>">Created at<?php if ($sort == 'created_at') echo $arrow; ?></a></th>
-            <th scope="col"><a class="filter-link" href="?sort=updated_at&order=<?php echo $order; ?>">Updated at<?php if ($sort == 'updated_at') echo $arrow; ?></a></th>
-            <th scope="col"><a class="filter-link" href="?sort=featured&order=<?php echo $order; ?>">Featured<?php if ($sort == 'featured') echo $arrow; ?></a></th>
+            <th scope="col"><a class="filter-link" href="/user/posts/sort/title/order/<?php echo $orderBy; ?>">Title<?php if ($sort == 'title') echo $arrow; ?></a></th>
+            <th scope="col"><a class="filter-link" href="/user/posts/sort/category/order/<?php echo $orderBy; ?>">Category<?php if ($sort == 'category') echo $arrow; ?></a></th>
+            <th scope="col"><a class="filter-link" href="/user/posts/sort/created_at/order/<?php echo $orderBy; ?>">Created at<?php if ($sort == 'created_at') echo $arrow; ?></a></th>
+            <th scope="col"><a class="filter-link" href="/user/posts/sort/updated_at/order/<?php echo $orderBy; ?>">Updated at<?php if ($sort == 'updated_at') echo $arrow; ?></a></th>
+            <th scope="col"><a class="filter-link" href="/user/posts/sort/featured/order/<?php echo $orderBy; ?>">Featured<?php if ($sort == 'featured') echo $arrow; ?></a></th>
             <th scope="col">Actions</th>
         </tr>
     </thead>
@@ -238,7 +248,7 @@ if (!isset($view)) {
             <td <?php echo $post['featured'] ? 'class="text-success"' : 'class="text-secondary"'; ?>><?php echo $post["featured"] ? 'Yes' : 'No'; ?></td>
             <td>
                 <!-- view post button -->
-                <a class="btn btn-outline-info" href="/post/=<?php echo $post["id"]; ?>">View</a>
+                <a class="btn btn-outline-info" href="/post/<?php echo $post["id"]; ?>">View</a>
 
                 <!-- edit modal button -->
                 <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
@@ -366,15 +376,15 @@ if (!isset($view)) {
 <nav aria-label="pagination">
     <ul class="pagination justify-content-center">
     <li class="page-item  <?php echo (($page - 1) <= 0 ) ? "disabled" : ""; ?>">
-        <a class="page-link" href="post_manager.php?page=<?php echo $page - 1 ; ?>">Previous</a>
+        <a class="page-link" href="/user/posts/page/<?php echo $page - 1 ; ?>">Previous</a>
     </li>
     <?php for ($pages=1;$pages<=$result["total_pages"];$pages++) : ?>
         <li class="page-item <?php echo ($pages == $page) ? "active" : ""; ?>"><a class="page-link"
-        href="post_manager.php?page=<?php echo $pages; ?>"><?php echo $pages; ?></a>
+        href="/user/posts/page/<?php echo $pages; ?>"><?php echo $pages; ?></a>
         </li>
     <?php endfor; ?>
     <li class="page-item <?php echo (($page + 1) > $result["total_pages"] ) ? "disabled" : ""; ?>">
-        <a class="page-link" href="post_manager.php?page=<?php echo $page + 1 ; ?>">Next</a>
+        <a class="page-link" href="/user/posts/page/<?php echo $page + 1 ; ?>">Next</a>
     </li>
     </ul>
 </nav>

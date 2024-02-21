@@ -166,7 +166,7 @@ if (!isset($_GET["magic"])) {
 
 <main class="container">
 
-    <table class="table text-white">
+    <table class="table">
         <tbody>
             <!-- username -->
             <tr>
@@ -253,9 +253,9 @@ if (!isset($_GET["magic"])) {
     <!-- edit username modal -->
 
     <div class="modal fade" id="editUsernameModal" tabindex="-1"
-        aria-labelledby="editUsernameModalLabel" aria-hidden="true" data-bs-theme="dark">
+        aria-labelledby="editUsernameModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content bg-dark">
+            <div class="modal-content">
 
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="editUsernameModalLabel">Change Username</h1>
@@ -267,12 +267,12 @@ if (!isset($_GET["magic"])) {
 
                         <div class="mb-3">
                             <label for="prevUsername">Previous Username:</label>
-                            <input type="text" name="prevUsername" id="prevUsername" class="form-control bg-dark text-light"  value="<?php echo $user["username"]; ?>" readonly>
+                            <input type="text" name="prevUsername" id="prevUsername" class="form-control"  value="<?php echo $user["username"]; ?>" readonly>
                         </div>
 
                         <div class="mb-3">
                             <label for="newUsername">New Username:</label>
-                            <input type="text" name="newUsername" id="newUsername" class="form-control bg-dark text-light" placeholder="<?php echo $user["username"]; ?>" autofocus>
+                            <input type="text" name="newUsername" id="newUsername" class="form-control" placeholder="<?php echo $user["username"]; ?>" autofocus>
                         </div>
 
                         <div class="modal-footer">
@@ -290,9 +290,9 @@ if (!isset($_GET["magic"])) {
     <!-- edit email modal -->
 
     <div class="modal fade" id="editEmailModal" tabindex="-1"
-        aria-labelledby="editEmailModalLabel" aria-hidden="true" data-bs-theme="dark">
+        aria-labelledby="editEmailModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content bg-dark">
+            <div class="modal-content">
 
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="editEmailModalLabel">Change Email</h1>
@@ -304,12 +304,12 @@ if (!isset($_GET["magic"])) {
 
                         <div class="mb-3">
                             <label for="prevEmail">Previous Email:</label>
-                            <input type="text" name="prevEmail" class="form-control bg-dark text-light"  value="<?php echo $user["email"]; ?>" readonly>
+                            <input type="text" name="prevEmail" class="form-control"  value="<?php echo $user["email"]; ?>" readonly>
                         </div>
 
                         <div class="mb-3">
                             <label for="newEmail">New Email:</label>
-                            <input type="text" name="newEmail" class="form-control bg-dark text-light" placeholder="<?php echo $user["email"]; ?>" autofocus>
+                            <input type="text" name="newEmail" class="form-control" placeholder="<?php echo $user["email"]; ?>" autofocus>
                         </div>
 
                         <div class="modal-footer">
@@ -327,9 +327,9 @@ if (!isset($_GET["magic"])) {
     <!-- edit password modal -->
 
     <div class="modal fade" id="editPasswordModal" tabindex="-1"
-        aria-labelledby="editPasswordModalLabel" aria-hidden="true" data-bs-theme="dark">
+        aria-labelledby="editPasswordModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content bg-dark">
+            <div class="modal-content">
 
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="editPasswordModalLabel">Change Password</h1>
@@ -341,17 +341,17 @@ if (!isset($_GET["magic"])) {
 
                         <div class="mb-3">
                             <label for="pw">Password:</label>
-                            <input type="password" name="pw" class="form-control bg-dark text-light">
+                            <input type="password" name="pw" class="form-control">
                         </div>
 
                         <div class="mb-3">
                             <label for="newPassword1">New Password:</label>
-                            <input type="password" name="newPassword1" class="form-control bg-dark text-light" autofocus>
+                            <input type="password" name="newPassword1" class="form-control" autofocus>
                         </div>
 
                         <div class="mb-3">
                             <label for="newPassword2">New Password Again:</label>
-                            <input type="password" name="newPassword2" class="form-control bg-dark text-light">
+                            <input type="password" name="newPassword2" class="form-control">
                         </div>
 
                         <div class="modal-footer">
@@ -369,9 +369,9 @@ if (!isset($_GET["magic"])) {
     <!-- edit profile picture modal -->
 
     <div class="modal fade" id="editPictureModal" tabindex="-1"
-        aria-labelledby="editPictureModalLabel" aria-hidden="true" data-bs-theme="dark">
+        aria-labelledby="editPictureModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content bg-dark">
+            <div class="modal-content">
 
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="editPictureModalLabel">Change Profile Picture</h1>
@@ -392,12 +392,12 @@ if (!isset($_GET["magic"])) {
 
                         }
                     ?>
-                    <img src="<?php echo $filePath; ?>" alt="" class="form-control bg-dark text-light">
+                    <img src="<?php echo $filePath; ?>" alt="" class="form-control">
                     </div>
                     
                         <div class="mb-3">
                             <label for="pw">New Picture:</label>
-                            <input type="file" accept="image/*" name="picture" id="picture" class="form-control bg-dark text-light">
+                            <input type="file" accept="image/*" name="picture" id="picture" class="form-control">
                         </div>
 
                         <div class="modal-footer">
