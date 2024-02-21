@@ -11,12 +11,14 @@
               document.documentElement.setAttribute('data-bs-theme', 'dark');
               document.getElementById('darkmode-toggle').setAttribute('checked', '');
               localStorage.setItem('darkmode', 'enabled');
+              document.cookie = 'darkmode = enabled'
             }
 
             const disableDarkMode = () => {
               document.documentElement.setAttribute('data-bs-theme', 'light')
               document.getElementById('darkmode-toggle').removeAttribute('checked');
               localStorage.setItem('darkmode', 'disabled');
+              document.cookie = 'darkmode = disabled'
             }
 
             if (darkMode === 'enabled') enableDarkMode();

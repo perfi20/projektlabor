@@ -4,6 +4,8 @@ session_start();
 //error_reporting(0);
 
 include_once('components/curl.php');
+require_once('components/post.php');
+require_once('components/pagination.php');
 
 if (isset($_SESSION['username']) && !empty($_SESSION['username'])) {
   include('inc/loggedInHeader.php');
@@ -53,34 +55,25 @@ if (isset($postByID) && $postID !== "") :
   $ip = $_SERVER["REMOTE_ADDR"];
 
   $postfields = json_encode(['id' => $postByID, 'ip' => $ip, 'userID' => $_SESSION["userID"]]);
-  $result = curl('posts', 'POST', $postfields, true);
+  $post = curl('posts', 'POST', $postfields, true);
 
-  if ($result["success"] != true) {
+  if ($post["success"] != true) {
     header('location: /');
   }
 
-  $title = $result["title"];
-  $category = $result["category"];
-  $cover = $result["cover"];
-  $publisher = $result["publisher"];
-  $date = date("M d, Y", strtotime($result["created_at"]));
-  $content = $result["content"];
+  // display post
+  $posts = new Post(
+    $post['created_at'],
+    $post['title'],
+    $post['cover'],
+    $post['category'],
+    $post['username'],
+    $post['content']
+  );
 
-  ?>
+  $posts->display();
 
-  <?php // display post
-    echo '
-      <article class="blog-post">
-      <h2 class="display-5 link-body-emphasis mb-1">'.$title.'</h2>
-      <img class="rounded img-fluid" src="'.$cover.'">
-      <div class="position-relative">
-        <p class="blog-post-meta postition-absolute top-0 start-0"><a href="/posts/category/'.$category.'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$category.'</strong></a></p>
-        <p class="position-absolute top-0 end-0">'.$date.' by <a href="/posts/from/'.$publisher.'">'.$publisher.'</a></p>
-      </div>
-      '.$content.'
-      </article>
-    '; 
-  ?>
+?>
 
     <a class="btn btn-outline-light mb-4" href="/">Back</a>
     </div>
@@ -106,39 +99,25 @@ if (isset($postsByUser) && $postsByUser !== "") :
   <h3 class="pb-4 mb-4 fst-italic border-bottom">From <?php echo $result["publisher"]; ?></h3>
   <?php  foreach ($content as $post) : 
 
-  $date = date("M d, Y", strtotime($post["created_at"]));
+  $posts = new Post(
+    $post['created_at'],
+    $post['title'],
+    $post['cover'],
+    $post['category'],
+    $post['username'],
+    $post['content']
+  );
 
-  echo '
-  <article class="blog-post">
-  <h2 class="display-5 link-body-emphasis mb-1">'.$post["title"].'</h2>
-  <img class="rounded img-fluid" src="'.$post["cover"].'">
-  <div class="position-relative">
-    <p class="blog-post-meta postition-absolute top-0 start-0"><a href="/posts/category/'.$post["category"].'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$post["category"].'</strong></a></p>
-    <p class="position-absolute top-0 end-0">'.$date.' by <a href="/posts/from/'.$post["username"].'">'.$post["username"].'</a></p>
-  </div>
-  '.$post["content"].'
-  </article>
-  ';
+  $posts->display();
 
-  endforeach; ?>
+  endforeach;
 
-  <!-- pagination -->
-  <nav aria-label="pagination">
-      <ul class="pagination justify-content-center">
-        <li class="page-item  <?php echo (($page - 1) <= 0 ) ? "disabled" : ""; ?>">
-          <a class="page-link" href="/posts/from/<?php echo $postsByUser; ?>/page/<?php echo $page - 1 ; ?>">Previous</a>
-        </li>
-        <?php for ($pages=1;$pages<=$result["total_pages"];$pages++) : ?>
-          <li class="page-item <?php echo ($pages == $page) ? "active" : ""; ?>"><a class="page-link"
-            href="/posts/from/<?php echo $postsByUser; ?>/page/<?php echo $pages; ?>"><?php echo $pages; ?></a>
-          </li>
-        <?php endfor; ?>
-        <li class="page-item <?php echo (($page + 1) > $result["total_pages"] ) ? "disabled" : ""; ?>">
-          <a class="page-link" href="/posts/from/<?php echo $postsByUser; ?>/page/<?php echo $page + 1 ; ?>">Next</a>
-        </li>
-      </ul>
-    </nav>
+  // pagination
+  $pagination = new Pagination($page, $postsByUser, '/posts/from/', $result['total_pages']);
+  $pagination->display();
 
+  ?>
+  
 </div>
 
 <?php endif;
@@ -160,38 +139,22 @@ if (isset($postsByCategory) && $postsByCategory !== "") :
 
     foreach ($content as $post) : 
 
-      $date = date("M d, Y", strtotime($post["created_at"]));
+      $posts = new Post(
+        $post['created_at'],
+        $post['title'],
+        $post['cover'],
+        $post['category'],
+        $post['username'],
+        $post['content']
+      );
+      $posts->display();
 
-      echo '
-      <article class="blog-post">
-      <h2 class="display-5 link-body-emphasis mb-1">'.$post["title"].'</h2>
-      <img class="rounded img-fluid" src="'.$post["cover"].'">
-      <div class="position-relative">
-        <p class="blog-post-meta postition-absolute top-0 start-0"><a href="/posts/category/'.$post["category"].'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$post["category"].'</strong></a></p>
-        <p class="position-absolute top-0 end-0">'.$date.' by <a href="/posts/from/'.$post["username"].'">'.$post["username"].'</a></p>
-      </div>
-      '.$post["content"].'
-      </article>
-      ';
+    endforeach; 
 
-    endforeach; ?>
+    $pagination = new Pagination($page, $postsByCategory, '/posts/category/', $result['total_pages']);
+    $pagination->display();
     
-    <!-- pagination -->
-    <nav aria-label="pagination">
-      <ul class="pagination justify-content-center">
-        <li class="page-item  <?php echo (($page - 1) <= 0 ) ? "disabled" : ""; ?>">
-          <a class="page-link" href="/posts/category/<?php echo $postsByCategory; ?>/page/<?php echo $page - 1 ; ?>">Previous</a>
-        </li>
-        <?php for ($pages=1;$pages<=$result["total_pages"];$pages++) : ?>
-          <li class="page-item <?php echo ($pages == $page) ? "active" : ""; ?>"><a class="page-link"
-            href="/posts/category/<?php echo $postsByCategory; ?>/page/<?php echo $pages; ?>"><?php echo $pages; ?></a>
-          </li>
-        <?php endfor; ?>
-        <li class="page-item <?php echo (($page + 1) > $result["total_pages"] ) ? "disabled" : ""; ?>">
-          <a class="page-link" href="/posts/category/<?php echo $postsByCategory; ?>/page/<?php echo $page + 1 ; ?>">Next</a>
-        </li>
-      </ul>
-    </nav>
+   ?>
 
   </div>
 
@@ -212,38 +175,23 @@ if (isset($postsByYear) || isset($postsByMonth)) {
 
   foreach ($content as $post) : 
 
-    $date = date("M d, Y", strtotime($post["created_at"]));
+    $posts = new Post(
+      $post['created_at'],
+      $post['title'],
+      $post['cover'],
+      $post['category'],
+      $post['username'],
+      $post['content']
+    );
+    $posts->display();
 
-    echo '
-    <article class="blog-post">
-    <h2 class="display-5 link-body-emphasis mb-1">'.$post["title"].'</h2>
-    <img class="rounded img-fluid" src="'.$post["cover"].'">
-    <div class="position-relative">
-        <p class="blog-post-meta postition-absolute top-0 start-0"><a href="/posts/category/'.$post["category"].'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$post["category"].'</strong></a></p>
-        <p class="position-absolute top-0 end-0">'.$date.' by <a href="/posts/from/'.$post["username"].'">'.$post["username"].'</a></p>
-    </div>
-    '.$post["content"].'
-    </article>
-    ';
-
-  endforeach;?>
-
-  <!-- pagination -->
-    <nav aria-label="pagination">
-      <ul class="pagination justify-content-center">
-        <li class="page-item  <?php echo (($page - 1) <= 0 ) ? "disabled" : ""; ?>">
-          <a class="page-link" href="/posts/date/<?php echo $postsByYear; ?>/<?php echo $postsByMonth; ?>/page/<?php echo $page - 1 ; ?>">Previous</a>
-        </li>
-        <?php for ($pages=1;$pages<=$result["total_pages"];$pages++) : ?>
-          <li class="page-item <?php echo ($pages == $page) ? "active" : ""; ?>"><a class="page-link"
-            href="/posts/date/<?php echo $postsByYear; ?>/<?php echo $postsByMonth; ?>/page/<?php echo $pages; ?>"><?php echo $pages; ?></a>
-          </li>
-        <?php endfor; ?>
-        <li class="page-item <?php echo (($page + 1) > $result["total_pages"] ) ? "disabled" : ""; ?>">
-          <a class="page-link" href="/posts/date/<?php echo $postsByYear; ?>/<?php echo $postsByMonth; ?>/page/<?php echo $page + 1 ; ?>">Next</a>
-        </li>
-      </ul>
-    </nav>
+  endforeach;
+  
+  // pagination TODO: $postsByDate ???
+  $pagination = new Pagination($page, $postsByDate, '/posts/date/', $result['total_pages']);
+  $pagination->display();
+  
+  ?>
 
   </div>
 
@@ -267,20 +215,15 @@ if (!isset($postByID) && !isset($postsByUser) && !isset($postsByCategory) && !is
 
     foreach ($content as $post) : 
 
-      $date = date("M d, Y", strtotime($post["created_at"]));
-
-      echo '
-      <article class="blog-post">
-      <h2 class="display-5 link-body-emphasis mb-1">'.$post["title"].'</h2>
-      <img class="rounded img-fluid" src="'.$post["cover"].'">
-      <div class="position-relative">
-        <p class="blog-post-meta postition-absolute top-0 start-0"><a href="/posts/category/'.$post["category"].'"><strong class="d-inline-block mb-2 text-primary-emphasis">'.$post["category"].'</strong></a></p>
-        <p class="position-absolute top-0 end-0">'.$date.' by <a href="/posts/from/'.$post["username"].'">'.$post["username"].'</a></p>
-      </div>
-      
-      '.$post["content"].'
-      </article>
-      ';
+      $posts = new Post(
+        $post['created_at'],
+        $post['title'],
+        $post['cover'],
+        $post['category'],
+        $post['username'],
+        $post['content']
+      );
+      $posts->display();
 
     endforeach; ?>
   
