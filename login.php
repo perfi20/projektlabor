@@ -4,6 +4,7 @@ session_start();
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 require_once('components/curl.php');
 require_once('inc/notLoggedInHeader.php');
 require_once('components/validateInput.php');
@@ -17,6 +18,11 @@ include_once('components/curl.php');
 include_once('inc/notLoggedInHeader.php');
 include_once('components/validateInput.php');
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
+=======
+include_once('components/curl.php');
+include_once('inc/notLoggedInHeader.php');
+include_once('components/validateInput.php');
+>>>>>>> refs/remotes/origin/2024
 
 if (isset($_SESSION['username']) && $_SESSION['username'] !== "") {
   header('location: /');
@@ -75,16 +81,20 @@ if (isset($_POST['submit'])) {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 =======
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 =======
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
+=======
+>>>>>>> refs/remotes/origin/2024
 <?php
 include_once('inc/footer.php');
 ?>
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
  <!-- toast -->
@@ -114,6 +124,8 @@ include_once('inc/footer.php');
 =======
 =======
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
+=======
+>>>>>>> refs/remotes/origin/2024
 <!-- toast -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
   <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -140,9 +152,12 @@ include_once('inc/footer.php');
         $GLOBALS["toastFunction"] = "";
     } 
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 =======
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
+=======
+>>>>>>> refs/remotes/origin/2024
 ?>
 
 // prevent form resubmission when page is refreshed

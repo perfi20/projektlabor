@@ -24,6 +24,7 @@ class Post {
             <h2 class="display-5 link-body-emphasis mb-1">'.$this->title.'</h2>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             <img loading="lazy" class="rounded img-fluid" src="'.$this->cover.'">
 =======
             <img class="rounded img-fluid" src="'.$this->cover.'">
@@ -31,6 +32,9 @@ class Post {
 =======
             <img class="rounded img-fluid" src="'.$this->cover.'">
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
+=======
+            <img class="rounded img-fluid" src="'.$this->cover.'">
+>>>>>>> refs/remotes/origin/2024
             <div class="position-relative">
             <p class="blog-post-meta postition-absolute top-0 start-0">
                 <a href="/posts/category/'.$this->category.'">

@@ -11,6 +11,7 @@ require('./config.php');
 $data = null;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 $development = false;
 =======
 $development = true;
@@ -18,6 +19,9 @@ $development = true;
 =======
 $development = true;
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
+=======
+$development = true;
+>>>>>>> refs/remotes/origin/2024
 
 $pdo = new PDO('mysql:host=mysql.rackhost.hu;dbname='.$db['mysqlDb'], $db['mysqlUser'], $db['mysqlPass'], array(PDO::MYSQL_ATTR_FOUND_ROWS => true));
 

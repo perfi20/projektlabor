@@ -10,6 +10,7 @@ require_once('components/validateInput.php');
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 function normalize_files_array($files = []) {
 
     $normalized_array = [];
@@ -41,6 +42,8 @@ function normalize_files_array($files = []) {
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 =======
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
+=======
+>>>>>>> refs/remotes/origin/2024
 if (empty($_SESSION['username'])) {
     header('location: /');
 
@@ -54,12 +57,15 @@ if (empty($_SESSION['username'])) {
 if (isset($_POST['postSubmit'])) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     $normalizedFiles = normalize_files_array($_FILES);
 =======
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 =======
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
+=======
+>>>>>>> refs/remotes/origin/2024
     
     $postTitle = $_POST['postTitle'];
 
@@ -67,6 +73,7 @@ if (isset($_POST['postSubmit'])) {
 
     $postSum = $_POST['postSum'];
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     // cover image
@@ -104,6 +111,9 @@ if (isset($_POST['postSubmit'])) {
 =======
     $postCoverImage = filter_var($_POST['coverImage'], FILTER_SANITIZE_URL);
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
+=======
+    $postCoverImage = filter_var($_POST['coverImage'], FILTER_SANITIZE_URL);
+>>>>>>> refs/remotes/origin/2024
 
     if (!empty($_POST['form'])) {
         $postInputs = $_POST['form'];
@@ -111,6 +121,7 @@ if (isset($_POST['postSubmit'])) {
         $GLOBALS["toastFunction"] = "showToast('false', 'Post content cannot be empty!');";
     }
     
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     // iterate through input fields
@@ -313,6 +324,8 @@ if (isset($_POST['postSubmit'])) {
 =======
 =======
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
+=======
+>>>>>>> refs/remotes/origin/2024
     // 2d array
     foreach ($postInputs as $p) {
 
@@ -380,9 +393,12 @@ if (isset($_POST['postSubmit'])) {
         }
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 =======
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
+=======
+>>>>>>> refs/remotes/origin/2024
 
     $postfields = json_encode([
         'title' => $postTitle,
@@ -451,6 +467,7 @@ if (isset($_POST["edit"])) {
 if (isset($view) && $view == "create") {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     //include_once('./components/__createPost.php');
 =======
     include_once('./components/__createPost.php');
@@ -458,6 +475,9 @@ if (isset($view) && $view == "create") {
 =======
     include_once('./components/__createPost.php');
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
+=======
+    include_once('./components/__createPost.php');
+>>>>>>> refs/remotes/origin/2024
     include_once('./components/_create_post.php');
 }
 

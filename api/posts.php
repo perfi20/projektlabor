@@ -214,6 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "SELECT p.id, p.title, p.category, p.cover, p.created_at, p.content, u.username FROM post p
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             INNER JOIN user u ON p.publisher = u.id WHERE YEAR(p.created_at) = ?
             AND MONTH(p.created_at) = ?
 =======
@@ -224,6 +225,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             INNER JOIN user u ON p.publisher = u.id WHERE YEAR(created_at) = ?
             AND MONTH(created_at) = ?
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
+=======
+            INNER JOIN user u ON p.publisher = u.id WHERE YEAR(created_at) = ?
+            AND MONTH(created_at) = ?
+>>>>>>> refs/remotes/origin/2024
             ORDER BY created_at ASC LIMIT $starting_limit, $limit
         ");
         $stmt->execute([$input->year, $input->month]);
@@ -331,6 +336,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     try {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         $stmt = $pdo->prepare("INSERT INTO post (title, category, cover, summary, publisher, content)
                                 VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->execute([$input->title, $input->category, $input->cover_image, $input->summary, $publisher, $input->content]);
@@ -341,6 +347,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
 =======
 =======
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
+=======
+>>>>>>> refs/remotes/origin/2024
     $stmt = $pdo->prepare("INSERT INTO post (title, category, cover, summary, publisher, content)
                             VALUES (?, ?, ?, ?, ?, ?)");
     $stmt->execute([$input->title, $input->category, $input->cover_image, $input->summary, $publisher, $input->content]);
@@ -349,9 +357,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     $lastId = $pdo->lastInsertId();
     $data = array('success' => true,'message' => 'Post created successfully!', 'id' => $lastId);
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 =======
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
+=======
+>>>>>>> refs/remotes/origin/2024
     } catch (PDOException $e) {
         $data = array('success' => false, 'message' => 'Failed to create Post!', 'error' => $e->getMessage());
     }

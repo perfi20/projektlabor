@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 // toast target element
 =======
 // toast targer element
@@ -7,6 +8,9 @@
 =======
 // toast targer element
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
+=======
+// toast targer element
+>>>>>>> refs/remotes/origin/2024
 const toastLiveTarget = document.getElementById('liveToast'); 
 
 const toastMessage = document.getElementById('toastMessage');
