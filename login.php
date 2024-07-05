@@ -1,92 +1,101 @@
 <?php
-require('components/curl.php');
-require "inc/config.php";
+
 session_start();
-if (!empty($_SESSION['email'])) {
-  header('location: home.php');
-} else {
-  session_unset();
-  session_destroy();
+
+require_once('components/curl.php');
+require_once('inc/notLoggedInHeader.php');
+require_once('components/validateInput.php');
+
+if (isset($_SESSION['username']) && $_SESSION['username'] !== "") {
+  header('location: /');
 }
 
-if (isset($_POST['submit'])){
+if (isset($_POST['submit'])) {
 
-  $email = $_POST['email'];
-  $pwraw = $_POST['jelszo'];
-  $pw = hash('sha256', $pwraw);
+  $username = validateInput($_POST['username']);
+  $pw = validateInput($_POST['password']);
+  $pwSecured = hash('sha256', $pw);
 
-  $postfields = json_encode(['email' => $email, 'jelszo' => $pw]);
+  $postfields = json_encode(['username' => $username, 'pw' => $pwSecured]);
 
-  $data = curl('users', 'POST', $postfields);
+  $result = curl('users', 'POST', $postfields);
+ 
+  // login successful -> redirect to home page
+  if($result->success == true) {
 
+    $_SESSION['username'] = $result->username;
+    $_SESSION['userID'] = $result->id;
+    $_SESSION['email'] = $result->email;
+    //$_SESSION['access_level'] = $result->access_level;
+    // set admin access for demo purposes
+    $_SESSION['access_level'] = 1;
 
-  if($data->err_code == 2){
-    $email_error = "Hibás e-mail!";
-  } else if ($data->err_code == 3) {
-    $jelszo_error = "Hibás jelszó!";
-  } else {
-    session_start();
-    $_SESSION['email'] = $data->email;
-    $_SESSION['knev'] = $data->knev;
-    $_SESSION['admin'] = $data->admin;
-    $_SESSION['token'] = $data->token;
-    header('location: home.php');
+    $_SESSION['token'] = $result->token;
+    
+    header('location: /');
   }
+
+  // login toast
+  $GLOBALS["toastFunction"] = "showToast('$result->success', '$result->message');";
+
 }
+
 ?>
 
-<!DOCTYPE html>
-<html lang="hu">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
-  <title>Játszóház</title>
-</head>
-
-<body class="bg-secondary">
-  <nav class="navbar navbar-expand-lg bg-light">
-    <div class="container">
-      <a class="navbar-brand" href="index.php"><i class="bi bi-circle"></i> Kör</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="login.php">Bejelentkezes</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="register.php">Regisztracio</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <div class="container">
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" class="was-validated" method="POST">
-      <label class="form-label text-light mt-3" for="email">Email:</label>
-      <div class="mb-3">
-        <input type="email" class="form-control" placeholder="Email" value="<?php echo $email; ?>" name="email" required>
-        <?php if (isset($email_error)) : ?>
-          <span class="text-light bg-danger"><?php echo $email_error; ?></span>
-        <?php endif ?>
-      </div>
-      <div class="mb-3">
-        <label class="form-label text-light" for="pwd">Jelszó:</label>
-        <input type="password" class="form-control" placeholder="Jelszó" value="<?php echo $jelszo; ?>" name="jelszo" required>
-        <?php if (isset($jelszo_error)) : ?>
-          <span class="text-light bg-danger mt-3"><?php echo $jelszo_error; ?></span>
-        <?php endif ?>
-      </div>
-      <button type="submit" name="submit" class="btn btn-outline-light">Bejelentkezés</button>
-    </form>
+<div class="container position-absolute top-50 start-50 translate-middle">
+<form action="/login" class="was-validated border border-secondary p-5 rounded" style="--bs-border-opacity: .5;" method="POST">
+<h1>Login</h1>
+  <div class="form-floating my-5">
+    <input type="text" class="form-control"
+      value="<?php echo isset($username) ? "$username" : ""; ?>" name="username"
+      id="floatingUsername" placeholder="Username" required autofocus autocomplete="username">
+    <label for="floatingUsername">Username</label>
   </div>
-  <?php
-  include "inc/footer.php";
-  ?>
-</body>
+  <div class="form-floating mb-5">
+    <input type="password" class="form-control" value=""name="password"
+      id="floatingPassword" placeholder="Password" required autocomplete="current-password"
+    >
+    <label for="floatingPassword">Password</label>
+  </div>
+  <button type="submit" name="submit" class="btn btn-outline-success align-middle">Login</button>
+</form>
+</div>
 
-</html>
+
+
+<?php
+include_once('inc/footer.php');
+?>
+
+ <!-- toast -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header" id="toastHeader">
+            <strong class="me-auto" id="toastTitle"></strong>
+            <small>now</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toastMessage">
+
+        </div>
+    </div>
+</div>
+
+<script src="/js/eventHandler.js"></script>
+
+<script>
+
+<?php 
+  if ($GLOBALS["toastFunction"] !== "") {
+      echo $GLOBALS["toastFunction"];
+  } else {
+      $GLOBALS["toastFunction"] = "";
+  } 
+?>
+
+// prevent form resubmission when page is refreshed
+if ( window.history.replaceState ) {
+  window.history.replaceState( null, null, window.location.href );
+}
+
+</script>

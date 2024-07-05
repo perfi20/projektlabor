@@ -8,102 +8,125 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $is_jwt_valid = is_jwt_valid($bearer_token);
 
     // query
-    if ($is_jwt_valid) {
-        $stmt = $pdo->prepare('SELECT id, knev, email, admine FROM labor_users');
-        $stmt->execute();
-
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return;
-    } else {
-        $data = array('error' => 'Access denied');
+    if (!$is_jwt_valid) {
+        $data = array('success' => false, 'error' => 'Access denied');
         return;
     }
+
+    try {
+        $stmt = $pdo->prepare('SELECT id, username, email, access_level, created_at, updated_at FROM user');
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    } catch (PDOException $e) {
+        $data = array('success' => false, 'message' => 'Failed to load Users', 'error' => $e->getMessage());
+        return;
+    }
+
     return;
 }
 
 // LOGIN USER
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
-    $data = json_decode(file_get_contents('php://input', true));
+    $input = json_decode(file_get_contents('php://input', true));
 
-    // check if unique email exists
-    $checkEmail = $pdo->prepare('SELECT id FROM labor_users WHERE email = ?');
-    $checkEmail->execute([$data->email]);
-    $checkEmail = $checkEmail->fetch(PDO::FETCH_ASSOC);
+    try {
+        $stmt = $pdo->prepare('SELECT id, username, email, access_level FROM user WHERE username = ? AND pw = ?');
+        $stmt->execute([$input->username, $input->pw]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // check if password is wrong
-    $checkPw = $pdo->prepare('SELECT id FROM labor_users WHERE jszo = ? ');
-    $checkPw->execute([$data->jelszo]);
-    $checkPw = $checkPw->fetch(PDO::FETCH_ASSOC);
+        // login failed
+        if (!$data) {
+            $data = array('success' => false, 'message' => 'Invalid Creditentials!');
+            return;
+        }
 
-    // check if email is wrong
-    if (!$checkEmail) {
-        $data = array('status' => 'email_wrong', 'err_code' => 2);
+        $access_level = $data['access_level'];
+        $email = $data['email'];
+        $username = $data['username'];
+        $id = $data["id"];
+
+        // jwt
+        $headers = array('alg' => 'HS256', 'typ' => 'JWT');
+        $payload = array('username' => $username, 'exp' => (time() + 3600)); // token valid for 1 hours
+        $jwt = generate_jwt($headers, $payload);
+
+        $data = array(
+            'success' => true,
+            'message' => 'Login Successful!',
+            'token' => $jwt,
+            'username' => $username,
+            'id' => $id,
+            'email' => $email,
+            'access_level' => $access_level
+        );
+            
+    } catch (PDOException $e) {
+        $data = array('success' => false, 'message' => 'Login Failed!', 'error' => $e->getMessage());
         return;
     }
     
-    // check if pw is wrong
-    if (!$checkPw) {
-        $data = array('status' => 'pw_wrong', 'err_code' => 3);
-        return;
-    }
-
-    // all check passed
-    $stmt = $pdo->prepare('SELECT knev, email, admine FROM labor_users WHERE email = ? AND jszo = ?');
-    $stmt->execute([$data->email, $data->jelszo]);
-    $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    // 
-    $admin = $data['admine'];
-    $email = $data['email'];
-    $username = $data['knev'];
-
-    // jwt
-    $headers = array('alg' => 'HS256', 'typ' => 'JWT');
-    $payload = array('username' => $username, 'exp' => (time() + 36000)); // token valid for 1 hours
-    $jwt = generate_jwt($headers, $payload);
-
-    // response
-    $data = array('status' => 1, 'err_code' => 1, 'token' => $jwt, 'knev' => $username, 'email' => $email, 'admin' => $admin);
     return;
+
  }
 
 // REGISTER USER
 if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
 
-    $data = json_decode(file_get_contents('php://input', true));
+    $input = json_decode(file_get_contents('php://input', true));
 
-    // check if unique username exists
-    $checkUsername = $pdo->prepare('SELECT id FROM labor_users WHERE knev = ? ');
-    $checkUsername->execute([$data->knev]);
-    $checkUsername = $checkUsername->fetch(PDO::FETCH_ASSOC);
+    try {
+        // check if unique username exists
+        $checkUsername = $pdo->prepare('SELECT id FROM user WHERE username = ? ');
+        $checkUsername->execute([$input->username]);
+        $checkUsername = $checkUsername->fetch(PDO::FETCH_ASSOC);
 
-    // check if unique email exists
-    $checkEmail = $pdo->prepare('SELECT id FROM labor_users WHERE email = ?');
-    $checkEmail->execute([$data->email]);
-    $checkEmail = $checkEmail->fetch(PDO::FETCH_ASSOC);
+        // check if unique email exists
+        $checkEmail = $pdo->prepare('SELECT id FROM user WHERE email = ?');
+        $checkEmail->execute([$input->email]);
+        $checkEmail = $checkEmail->fetch(PDO::FETCH_ASSOC);
 
-    // username and email already exists - needs to be checked first!
-    if ($checkUsername && $checkEmail) {
-        $data = array('status' => 'username_and_email_exists');
+        // username and email already exists - needs to be checked first!
+        if ($checkUsername && $checkEmail) {
+            $data = array('success' => false, 'message' => 'Username and Email already exists!');
+            return;
+        }
+        // username already exists
+        if ($checkUsername) { 
+            $data = array('success' => false, 'message' => 'Username already exists!');
+            return;
+        }
+
+        // email already exists
+        if ($checkEmail) { 
+            $data = array('success' => false, 'message' => 'Email already exists!'); // username and email already exists
+            return;
+        }
+
+        // all check passed
+        $stmt = $pdo->prepare('INSERT IGNORE INTO user (username, email, pw) VALUES (?, ?, ?)');
+        $stmt->execute([$input->username, $input->email, $input->password]);
+
+        // jwt
+        $headers = array('alg' => 'HS256', 'typ' => 'JWT');
+        $payload = array('username' => $username, 'exp' => (time() + 36000)); // token valid for 10 hours
+        $jwt = generate_jwt($headers, $payload);
+
+        $id = $pdo->lastInsertId();
+
+        $data = array(
+            'success' => true,
+            'message' => 'Register Successful!',
+            'token' => $jwt,
+            'id' => $id,
+            'access_level' => 0
+        );
+
+    } catch (PDOException $e) {
+        $data = array('success' => false, 'message' => 'Registration failed!', 'error' => $e->getMessage());
         return;
     }
-    // username already exists
-    if ($checkUsername) { 
-        $data = array('status' => 'username_exists');
-        return;
-    }
 
-    // email already exists
-    if ($checkEmail) { 
-        $data = array('status' => 'email_exists'); // username and email already exists
-        return;
-    }
-
-    // all check passed
-    $stmt = $pdo->prepare('INSERT IGNORE INTO labor_users (knev, email, jszo) VALUES (?, ?, ?)');
-    $stmt->execute([$data->knev, $data->email, $data->jelszo]);
-    $data = $stmt->fetch(PDO::FETCH_ASSOC);
-    $data = array('status' => 1);
     return;
 }

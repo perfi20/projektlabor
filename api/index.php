@@ -4,11 +4,12 @@
 // RewriteCond %{HTTP:Authorization} ^(.*)
 // RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
 
-use PDO;
-
 require('./jwt_utils.php');
 require('./cors.php');
 require('./config.php');
+
+$data = null;
+$development = false;
 
 $pdo = new PDO('mysql:host=mysql.rackhost.hu;dbname='.$db['mysqlDb'], $db['mysqlUser'], $db['mysqlPass'], array(PDO::MYSQL_ATTR_FOUND_ROWS => true));
 
@@ -20,7 +21,6 @@ if ($development) {
 $resource = strtok($_SERVER['QUERY_STRING'], '='); // lecsapja a query = előtti részét
 //require('auth.php');
 
-// TODO: egyszerúbb resource kezelés
 if ($resource == 'users') {
     require('users.php');
 }
@@ -40,5 +40,5 @@ if ($resource == 'stats') {
 if ($resource == 'chat') {
     require('chat.php');
 }
-
+  
 exit(json_encode($data));

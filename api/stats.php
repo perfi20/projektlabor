@@ -1,58 +1,194 @@
 <?php
 
 // list general statistics
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    // jwt validation
+    $input = json_decode(file_get_contents('php://input', true));
+
+    //auth
     $bearer_token = get_bearer_token();
     $is_jwt_valid = is_jwt_valid($bearer_token);
 
-    // query
-    if ($is_jwt_valid) {
-        
-        // user count
-        $userCount = $pdo->prepare("SELECT COUNT(id) AS 'users' FROM labor_users");
+    if (!$is_jwt_valid) {
+        $data = array('success' => false, 'error' => 'Access denied!');
+        return;
+    }
+
+    // get stats
+    if (isset($input->view) && $input->view == 'stats') {
+
+        try {
+            // user count
+        $userCount = $pdo->prepare("SELECT COUNT(id) AS users FROM user");
         $userCount->execute();
         $userCount = $userCount->fetch(PDO::FETCH_ASSOC);
 
-        // event count
-        $eventCount = $pdo->prepare("SELECT COUNT(id) AS 'events' FROM labor_forum WHERE event = 1");
-        $eventCount->execute();
-        $eventCount = $eventCount->fetch(PDO::FETCH_ASSOC);
-
         // post count
-        $postCount = $pdo->prepare("SELECT COUNT(id) AS 'posts' FROM labor_forum");
+        $postCount = $pdo->prepare("SELECT COUNT(id) AS posts FROM post");
         $postCount->execute();
         $postCount = $postCount->fetch(PDO::FETCH_ASSOC);
 
-        // msg count
-        $msgCount = $pdo->prepare("SELECT COUNT(id) AS 'msgs' FROM labor_chat");
-        $msgCount->execute();
-        $msgCount = $msgCount->fetch(PDO::FETCH_ASSOC);
-
-        // query failed
-        // if (!$userCount || !$eventCount || !$postCount || !$msgCount) {
-        //     $data = array('status' => 0);
-        //     return;
-        // }
-
-        // all good
+        // view count
+        $viewCount = $pdo->prepare("SELECT COUNT(id) AS views FROM views");
+        $viewCount->execute();
+        $viewCount = $viewCount->fetch(PDO::FETCH_ASSOC);
 
         $users = $userCount['users'];
-        $events = $eventCount['events'];
         $posts = $postCount['posts'];
-        $msgs = $msgCount['msgs'];
+        $views = $viewCount['views'];
 
         $data = array(
-            'status' => 1,
+            'success' => true,
             'users' => $users,
-            'events' => $events,
             'posts' => $posts,
-            'msgs' => $msgs
+            'views' => $views,
         );
-        return;
-    } else {
-        $data = array('error' => 'Access denied');
+
+        } catch (PDOException $e) {
+            $data = array('success' => false, 'message' => $e->getMessage());
+            return;
+        }
+
         return;
     }
+
+    // posts view
+    if (isset($input->view) && $input->view === 'posts') {
+
+        // pagination
+        $limit = $input->limit;
+
+        try {        
+            $pagination = $pdo->prepare(
+                "SELECT COUNT(p.id) AS posts, u.username FROM post p
+                INNER JOIN user u ON p.publisher = u.id"
+            );
+            $pagination->execute();
+            $pages = $pagination->fetch(PDO::FETCH_ASSOC);
+            $totalPages = ceil($pages["posts"] / $limit);
+            $starting_limit = ($input->page - 1) * $limit;
+
+        } catch (PDOException $e) {
+            $data = array('success' => false, 'message' => $e->getMessage());
+            return;
+        }
+
+        // filtering
+        if (isset($input->sort) && isset($input->order)) {
+            $sort = $input->sort;
+            $order = $input->order;
+        } else {
+            $sort = 'created_at';
+            $order = 'asc';
+        }
+
+        try {
+            $stmt = $pdo->prepare(
+            "SELECT p.id, p.title, p.category, p.cover, p.summary, DATE_FORMAT(p.created_at, '%Y-%m-%d') AS created_at,
+            DATE_FORMAT(p.updated_at, '%Y %m %d') AS updated_at , p.content, p.featured,
+            u.username, COUNT(v.id) AS views
+            FROM post p JOIN user u ON p.publisher = u.id LEFT JOIN views v ON p.id = v.postID
+            GROUP BY p.id ORDER BY $sort $order LIMIT $starting_limit, $limit"
+            );
+            $stmt->execute();
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $content = array(
+            'success' => true,
+            'page' => $input->page,
+            'total_pages' => $totalPages,
+            'posts' => $data
+            );
+            $data = $content;
+
+        } catch (PDOException $e) {
+            $data = array('success' => false, 'message' => $e->getMessage());
+            return;
+        }
+
+        return;
+    }
+
+    // users view
+    if (isset($input->view) && $input->view === "users") {
+
+        // pagination
+        $limit = $input->limit;
+
+        try {
+            $pagination = $pdo->prepare(
+                "SELECT COUNT(id) AS users FROM user"
+            );
+            $pagination->execute();
+            $pages = $pagination->fetch(PDO::FETCH_ASSOC);
+            $totalPages = ceil($pages["users"] / $limit);
+            $starting_limit = ($input->page - 1) * $limit;
+        } catch (PDOException $e) {
+            $data = array('success' => false);
+            return;
+        }
+
+        // filtering
+        if (isset($input->sort) && isset($input->order)) {
+            $sort = $input->sort;
+            $order = $input->order;
+        } else {
+            $sort = 'created_at';
+            $order = 'asc';
+        }
+
+        try {
+            $stmt = $pdo->prepare(
+                "SELECT u.id, u.username, u.email, DATE_FORMAT(u.created_at, '%Y-%m-%d') AS created_at,
+                DATE_FORMAT(u.updated_at, '%Y-%m-%d') AS updated_at, u.access_level, COUNT(p.id) AS postNumber,
+                (SELECT COUNT(id) FROM views WHERE authorID = u.id) AS totalViews
+                FROM user u LEFT JOIN post p ON u.id = p.publisher
+                GROUP BY u.id ORDER BY $sort $order LIMIT $starting_limit, $limit"
+            );
+            $stmt->execute();
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $content = array(
+            'success' => true,
+            'page' => $input->page,
+            'total_pages' => $totalPages,
+            'users' => $data
+            );
+
+            $data = $content;
+        } catch (PDOException $e) {
+            $data = array('success' => false);
+            return;
+        }
+
+        return;
+
+    }
+        
+    return;
+}
+
+// admin edit user
+if ($_SERVER["REQUEST_METHOD"] == 'PATCH') {
+
+    $input = json_decode(file_get_contents('php://input', true));
+
+    //auth
+    $bearer_token = get_bearer_token();
+    $is_jwt_valid = is_jwt_valid($bearer_token);
+
+    if (!$is_jwt_valid) {
+        $data = array('success' => false, 'error' => 'Access denied!');
+        return;
+    }
+
+    try {
+        $stmt = $pdo->prepare('UPDATE user SET username = ?, email = ?, access_level = ? WHERE id = ?');
+        $stmt->execute([$input->newUsername, $input->newEmail, $input->newAccessLevel, $input->id]);
+        $data = array('success' => true, 'message' => 'User edited Successfully!');
+
+    } catch (PDOException $e) {
+        $data = array('success' => false, 'message' => 'Failed to edit User!');
+        return;
+    }
+
 }

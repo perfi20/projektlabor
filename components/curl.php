@@ -3,10 +3,15 @@
 // making request to the api
 function curl($url, $method, $postfields = NULL, $assoc = false) {
 
+    if(!isset($_SESSION['token'])) {
+        $_SESSION['token'] = '';
+    }
+
     $curl = curl_init();
 
     curl_setopt_array($curl, [
-    CURLOPT_URL => "https://perfi.hu/api/index.php?". $url,
+    CURLOPT_URL => 'https://perfi.hu/api/index.php?' . $url,
+    //CURLOPT_URL => "http://localhost/projektlabor/api/index.php?". $url,
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => "",
     CURLOPT_MAXREDIRS => 10,
@@ -29,6 +34,26 @@ function curl($url, $method, $postfields = NULL, $assoc = false) {
     if ($err) {
         return "cURL Error #:" . $err;
     } else return $data;
+}
+
+function weather() {
+
+    $url = "https://api.open-meteo.com/v1/forecast?latitude=47.19&longitude=18.41&current_weather=true&timezone=Europe%2FBerlin";
+    $curl = curl_init();
+        
+    curl_setopt($curl, CURLOPT_HEADER, 0);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+    curl_setopt($curl, CURLOPT_VERBOSE, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+    $response = curl_exec($curl);
+    $data = json_decode($response);
+
+    curl_close($curl);
+
+    return $data;
 }
 
 ?>

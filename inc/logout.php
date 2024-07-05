@@ -1,5 +1,11 @@
 <?php
+
 session_start();
-session_unset();
+$_SESSION['username'] = "";
+$_SESSION['userID'] = "";
+$_SESSION['email'] = "";
+$_SESSION['access_level'] = "";
+$_SESSION['token'] = "";
 session_destroy();
-header('location: ../index.php');
+
+header('location: ../');
