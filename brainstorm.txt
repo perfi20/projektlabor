@@ -1,6 +1,0 @@
-chat websocket?
-
-TODO:
-
-profile pic!!!
-
