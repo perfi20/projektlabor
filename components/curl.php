@@ -13,6 +13,9 @@ function curl($url, $method, $postfields = NULL, $assoc = false) {
     CURLOPT_URL => 'https://perfi.hu/api/index.php?' . $url,
 =======
     CURLOPT_URL => "https://perfi.hu/api/index.php?". $url,
+<<<<<<< HEAD
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
+=======
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
     //CURLOPT_URL => "http://localhost/projektlabor/api/index.php?". $url,
     CURLOPT_RETURNTRANSFER => true,

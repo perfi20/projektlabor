@@ -10,7 +10,11 @@ require('./config.php');
 
 $data = null;
 <<<<<<< HEAD
+<<<<<<< HEAD
 $development = false;
+=======
+$development = true;
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 =======
 $development = true;
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1

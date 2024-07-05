@@ -339,7 +339,11 @@ if (isset($view) && $view == "posts") {
 <?php
     // pagination
 <<<<<<< HEAD
+<<<<<<< HEAD
     $pagination = new Pagination($page, null, '/admin/posts', $result['total_pages']);
+=======
+    $pagination = new Pagination($page, null, '/admin/posts/', $result['total_pages']);
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 =======
     $pagination = new Pagination($page, null, '/admin/posts/', $result['total_pages']);
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
@@ -562,7 +566,11 @@ if (isset($view) && $view == "users") {
 <?php 
     // pagination
 <<<<<<< HEAD
+<<<<<<< HEAD
     $pagination = new Pagination($page, NULL, '/admin/users', $result['total_pages']);
+=======
+    $pagination = new Pagination($page, NULL, '/admin/users/', $result['total_pages']);
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 =======
     $pagination = new Pagination($page, NULL, '/admin/users/', $result['total_pages']);
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1

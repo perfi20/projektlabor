@@ -68,7 +68,11 @@ if (isset($postByID) && $postID !== "") :
     $post['cover'],
     $post['category'],
 <<<<<<< HEAD
+<<<<<<< HEAD
     $post['publisher'],
+=======
+    $post['username'],
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 =======
     $post['username'],
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
@@ -80,7 +84,11 @@ if (isset($postByID) && $postID !== "") :
 ?>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     <a class="btn btn-outline-warning mb-4" href="/">Back</a>
+=======
+    <a class="btn btn-outline-light mb-4" href="/">Back</a>
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 =======
     <a class="btn btn-outline-light mb-4" href="/">Back</a>
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
@@ -197,7 +205,11 @@ if (isset($postsByYear) || isset($postsByMonth)) {
   
   // pagination TODO: $postsByDate ???
 <<<<<<< HEAD
+<<<<<<< HEAD
   $pagination = new Pagination($page, $postsByDate, '/posts/date/'.$postsByYear.'/'.$postsByMonth, $result['total_pages']);
+=======
+  $pagination = new Pagination($page, $postsByDate, '/posts/date/', $result['total_pages']);
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 =======
   $pagination = new Pagination($page, $postsByDate, '/posts/date/', $result['total_pages']);
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1

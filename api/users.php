@@ -50,7 +50,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // jwt
         $headers = array('alg' => 'HS256', 'typ' => 'JWT');
 <<<<<<< HEAD
+<<<<<<< HEAD
         $payload = array('username' => $username, 'exp' => (time() + 3600)); // token valid for 1 hours
+=======
+        $payload = array('username' => $username, 'exp' => (time() + 36000)); // token valid for 10 hours
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 =======
         $payload = array('username' => $username, 'exp' => (time() + 36000)); // token valid for 10 hours
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1

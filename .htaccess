@@ -1,7 +1,11 @@
 RewriteEngine On
 RewriteCond %{REQUEST_URI} !\.(jpg|jpeg|png|gif|css|js|svg)$
 <<<<<<< HEAD
+<<<<<<< HEAD
 RewriteRule (.*) routes.php [QSA,L]
+=======
+RewriteRule (.*) routes.php [QSA,L]
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 =======
 RewriteRule (.*) routes.php [QSA,L]
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1

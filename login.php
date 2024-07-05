@@ -3,9 +3,15 @@
 session_start();
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 require_once('components/curl.php');
 require_once('inc/notLoggedInHeader.php');
 require_once('components/validateInput.php');
+=======
+include_once('components/curl.php');
+include_once('inc/notLoggedInHeader.php');
+include_once('components/validateInput.php');
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 =======
 include_once('components/curl.php');
 include_once('inc/notLoggedInHeader.php');
@@ -68,14 +74,18 @@ if (isset($_POST['submit'])) {
 </div>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 =======
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 <?php
 include_once('inc/footer.php');
 ?>
 
+<<<<<<< HEAD
 <<<<<<< HEAD
  <!-- toast -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
@@ -102,6 +112,8 @@ include_once('inc/footer.php');
       $GLOBALS["toastFunction"] = "";
   } 
 =======
+=======
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 <!-- toast -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
   <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -127,6 +139,9 @@ include_once('inc/footer.php');
     } else {
         $GLOBALS["toastFunction"] = "";
     } 
+<<<<<<< HEAD
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
+=======
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 ?>
 

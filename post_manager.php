@@ -9,6 +9,7 @@ require_once('inc/loggedInHeader.php');
 require_once('components/validateInput.php');
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 function normalize_files_array($files = []) {
 
     $normalized_array = [];
@@ -38,6 +39,8 @@ function normalize_files_array($files = []) {
 
 =======
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
+=======
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 if (empty($_SESSION['username'])) {
     header('location: /');
 
@@ -50,8 +53,11 @@ if (empty($_SESSION['username'])) {
 // create post from submit
 if (isset($_POST['postSubmit'])) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     $normalizedFiles = normalize_files_array($_FILES);
+=======
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 =======
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
     
@@ -61,6 +67,7 @@ if (isset($_POST['postSubmit'])) {
 
     $postSum = $_POST['postSum'];
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     // cover image
         $path = 'src/posts/coverimages/';
@@ -94,6 +101,9 @@ if (isset($_POST['postSubmit'])) {
 =======
     $postCoverImage = filter_var($_POST['coverImage'], FILTER_SANITIZE_URL);
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
+=======
+    $postCoverImage = filter_var($_POST['coverImage'], FILTER_SANITIZE_URL);
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 
     if (!empty($_POST['form'])) {
         $postInputs = $_POST['form'];
@@ -101,6 +111,7 @@ if (isset($_POST['postSubmit'])) {
         $GLOBALS["toastFunction"] = "showToast('false', 'Post content cannot be empty!');";
     }
     
+<<<<<<< HEAD
 <<<<<<< HEAD
     // iterate through input fields
     foreach ($postInputs as $input) {
@@ -300,6 +311,8 @@ if (isset($_POST['postSubmit'])) {
     //     }
     // }
 =======
+=======
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
     // 2d array
     foreach ($postInputs as $p) {
 
@@ -366,6 +379,9 @@ if (isset($_POST['postSubmit'])) {
             }
         }
     }
+<<<<<<< HEAD
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
+=======
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 
     $postfields = json_encode([
@@ -434,7 +450,11 @@ if (isset($_POST["edit"])) {
 // new post form
 if (isset($view) && $view == "create") {
 <<<<<<< HEAD
+<<<<<<< HEAD
     //include_once('./components/__createPost.php');
+=======
+    include_once('./components/__createPost.php');
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 =======
     include_once('./components/__createPost.php');
 >>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
