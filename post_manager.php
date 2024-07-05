@@ -8,6 +8,7 @@ require_once('components/curl.php');
 require_once('inc/loggedInHeader.php');
 require_once('components/validateInput.php');
 
+<<<<<<< HEAD
 function normalize_files_array($files = []) {
 
     $normalized_array = [];
@@ -35,6 +36,8 @@ function normalize_files_array($files = []) {
 
 }
 
+=======
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 if (empty($_SESSION['username'])) {
     header('location: /');
 
@@ -46,8 +49,11 @@ if (empty($_SESSION['username'])) {
 <?php
 // create post from submit
 if (isset($_POST['postSubmit'])) {
+<<<<<<< HEAD
 
     $normalizedFiles = normalize_files_array($_FILES);
+=======
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
     
     $postTitle = $_POST['postTitle'];
 
@@ -55,6 +61,7 @@ if (isset($_POST['postSubmit'])) {
 
     $postSum = $_POST['postSum'];
 
+<<<<<<< HEAD
     // cover image
         $path = 'src/posts/coverimages/';
     
@@ -84,6 +91,9 @@ if (isset($_POST['postSubmit'])) {
 
         $postCoverImage = 'src/posts/coverimages/' . basename($_FILES['coverImage']['name']);
 
+=======
+    $postCoverImage = filter_var($_POST['coverImage'], FILTER_SANITIZE_URL);
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 
     if (!empty($_POST['form'])) {
         $postInputs = $_POST['form'];
@@ -91,6 +101,7 @@ if (isset($_POST['postSubmit'])) {
         $GLOBALS["toastFunction"] = "showToast('false', 'Post content cannot be empty!');";
     }
     
+<<<<<<< HEAD
     // iterate through input fields
     foreach ($postInputs as $input) {
 
@@ -288,6 +299,74 @@ if (isset($_POST['postSubmit'])) {
     //         }
     //     }
     // }
+=======
+    // 2d array
+    foreach ($postInputs as $p) {
+
+        foreach ($p as $key => $value) 
+        {
+            switch ($key) {
+
+                case "header": 
+                    $postContent .= '<h3>'.$value.'</h3>';
+                    break;
+
+                case "pContent": 
+
+                    $postContent .= '<p>'.$value.'</p>';
+                    break;
+
+                case "ulContent":
+
+                    $postContent .= '<ul>';
+                    $list = explode(",", $value);
+                    foreach ($list as $li) {
+                        $postContent .= '<li>'.$li.'</li>';
+                    }
+                    $postContent .= '</ul>';
+                    break;
+
+                case "olContent":
+
+                    $postContent .= '<ol>';
+                    $list = explode(",", $value);
+                    foreach ($list as $li) {
+                        $postContent .= '<li>'.$li.'</li>';
+                    }
+                    $postContent .= '</ol>';
+                    break;
+
+                case "tableHeads":
+                    $postContent .= '<table class="table"><thead><tr>';
+                    $list = explode(",", $value);
+                    foreach ($list as $heads) {
+                        $postContent .= '<th>'.$heads.'</th>';
+                    }
+                    $postContent .= '</tr></thead>';
+                    break;
+                case "tableRows":
+                    $postContent .= '<tbody>';
+                    $rows = explode("-", $value);
+                 
+                    foreach ($rows as $row) {
+                        $row = explode(",", $row);
+                        $postContent .= '<tr>';
+                        foreach ($row as $data) {
+                            $postContent .= '<td>'.$data.'</td>';
+                        }
+                        $postContent .= '</tr>';
+                    }
+                    $postContent .= '</tbody></table>';
+                    break;
+                case "picture":
+                    $postContent .= '<img class="rounded img-fluid" src="';
+                    $postContent .= "$value";
+                    $postContent .= '">';
+                    break;
+            }
+        }
+    }
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 
     $postfields = json_encode([
         'title' => $postTitle,
@@ -354,7 +433,11 @@ if (isset($_POST["edit"])) {
 
 // new post form
 if (isset($view) && $view == "create") {
+<<<<<<< HEAD
     //include_once('./components/__createPost.php');
+=======
+    include_once('./components/__createPost.php');
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
     include_once('./components/_create_post.php');
 }
 

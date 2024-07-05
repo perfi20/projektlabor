@@ -1,5 +1,4 @@
 <?php
-
 // making request to the api
 function curl($url, $method, $postfields = NULL, $assoc = false) {
 
@@ -10,7 +9,11 @@ function curl($url, $method, $postfields = NULL, $assoc = false) {
     $curl = curl_init();
 
     curl_setopt_array($curl, [
+<<<<<<< HEAD
     CURLOPT_URL => 'https://perfi.hu/api/index.php?' . $url,
+=======
+    CURLOPT_URL => "https://perfi.hu/api/index.php?". $url,
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
     //CURLOPT_URL => "http://localhost/projektlabor/api/index.php?". $url,
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => "",

@@ -2,9 +2,15 @@
 
 session_start();
 
+<<<<<<< HEAD
 require_once('components/curl.php');
 require_once('inc/notLoggedInHeader.php');
 require_once('components/validateInput.php');
+=======
+include_once('components/curl.php');
+include_once('inc/notLoggedInHeader.php');
+include_once('components/validateInput.php');
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 
 if (isset($_SESSION['username']) && $_SESSION['username'] !== "") {
   header('location: /');
@@ -61,12 +67,16 @@ if (isset($_POST['submit'])) {
 </form>
 </div>
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 <?php
 include_once('inc/footer.php');
 ?>
 
+<<<<<<< HEAD
  <!-- toast -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -91,6 +101,33 @@ include_once('inc/footer.php');
   } else {
       $GLOBALS["toastFunction"] = "";
   } 
+=======
+<!-- toast -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header" id="toastHeader">
+
+      <strong class="me-auto" id="toastTitle"></strong>
+      <small>11 mins ago</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body" id="toastMessage">
+    
+    </div>
+  </div>
+</div>
+
+<script src="./js/eventHandler.js"></script>
+
+<script>
+
+<?php
+    if ($GLOBALS["toastFunction"] !== "") {
+        echo $GLOBALS["toastFunction"];
+    } else {
+        $GLOBALS["toastFunction"] = "";
+    } 
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 ?>
 
 // prevent form resubmission when page is refreshed

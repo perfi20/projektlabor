@@ -208,6 +208,7 @@ function addNewContent(type) {
         let br = document.createElement("br");
 
         let picLabel = document.createElement("label");
+<<<<<<< HEAD
         picLabel.innerHTML = "Picture URL";
         picLabel.setAttribute("for", "picture");
         let picture = document.createElement("input");
@@ -216,6 +217,15 @@ function addNewContent(type) {
         picture.setAttribute("name", `picture[]`);
         picture.setAttribute("class", "form-control");
         picture.setAttribute("required", "");
+=======
+        picLabel.innerHTML = "Enter Picture URL";
+        picLabel.setAttribute("for", "picture");
+        let picture = document.createElement("input");
+        picture.setAttribute("type", "url");
+        picture.setAttribute("name", `form[${i}][picture]`);
+        picture.setAttribute("required", "");
+        picture.setAttribute("class", "form-control");
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
 
         let pictureDelete = document.createElement("button");
         pictureDelete.innerHTML = "";

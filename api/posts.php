@@ -212,8 +212,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmt = $pdo->prepare(
             "SELECT p.id, p.title, p.category, p.cover, p.created_at, p.content, u.username FROM post p
+<<<<<<< HEAD
             INNER JOIN user u ON p.publisher = u.id WHERE YEAR(p.created_at) = ?
             AND MONTH(p.created_at) = ?
+=======
+            INNER JOIN user u ON p.publisher = u.id WHERE YEAR(created_at) = ?
+            AND MONTH(created_at) = ?
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
             ORDER BY created_at ASC LIMIT $starting_limit, $limit
         ");
         $stmt->execute([$input->year, $input->month]);
@@ -319,6 +324,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     }
     
     try {
+<<<<<<< HEAD
         $stmt = $pdo->prepare("INSERT INTO post (title, category, cover, summary, publisher, content)
                                 VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->execute([$input->title, $input->category, $input->cover_image, $input->summary, $publisher, $input->content]);
@@ -326,6 +332,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
 
         $lastId = $pdo->lastInsertId();
         $data = array('success' => true,'message' => 'Post created successfully!', 'id' => $lastId);
+=======
+    $stmt = $pdo->prepare("INSERT INTO post (title, category, cover, summary, publisher, content)
+                            VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->execute([$input->title, $input->category, $input->cover_image, $input->summary, $publisher, $input->content]);
+    $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $lastId = $pdo->lastInsertId();
+    $data = array('success' => true,'message' => 'Post created successfully!', 'id' => $lastId);
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
     } catch (PDOException $e) {
         $data = array('success' => false, 'message' => 'Failed to create Post!', 'error' => $e->getMessage());
     }

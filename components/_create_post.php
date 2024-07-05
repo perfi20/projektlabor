@@ -6,7 +6,11 @@ $error = "";
 ?>
 
 <div class="container">
+<<<<<<< HEAD
     <form enctype="multipart/form-data" id="create_post" class="was-validated border border-secondary p-5 rounded" style="--bs-border-opacity: .5;" method="POST" action="/user/posts">
+=======
+    <form id="create_post" class="was-validated border border-secondary p-5 rounded" style="--bs-border-opacity: .5;" method="POST" action="/user/posts">
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
     
 
         <h1>Create a new post</h1>
@@ -42,8 +46,13 @@ $error = "";
         </div>
 
         <div class="mb-5">
+<<<<<<< HEAD
             <label for="coverImage">Cover Image</label>
             <input type="file" accept="image/*" name="coverImage" id="coverImage" class="form-control" required>
+=======
+            <label for="coverImage">Cover Image URL</label>
+            <input type="url" name="coverImage" id="coverImage" class="form-control" required>
+>>>>>>> f7bb41a4ac79e8a78d2a24c1de5b630fd6e09fa1
         </div>
 
         <div id="form_content"></div>
